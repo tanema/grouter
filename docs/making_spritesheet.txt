@@ -1,0 +1,13 @@
+
+using gimp
+new project
+-> snap to grid
+-> show grid
+-> configure grid
+  -> set tile size
+-> open as layers
+  -> select all files needed for spritesheet
+  -> leave them as layers do not merge! makes better for future reorginizing
+  -> organize tiles to where they need
+  -> as project for future use
+  -> export as png for app usage

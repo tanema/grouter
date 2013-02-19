@@ -1,0 +1,32 @@
+map properties
+  background    color
+  tiles_overflow in case you see edges around the viewport make this larger than 5
+layer
+  properties
+    ******* nothing right now ********
+  object
+    type        player|npc|action_tile
+    properties
+      source    path to the spritesheet
+      width     if 0 given this will default to the map tile size
+      heigth    if 0 given this will default to the map tile size
+      margin    default 0
+      spacing   default 0
+
+      left      array of tile indexes
+      down      array of tile indexes
+      up        array of tile indexes
+      right     array of tile indexes
+      idle      array of tile indexes
+
+      script    behaviour for player or NPC
+      speed     number of how fast they are
+      action    what happens when interacted with
+tilesheet
+  properties
+    src         the source that the loader will fetch it from on the client side if not set the loader will try and load tilesheet.image the system path(probably wont work)
+  tileproperties
+    solid       true|false default:false
+    animated    true|false default:false
+    frames      array of tile indexes
+    speed       timeout in milliseconds

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="base" tilewidth="32" tileheight="32">
+  <tileoffset x="1" y="0"/>
+  <image source="../images/map0.png" width="416" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="40">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="42">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="43">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="45">
+   <properties>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+  <tile id="91">
+   <properties>
+    <property name="animated" value="true"/>
+    <property name="frames" value="91,92,93,94,95,96,97,98"/>
+    <property name="solid" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="base" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1rEJACAMRUGnsnD/wdxABEW+5A7Spshr0hrAn/qjYY8eWW7f73TfWEwFemTRI4seWfTIkvZfVe8BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQC0Tie0moQ==
+  </data>
+ </layer>
+ <layer name="background" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1stKhGAYgGFrF50Pi86HRQWdFhVBqwqhWnYB3f919EUOiaiYDjbi88DLjwgy//x+wyQJwDCtRKs9rE0tRYvZupytk8ZgLpovWfei/RZr1fOa2om2s3U3WyeNQdX7/FDTWrQebUSb0VbuXtf5GLuq9zlNfr7ftKSD6DA6io6jk+T3PLrOx7fT6CzXecu9DVGT+UgL1xfRZXQVXUc3yXTn4za6y3XfdnMDVPU+1/1ePWaV3ZvGfIz5POrmozgXxeuypjEfT9FzrpdWOxumqv9J//W81+gteu/wGYbso6doZqGnaOazp2jGecwW5zFbnAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/xBaDUSKk=
+  </data>
+ </layer>
+ <objectgroup name="actors" width="100" height="100">
+  <object name="player" type="player" x="480" y="224">
+   <properties>
+    <property name="down" value="10,11,12"/>
+    <property name="height" value="42"/>
+    <property name="idle" value="10"/>
+    <property name="left" value="1,2,3"/>
+    <property name="right" value="7,8,9"/>
+    <property name="source" value="/images/harry.png"/>
+    <property name="up" value="4,5,6"/>
+    <property name="width" value="32"/>
+   </properties>
+  </object>
+  <object name="talker" type="npc" x="736" y="352">
+   <properties>
+    <property name="down" value="10,11,12"/>
+    <property name="height" value="42"/>
+    <property name="idle" value="10"/>
+    <property name="left" value="1,2,3"/>
+    <property name="right" value="7,8,9"/>
+    <property name="source" value="/images/harry.png"/>
+    <property name="up" value="4,5,6"/>
+    <property name="width" value="32"/>
+   </properties>
+  </object>
+  <object name="house sign" type="actionabe" x="640" y="256"/>
+  <object x="1376" y="128"/>
+  <object x="1312" y="128"/>
+  <object name="house door" type="actionable" x="576" y="224"/>
+  <object name="house exit" type="actionable" x="1312" y="352"/>
+ </objectgroup>
+ <layer name="foreground" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0bEJwDAMRUGD42SVeAPvP1l+4TJlQATu4KFKIFBrAFCjpyONdKar9hwAfmale0+ACrNol3f+AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHzpAdwIAVY=
+  </data>
+ </layer>
+</map>

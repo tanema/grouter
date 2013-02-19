@@ -1,0 +1,71 @@
+function Map(map_src){
+  this.map_src = map_src;
+  this.layers = [];
+  this.player = null;
+  this.npcs = [];
+  this.actionables = [];
+}
+
+Map.prototype.load = function (next){
+  var _map = this, i;
+
+  console.log("loading map " + this.map_src + " ...");
+  $.getJSON(this.map_src, function(map_data){
+    _map.data = map_data;
+    _map.properties = map_data.properties || {};
+    _map.orientation = map_data.orientation;
+
+    console.log("["+ _map.map_src + "] loading " + map_data.tilesets.length + " tileset(s)");
+    //load tilesets
+    _map.spritesheet = new SpriteSheet(map_data.tilewidth, map_data.tileheight);
+    _map._load_tileset(map_data.tilesets, function(){
+      console.log("["+ _map.map_src + "] all loaded: " + _map.spritesheet.loaded());
+      console.log("["+ _map.map_src + "] setting up " + map_data.layers.length + " layer(s)");
+      //load layers
+      _map._load_layer(map_data.layers, function(){
+        console.log("finished loading map " + _map.map_src);
+        // map loaded so continue
+        if(next)
+          next();
+      });
+    });
+  });
+};
+
+Map.prototype.loaded = function (){
+  return this.spritesheet.loaded();
+};
+
+Map.prototype._load_tileset = function(tilesets, next){
+  if(tilesets.length === 0){return next();}
+  var _map = this;
+  this.spritesheet.add_image(tilesets[0], function(){
+    tilesets.shift();
+    _map._load_tileset(tilesets, next);
+  });
+};
+
+Map.prototype._load_layer = function(layers, next){
+  if(layers.length === 0){return next();}
+  var _map = this;
+  new Layer(_map.data.layers[0], _map, function(layer){
+    _map.layers.push(layer);
+    layers.shift();
+    _map._load_layer(layers, next);
+  });
+};
+
+
+Map.prototype.draw = function (ctx){
+  //default bacground color
+  ctx.fillStyle = this.properties.background || '#FFFFFF';
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  //set viewport x,y from player TDOD Almost got it!
+  ctx.viewport.x = this.player.x + (ctx.screen.tilesX / 2);
+  ctx.viewport.y = this.player.y + (ctx.screen.tilesY / 2);
+
+  for(var i=0; i<this.layers.length; i++){
+    this.layers[i].draw(ctx, this.orientation);
+  }
+};

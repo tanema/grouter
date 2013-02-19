@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/javascripts/loader.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <canvas id="canvas" width="900" height="500"></canvas>
+    <script src="/javascripts/src/engine.js"></script>
+    <script src="/javascripts/src/map.js"></script>
+    <script src="/javascripts/src/layer.js"></script>
+    <script src='/javascripts/src/spritesheet.js'> </script>
+    <script src='/javascripts/src/actionable.js'> </script>
+    <script src='/javascripts/src/displayable.js'> </script>
+    <script src='/javascripts/src/player.js'> </script>
+    <script src='/javascripts/src/npc.js'> </script>
+    <script src='/javascripts/src/animated_tile.js'> </script>
+    <script src='/javascripts/src/keyboard.js'> </script>
+    <script src='/javascripts/src/screen.js'> </script>
+    <script src='/javascripts/src/viewport.js'> </script>
+    <script>
+      var engine = new TileEngine('/maps/map0.json');
+      Loader.init();
+    </script>
+  </body>
+</html>
