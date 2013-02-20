@@ -55,6 +55,28 @@ Map.prototype._load_layer = function(layers, next){
   });
 };
 
+Map.prototype.at = function(x,y){
+  var results = {tiles: [], objects: []};
+
+  for(var i=0; i<this.layers.length; i++){
+    var layer = this.layers[i];
+    if(layer.is_tilelayer()){
+      var tile = this.spritesheet.get(layer.data[(x + y * layer.width)]);
+      if(tile){
+        results.tiles.push(tile);
+      }
+    }else if(layer.is_objectgroup()){
+      for(var j=0; j< layer.objects.length; j++){
+        var object = layer.objects[j];
+        if(object && object.x === x && object.y === y){
+          results.objects.push(object);
+        }
+      }
+    }
+  }
+
+  return results;
+};
 
 Map.prototype.draw = function (ctx){
   //default bacground color

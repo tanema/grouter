@@ -80,12 +80,12 @@ Displayable.prototype._get_frame = function(ctx){
 
 Displayable.prototype.move = function(direction, distance){
   distance = distance || 1;
-  if(!this.is_moving){
-    this.currentMovement = direction;
-    this.movementIndex = 0;
-    this.is_moving = true;
-    this.animate(direction, distance);
-  }
+  if(this.is_moving){ return; }
+
+  this.currentMovement = direction;
+  this.movementIndex = 0;
+  this.is_moving = true;
+  this.animate(direction, distance);
 };
 
 Displayable.prototype.animate = function(direction, distance){
