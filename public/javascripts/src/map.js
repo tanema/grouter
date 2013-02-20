@@ -61,9 +61,9 @@ Map.prototype.draw = function (ctx){
   ctx.fillStyle = this.properties.background || '#FFFFFF';
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  //set viewport x,y from player TDOD Almost got it!
-  ctx.viewport.x = this.player.x + (ctx.screen.tilesX / 2);
-  ctx.viewport.y = this.player.y + (ctx.screen.tilesY / 2);
+  //set viewport x,y from player TODO Almost got it!
+  // ctx.viewport.x = this.player.x + (ctx.screen.tilesX / 2);
+  // ctx.viewport.y = this.player.y + (ctx.screen.tilesY / 2);
 
   for(var i=0; i<this.layers.length; i++){
     this.layers[i].draw(ctx, this.orientation);

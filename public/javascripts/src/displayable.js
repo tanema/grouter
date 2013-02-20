@@ -35,8 +35,13 @@ Displayable.prototype.initalize_properties = function(next){
     }
   }
 
+  this.currentMovement = "idle";
+  this.movementIndex = 0;
+
   this.script = this.properties.script;
   this.speed = this.properties.speed || 20;
+  this.animation_speed = this.speed / this.movement["left"].length;
+  this.animation_step_size = 1 / this.movement["left"].length;
 
   if(this.properties.source){
     var _this = this;
@@ -61,13 +66,47 @@ Displayable.prototype.draw = function(ctx){
     draw_y = ((this.y * this.map_tile_height) - this.offset_y);
   }
 
-  ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
+  if(this.type == "player"){
+    ctx.drawImage(this._get_frame(), draw_x, draw_y);
+  }else{
+    ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
+  }
+
 };
 
 Displayable.prototype._get_frame = function(ctx){
-  return this.spritesheet.get(10).img;
+  return this.spritesheet.get(this.movement[this.currentMovement][this.movementIndex]).img;
 };
 
 Displayable.prototype.move = function(direction, distance){
-  return this.spritesheet.get(10).img;
+  distance = distance || 1;
+  if(!this.is_moving){
+    this.currentMovement = direction;
+    this.movementIndex = 0;
+    this.is_moving = true;
+    this.animate(direction, distance);
+  }
+};
+
+Displayable.prototype.animate = function(direction, distance){
+  switch(direction){
+    case "left":  this.x -= this.animation_step_size; break;
+    case "right": this.x += this.animation_step_size; break;
+    case "up":    this.y -= this.animation_step_size; break;
+    case "down":  this.y += this.animation_step_size; break;
+  }
+  this.movementIndex++;
+  if(this.movementIndex >= this.movement[direction].length){
+    this.movementIndex = 0;
+    this.is_moving = false;
+    if(distance > 1){
+      this.move(direction, distance--);
+    }
+  }else{
+    var _this = this;
+    setTimeout(function(){
+      _this.animate(direction, distance);
+    }, this.animation_speed);
+  }
+  $(document).trigger("redraw");
 };
