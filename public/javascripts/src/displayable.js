@@ -39,7 +39,7 @@ Displayable.prototype.initalize_properties = function(next){
   this.movementIndex = 0;
 
   this.script = this.properties.script;
-  this.speed = 100;
+  this.speed = this.properties.speed || 100;
   this.animation_speed = this.speed / this.movement["left"].length;
   this.animation_step_size = 1 / this.movement["left"].length;
 
@@ -74,10 +74,6 @@ Displayable.prototype.draw = function(ctx){
 
 };
 
-Displayable.prototype._get_frame = function(ctx){
-  return this.spritesheet.get(this.movement[this.currentMovement][this.movementIndex]).img;
-};
-
 Displayable.prototype.move = function(direction, distance){
   distance = distance || 1;
   if(this.is_moving){ return; }
@@ -85,27 +81,10 @@ Displayable.prototype.move = function(direction, distance){
   this.currentMovement = direction;
   this.movementIndex = 0;
 
-  var next_x = this.x,
-      next_y = this.y;
-
-  switch(direction){
-    case "left":  next_x--; break;
-    case "right": next_x++; break;
-    case "up":    next_y--; break;
-    case "down":  next_y++; break;
-  }
-
-  var to_tile = this.map.at(next_x, next_y);
-  if(to_tile.objects.length){
+  if(this._facing_solid_tile()){
+    $(document).trigger("redraw");
     return;
   }
-  for(var i = 0; i < to_tile.tiles.length; i++){
-    if(to_tile.tiles[i].properties.solid){return;}
-  }
-  // this is to clear up any decimal points at the end of the animation
-  // if we round we ge wierd behaviour, but we know where we are going anyways
-  this.to_x = next_x;
-  this.to_y = next_y;
 
   this.is_moving = true;
   this.animate(direction, distance);
@@ -120,7 +99,7 @@ Displayable.prototype.animate = function(direction, distance){
   }
   this.movementIndex++;
   if(this.movementIndex >= this.movement[direction].length){
-    //set our destination as while values
+    //set our destination as whole values because the step size might be just out a bit
     this.x = this.to_x;
     this.y = this.to_y;
 
@@ -138,4 +117,42 @@ Displayable.prototype.animate = function(direction, distance){
     }, this.animation_speed);
   }
   $(document).trigger("redraw");
+};
+
+Displayable.prototype._get_frame = function(ctx){
+  return this.spritesheet.get(this.movement[this.currentMovement][this.movementIndex]).img;
+};
+
+//we set to_x and to_y here so that the animation has a defined end so we dont get rounding
+//problems if the animation step is off by decimals, we round x and y to make sure are on the grid
+//at the end of the animation
+Displayable.prototype._get_to_tile = function(){
+  var next_x = this.x | 0,
+      next_y = this.y | 0;
+
+  switch(this.currentMovement){
+    case "left":  next_x--; break;
+    case "right": next_x++; break;
+    case "up":    next_y--; break;
+    case "down":  next_y++; break;
+  }
+
+  var to_tile = this.map.at(next_x, next_y);
+  this.to_x = to_tile.x = next_x;
+  this.to_y = to_tile.y = next_y;
+
+  return to_tile;
+};
+
+Displayable.prototype._facing_solid_tile = function(){
+  var to_tile = this._get_to_tile();
+  if(to_tile.objects.length){
+    return true;
+  }
+  for(var i = 0; i < to_tile.tiles.length; i++){
+    if(to_tile.tiles[i].properties.solid){
+      return true;
+    }
+  }
+  return false;
 };

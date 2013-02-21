@@ -9,7 +9,9 @@ function Actionable(actionable_options, map){
     this.x = this.x / map.spritesheet.tile_width;
     this.y = this.y / map.spritesheet.tile_height;
   }
-  this.action = actionable_options.action;
+  if(actionable_options.properties){
+    this.action = actionable_options.properties.action;
+  }
 }
 
 Actionable.prototype.action = function(){

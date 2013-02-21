@@ -143,12 +143,12 @@
  </tileset>
  <layer name="base" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1rEJACAMRUGnsnD/wdxABEW+5A7Spshr0hrAn/qjYY8eWW7f73TfWEwFemTRI4seWfTIkvZfVe8BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQC0Tie0moQ==
+   eJzt1sEJACEMRUGr2oP9F2YDyyJE5C+ZgdzEQx6CYwD803Np2KNHltP7q943P6YDPbLokaWyv7fzetR4H1nS/lfdewAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQywJUIidD
   </data>
  </layer>
  <layer name="background" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1stKhGAYgGFrF50Pi86HRQWdFhVBqwqhWnYB3f919EUOiaiYDjbi88DLjwgy//x+wyQJwDCtRKs9rE0tRYvZupytk8ZgLpovWfei/RZr1fOa2om2s3U3WyeNQdX7/FDTWrQebUSb0VbuXtf5GLuq9zlNfr7ftKSD6DA6io6jk+T3PLrOx7fT6CzXecu9DVGT+UgL1xfRZXQVXUc3yXTn4za6y3XfdnMDVPU+1/1ePWaV3ZvGfIz5POrmozgXxeuypjEfT9FzrpdWOxumqv9J//W81+gteu/wGYbso6doZqGnaOazp2jGecwW5zFbnAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/xBaDUSKk=
+   eJzt1slKw1AUgOHoTpyHhfOwcMBpoSK6UgmoSx/A938Oj3iLITQlpiU25Pvg5xAKpenNKc0ygG5aipZbmHUtRPNpLqY5qA9motkhcyfabTCr3q+urWgzze00B/VB1fN8P6KVaDVai9ajjcJr4+5H31U9z3n28/3mQ9qL9qOD6DA6yn7PY9z9+HYcnRQ6bXhvXVRnP/LS9Xl0EV1GV9F1Ntn9uIluC901vbkOqnqeR/1ePaYeorM0J7kffT6PUftR3ovy9bAmsR9P0XOhl0Z31k1V/5P+6/1eo7fofYzP0GUfLUU9cy1FPZ8tRT3OY7o4j+niPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+IsvBilInw==
   </data>
  </layer>
  <objectgroup name="actors" width="100" height="100">
@@ -176,7 +176,11 @@
     <property name="width" value="32"/>
    </properties>
   </object>
-  <object name="house sign" type="actionabe" x="640" y="256"/>
+  <object name="house sign" type="actionable" x="640" y="256">
+   <properties>
+    <property name="action" value="console.log(&quot;I am a sign&quot;)"/>
+   </properties>
+  </object>
   <object x="1376" y="128"/>
   <object x="1312" y="128"/>
   <object name="house door" type="actionable" x="576" y="224"/>
@@ -184,7 +188,7 @@
  </objectgroup>
  <layer name="foreground" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt0bEJwDAMRUGD42SVeAPvP1l+4TJlQATu4KFKIFBrAFCjpyONdKar9hwAfmale0+ACrNol3f+AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHzpAdwIAVY=
+   eJzt0csJACAMRMGAv1rsv0FTgBdByGUG3jGwkAgAqNGyno1sZqt2DgAAPNlFt9z5BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPDTAayNAL4=
   </data>
  </layer>
 </map>

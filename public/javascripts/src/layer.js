@@ -50,8 +50,8 @@ Layer.prototype._initiate_objects = function(objects, next){
       _this._initiate_objects(objects, next);
     });
   }else if(object.type.toLowerCase() == "actionable"){
-    var x = parseInt(object.x, 10),
-        y = parseInt(object.y, 10);
+    var x = parseInt(object.x, 10) / this.map.spritesheet.tile_width,
+        y = parseInt(object.y, 10) / this.map.spritesheet.tile_height;
     _this.map.actionables[x] = _this.map.actionables[x] || [];
     _this.map.actionables[x][y] = new Actionable(object);
     _this._initiate_objects(objects, next);
