@@ -39,7 +39,7 @@ Displayable.prototype.initalize_properties = function(next){
   this.movementIndex = 0;
 
   this.script = this.properties.script;
-  this.speed = this.properties.speed || 100;
+  this.speed = this.properties.speed || 200;
   this.animation_speed = this.speed / this.movement["left"].length;
   this.animation_step_size = 1 / this.movement["left"].length;
 
@@ -105,10 +105,10 @@ Displayable.prototype.animate = function(direction, distance){
 
     //reset animation
     this.movementIndex = 0;
+    this.is_moving = false;
+    //if the distance is set that means keep walking
     if(distance > 1){
-      this.move(direction, distance--);
-    }else{
-      this.is_moving = false;
+      this.move(direction, --distance);
     }
   }else{
     var _this = this;
