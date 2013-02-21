@@ -127,19 +127,27 @@ Displayable.prototype._get_frame = function(ctx){
 //problems if the animation step is off by decimals, we round x and y to make sure are on the grid
 //at the end of the animation
 Displayable.prototype._get_to_tile = function(){
-  var next_x = this.x | 0,
-      next_y = this.y | 0;
+  var to_tile;
 
-  switch(this.currentMovement){
-    case "left":  next_x--; break;
-    case "right": next_x++; break;
-    case "up":    next_y--; break;
-    case "down":  next_y++; break;
+  if(this.is_moving){
+    to_tile = this.map.at(this.to_x, this.to_x);
+    to_tile.x = this.to_x;
+    to_tile.y = this.to_x;
+  }else{
+    var next_x = this.x,
+        next_y = this.y;
+
+    switch(this.currentMovement){
+      case "left":  next_x--; break;
+      case "right": next_x++; break;
+      case "up":    next_y--; break;
+      case "down":  next_y++; break;
+    }
+
+    to_tile = this.map.at(next_x, next_y);
+    this.to_x = to_tile.x = next_x;
+    this.to_y = to_tile.y = next_y;
   }
-
-  var to_tile = this.map.at(next_x, next_y);
-  this.to_x = to_tile.x = next_x;
-  this.to_y = to_tile.y = next_y;
 
   return to_tile;
 };
