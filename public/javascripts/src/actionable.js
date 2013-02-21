@@ -14,6 +14,6 @@ function Actionable(actionable_options, map){
   }
 }
 
-Actionable.prototype.action = function(){
-
+Actionable.prototype.react = function(){
+  console.log(this.action);
 };

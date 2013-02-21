@@ -23,13 +23,23 @@ Player.prototype.bind_key_events = function(){
     _this.move("right");
   });
   $(document).on("keypress_z", function(){
-    _this.activate();
+    _this.take_action();
   });
 };
 
-Player.prototype.activate = function(){
-  var to_tile = this._get_to_tile();
-  if(this.map.actionables[to_tile.x] && this.map.actionables[to_tile.x][to_tile.y]){
-    this.map.actionables[this.to_x][this.to_y].action();
+Player.prototype.take_action = function(){
+  if(this.is_acting){
+    return;
   }
+
+  var to_tile = this._get_to_tile();
+  this.is_acting = true;
+
+  for(var i=0; i < to_tile.objects.length; i++){
+    if(to_tile.objects[i].react()){
+      break; //if action succeeded then dont do any other action
+    }
+  }
+
+  this.is_acting = false;
 };

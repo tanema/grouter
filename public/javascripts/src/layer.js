@@ -50,10 +50,7 @@ Layer.prototype._initiate_objects = function(objects, next){
       _this._initiate_objects(objects, next);
     });
   }else if(object.type.toLowerCase() == "actionable"){
-    var x = parseInt(object.x, 10) / this.map.spritesheet.tile_width,
-        y = parseInt(object.y, 10) / this.map.spritesheet.tile_height;
-    _this.map.actionables[x] = _this.map.actionables[x] || [];
-    _this.map.actionables[x][y] = new Actionable(object);
+    _this.objects.push(new Actionable(object, _this.map));
     _this._initiate_objects(objects, next);
   }else{
     _this._initiate_objects(objects, next);
@@ -100,7 +97,7 @@ Layer.prototype.draw = function(ctx){
     for(var i=0; i<this.objects.length; i++){
       if(this.objects[i].type == 'player'){
         this.objects[i].draw(ctx);
-      }else if(ctx.viewport.isInside(this.objects[i].x, this.objects[i].y)){
+      }else if(this.objects[i].type == 'npc' && ctx.viewport.isInside(this.objects[i].x, this.objects[i].y)){
         this.objects[i].draw(ctx);
       }
     }

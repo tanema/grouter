@@ -3,7 +3,6 @@ function Map(map_src){
   this.layers = [];
   this.player = null;
   this.npcs = [];
-  this.actionables = [];
 }
 
 Map.prototype.load = function (next){
