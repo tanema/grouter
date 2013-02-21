@@ -39,7 +39,7 @@ Displayable.prototype.initalize_properties = function(next){
   this.movementIndex = 0;
 
   this.script = this.properties.script;
-  this.speed = this.properties.speed || 20;
+  this.speed = 100;
   this.animation_speed = this.speed / this.movement["left"].length;
   this.animation_step_size = 1 / this.movement["left"].length;
 
@@ -84,6 +84,29 @@ Displayable.prototype.move = function(direction, distance){
 
   this.currentMovement = direction;
   this.movementIndex = 0;
+
+  var next_x = this.x,
+      next_y = this.y;
+
+  switch(direction){
+    case "left":  next_x--; break;
+    case "right": next_x++; break;
+    case "up":    next_y--; break;
+    case "down":  next_y++; break;
+  }
+
+  var to_tile = this.map.at(next_x, next_y);
+  if(to_tile.objects.length){
+    return;
+  }
+  for(var i = 0; i < to_tile.tiles.length; i++){
+    if(to_tile.tiles[i].properties.solid){return;}
+  }
+  // this is to clear up any decimal points at the end of the animation
+  // if we round we ge wierd behaviour, but we know where we are going anyways
+  this.to_x = next_x;
+  this.to_y = next_y;
+
   this.is_moving = true;
   this.animate(direction, distance);
 };
@@ -97,10 +120,16 @@ Displayable.prototype.animate = function(direction, distance){
   }
   this.movementIndex++;
   if(this.movementIndex >= this.movement[direction].length){
+    //set our destination as while values
+    this.x = this.to_x;
+    this.y = this.to_y;
+
+    //reset animation
     this.movementIndex = 0;
-    this.is_moving = false;
     if(distance > 1){
       this.move(direction, distance--);
+    }else{
+      this.is_moving = false;
     }
   }else{
     var _this = this;
