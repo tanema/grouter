@@ -7,21 +7,24 @@ layer
   object
     type        player|npc|action_tile
     properties
+      //display
       source    path to the spritesheet
       width     if 0 given this will default to the map tile size
       heigth    if 0 given this will default to the map tile size
       margin    default 0
       spacing   default 0
-
+      //movement mapping
       left      array of tile indexes
       down      array of tile indexes
       up        array of tile indexes
       right     array of tile indexes
       idle      array of tile indexes
-
-      script    behaviour for player or NPC
+      //character definitions
       speed     number of how fast they are
       action    what happens when interacted with
+      //NPC
+      onidle    behaviour script for player or NPC
+      idletime  amount of time between the last action and the onidle call
 tilesheet
   properties
     src         the source that the loader will fetch it from on the client side if not set the loader will try and load tilesheet.image the system path(probably wont work)

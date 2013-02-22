@@ -50,11 +50,13 @@
                  "name":"talker",
                  "properties":
                     {
+                     "action":"console.log(\"don't talk to me\")",
                      "down":"10,11,12",
                      "height":"42",
                      "idle":"10",
-                     "left":"1,2,3",
-                     "right":"7,8,9",
+                     "left":"7,8,9",
+                     "onidle":"me.move([\"up\", \"down\", \"left\", \"right\"][Math.floor(Math.random() * (3 - 0 + 1)) + 0], Math.floor(Math.random() * (3 - 1 + 1)) + 1)",
+                     "right":"1,2,3",
                      "source":"\/images\/harry.png",
                      "up":"4,5,6",
                      "width":"32"

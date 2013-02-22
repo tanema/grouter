@@ -17,8 +17,12 @@ function Actionable(actionable_options, map){
 
 Actionable.prototype.react = function(){
   if(this.action){
-    var me = this,
-        player = this.map.player;
-    eval("(function eval_csf(me, player){" + this.action + "})( me, player );");
+    this._eval_script(this.action);
   }
+};
+
+Actionable.prototype._eval_script = function(script){
+  var me = this,
+      player = this.map.player;
+  eval("(function eval_csf(me, player){" + script + "})( me, player );");
 };
