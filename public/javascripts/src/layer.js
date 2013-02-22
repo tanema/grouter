@@ -57,6 +57,7 @@ Layer.prototype._initiate_objects = function(objects, next){
   }
 };
 
+// TODO maybe: layers have x,y offset but I have not seen how tiled uses them
 Layer.prototype.draw = function(ctx){
   if(!this.visible){return;}
 

@@ -89,4 +89,14 @@ Map.prototype.draw = function (ctx){
   for(var i=0; i<this.layers.length; i++){
     this.layers[i].draw(ctx, this.orientation);
   }
+
+  // TODO audio manager
+  // TODO draw dialog on top if it happens
+  // first give text a background
+  // ctx.fillStyle = this.properties.background || '#FFFFFF';
+  // ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  // then draw text
+  // context.font = '40pt Calibri';
+  // context.fillStyle = 'black';
+  // context.fillText('Hello World!', 150, 100);
 };
