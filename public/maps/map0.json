@@ -50,7 +50,7 @@
                  "name":"talker",
                  "properties":
                     {
-                     "action":"console.log(\"don't talk to me\")",
+                     "action":"dialog.say(\"frank: don't talk to me\")",
                      "down":"10,11,12",
                      "height":"42",
                      "idle":"10",
@@ -71,7 +71,7 @@
                  "name":"house sign",
                  "properties":
                     {
-                     "action":"console.log(\"this is a house\");",
+                     "action":"dialog.say(\"all are welcome in our house\");",
                      "action_sound":"\/sounds\/action.wav"
                     },
                  "type":"actionable",
@@ -81,24 +81,24 @@
                 }, 
                 {
                  "height":0,
-                 "name":"",
+                 "name":"home frame",
                  "properties":
                     {
-
+                     "action":"dialog.say(\" Home Sweet Home\")"
                     },
-                 "type":"",
+                 "type":"actionable",
                  "width":0,
                  "x":1376,
                  "y":128
                 }, 
                 {
                  "height":0,
-                 "name":"",
+                 "name":"home picture",
                  "properties":
                     {
-
+                     "action":"dialog.say(\" A beautiful Painting of a hill side, I feel very refreshed\")"
                     },
-                 "type":"",
+                 "type":"actionable",
                  "width":0,
                  "x":1312,
                  "y":128

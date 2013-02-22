@@ -22,6 +22,7 @@
     <script src='/javascripts/src/keyboard.js'> </script>
     <script src='/javascripts/src/screen.js'> </script>
     <script src='/javascripts/src/viewport.js'> </script>
+    <script src='/javascripts/src/dialog.js'> </script>
     <script>
       var engine = new TileEngine('/maps/map0.json');
       Loader.init();

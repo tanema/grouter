@@ -4,6 +4,7 @@ function Map(map_src){
   this.player = null;
   this.npcs = [];
   this.audio_manager = new AudioManager();
+  this.dialog = new Dialog();
 }
 
 Map.prototype.load = function (next){
@@ -97,12 +98,5 @@ Map.prototype.draw = function (ctx){
     this.layers[i].draw(ctx, this.orientation);
   }
 
-  // TODO draw dialog on top if it happens
-  // first give text a background
-  // ctx.fillStyle = this.properties.background || '#FFFFFF';
-  // ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  // then draw text
-  // context.font = '40pt Calibri';
-  // context.fillStyle = 'black';
-  // context.fillText('Hello World!', 150, 100);
+  this.dialog.draw(ctx);
 };

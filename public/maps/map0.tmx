@@ -170,7 +170,7 @@
   </object>
   <object name="talker" type="npc" x="736" y="352">
    <properties>
-    <property name="action" value="console.log(&quot;don't talk to me&quot;)"/>
+    <property name="action" value="dialog.say(&quot;frank: don't talk to me&quot;)"/>
     <property name="down" value="10,11,12"/>
     <property name="height" value="42"/>
     <property name="idle" value="10"/>
@@ -184,12 +184,20 @@
   </object>
   <object name="house sign" type="actionable" x="640" y="256">
    <properties>
-    <property name="action" value="console.log(&quot;this is a house&quot;);"/>
+    <property name="action" value="dialog.say(&quot;all are welcome in our house&quot;);"/>
     <property name="action_sound" value="/sounds/action.wav"/>
    </properties>
   </object>
-  <object x="1376" y="128"/>
-  <object x="1312" y="128"/>
+  <object name="home frame" type="actionable" x="1376" y="128">
+   <properties>
+    <property name="action" value="dialog.say(&quot; Home Sweet Home&quot;)"/>
+   </properties>
+  </object>
+  <object name="home picture" type="actionable" x="1312" y="128">
+   <properties>
+    <property name="action" value="dialog.say(&quot; A beautiful Painting of a hill side, I feel very refreshed&quot;)"/>
+   </properties>
+  </object>
   <object name="house door" type="actionable" x="576" y="224">
    <properties>
     <property name="action" value="player.teleport(41,10)"/>

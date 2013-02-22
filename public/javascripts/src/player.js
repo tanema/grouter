@@ -23,7 +23,11 @@ Player.prototype.bind_key_events = function(){
     _this.move("right");
   });
   $(document).on("keypress_z", function(){
-    _this.take_action();
+    if(_this.map.dialog.is_talking){
+      _this.map.dialog.next();
+    }else{
+      _this.take_action();
+    }
   });
 };
 

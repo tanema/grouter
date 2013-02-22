@@ -34,6 +34,7 @@ Actionable.prototype.react = function(){
 
 Actionable.prototype._eval_script = function(script){
   var me = this,
-      player = this.map.player;
-  eval("(function eval_csf(me, player){" + script + "})( me, player );");
+      player = this.map.player,
+      dialog = this.map.dialog;
+  eval("(function eval_csf(me, player, dialog){" + script + "})(me, player, dialog);");
 };
