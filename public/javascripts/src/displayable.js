@@ -66,12 +66,7 @@ Displayable.prototype.draw = function(ctx){
     draw_y = ((this.y * this.map_tile_height) - this.offset_y);
   }
 
-  if(this.type == "player"){
-    ctx.drawImage(this._get_frame(), draw_x, draw_y);
-  }else{
-    ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
-  }
-
+  ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
 };
 
 Displayable.prototype.move = function(direction, distance){
