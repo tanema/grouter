@@ -10,6 +10,7 @@
     arrows for movement, z-button for action <br>
     <canvas id="canvas" width="800" height="416"></canvas>
     <script src="/javascripts/src/engine.js"></script>
+    <script src='/javascripts/src/audio_manager.js'> </script>
     <script src="/javascripts/src/map.js"></script>
     <script src="/javascripts/src/layer.js"></script>
     <script src='/javascripts/src/spritesheet.js'> </script>

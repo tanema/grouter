@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="background" value="#000"/>
+  <property name="music" value="/music/overworld.ogg"/>
+ </properties>
  <tileset firstgid="1" name="base" tilewidth="32" tileheight="32">
   <tileoffset x="1" y="0"/>
   <image source="../images/map0.png" width="416" height="256"/>
@@ -181,6 +185,7 @@
   <object name="house sign" type="actionable" x="640" y="256">
    <properties>
     <property name="action" value="console.log(&quot;this is a house&quot;);"/>
+    <property name="action_sound" value="/sounds/action.wav"/>
    </properties>
   </object>
   <object x="1376" y="128"/>
@@ -188,11 +193,13 @@
   <object name="house door" type="actionable" x="576" y="224">
    <properties>
     <property name="action" value="player.teleport(41,10)"/>
+    <property name="action_sound" value="/sounds/action.wav"/>
    </properties>
   </object>
   <object name="house exit" type="actionable" x="1312" y="352">
    <properties>
     <property name="action" value="player.teleport(18,8)"/>
+    <property name="action_sound" value="/sounds/action.wav"/>
    </properties>
   </object>
  </objectgroup>

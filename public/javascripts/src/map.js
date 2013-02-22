@@ -3,6 +3,7 @@ function Map(map_src){
   this.layers = [];
   this.player = null;
   this.npcs = [];
+  this.audio_manager = new AudioManager();
 }
 
 Map.prototype.load = function (next){
@@ -22,6 +23,12 @@ Map.prototype.load = function (next){
       console.log("["+ _map.map_src + "] setting up " + map_data.layers.length + " layer(s)");
       //load layers
       _map._load_layer(map_data.layers, function(){
+
+        if(_map.properties.music){
+          var sound = _map.audio_manager.load_src(_map.properties.music);
+          _map.audio_manager.loop(sound);
+        }
+
         console.log("finished loading map " + _map.map_src);
         // map loaded so continue
         if(next)
@@ -90,7 +97,6 @@ Map.prototype.draw = function (ctx){
     this.layers[i].draw(ctx, this.orientation);
   }
 
-  // TODO audio manager
   // TODO draw dialog on top if it happens
   // first give text a background
   // ctx.fillStyle = this.properties.background || '#FFFFFF';

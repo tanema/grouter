@@ -71,7 +71,8 @@
                  "name":"house sign",
                  "properties":
                     {
-                     "action":"console.log(\"this is a house\");"
+                     "action":"console.log(\"this is a house\");",
+                     "action_sound":"\/sounds\/action.wav"
                     },
                  "type":"actionable",
                  "width":0,
@@ -107,7 +108,8 @@
                  "name":"house door",
                  "properties":
                     {
-                     "action":"player.teleport(41,10)"
+                     "action":"player.teleport(41,10)",
+                     "action_sound":"\/sounds\/action.wav"
                     },
                  "type":"actionable",
                  "width":0,
@@ -119,7 +121,8 @@
                  "name":"house exit",
                  "properties":
                     {
-                     "action":"player.teleport(18,8)"
+                     "action":"player.teleport(18,8)",
+                     "action_sound":"\/sounds\/action.wav"
                     },
                  "type":"actionable",
                  "width":0,
@@ -147,7 +150,8 @@
  "orientation":"orthogonal",
  "properties":
     {
-
+     "background":"#000",
+     "music":"\/music\/overworld.ogg"
     },
  "tileheight":32,
  "tilesets":[
