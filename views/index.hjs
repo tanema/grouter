@@ -7,7 +7,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <canvas id="canvas" width="960" height="500"></canvas>
+    <canvas id="canvas" width="800" height="416"></canvas>
     <script src="/javascripts/src/engine.js"></script>
     <script src="/javascripts/src/map.js"></script>
     <script src="/javascripts/src/layer.js"></script>

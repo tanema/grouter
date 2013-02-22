@@ -82,7 +82,7 @@ Map.prototype.draw = function (ctx){
   ctx.fillStyle = this.properties.background || '#FFFFFF';
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  //set viewport x,y from player TODO Almost got it!
+  //set viewport x,y from player
   ctx.viewport.x = this.player.x - (ctx.screen.width  - this.spritesheet.tile_width) / (this.spritesheet.tile_width * 2);
   ctx.viewport.y = this.player.y - (ctx.screen.height - this.spritesheet.tile_height) / (this.spritesheet.tile_height * 2);
 

@@ -69,7 +69,7 @@
                  "name":"house sign",
                  "properties":
                     {
-                     "action":"console.log(\"I am a sign\")"
+                     "action":"console.log(\"this is a house\");"
                     },
                  "type":"actionable",
                  "width":0,
@@ -105,7 +105,7 @@
                  "name":"house door",
                  "properties":
                     {
-
+                     "action":"player.teleport(41,10)"
                     },
                  "type":"actionable",
                  "width":0,
@@ -117,7 +117,7 @@
                  "name":"house exit",
                  "properties":
                     {
-
+                     "action":"player.teleport(18,8)"
                     },
                  "type":"actionable",
                  "width":0,

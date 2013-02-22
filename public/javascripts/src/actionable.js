@@ -1,5 +1,6 @@
 function Actionable(actionable_options, map){
   actionable_options = actionable_options || {};
+  this.map = map || {};
   this.name = actionable_options.name;
   this.x = actionable_options.x || 0;
   this.y = actionable_options.y || 0;
@@ -15,5 +16,9 @@ function Actionable(actionable_options, map){
 }
 
 Actionable.prototype.react = function(){
-  console.log(this.action);
+  if(this.action){
+    var me = this,
+        player = this.map.player;
+    eval("(function eval_csf(me, player){" + this.action + "})( me, player );");
+  }
 };

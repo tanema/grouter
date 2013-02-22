@@ -69,6 +69,12 @@ Displayable.prototype.draw = function(ctx){
   ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
 };
 
+Displayable.prototype.teleport = function(x, y){
+  this.x = x;
+  this.y = y;
+  $(document).trigger("redraw");
+};
+
 Displayable.prototype.move = function(direction, distance){
   distance = distance || 1;
   if(this.is_moving){ return; }
@@ -149,7 +155,7 @@ Displayable.prototype._get_to_tile = function(){
 
 Displayable.prototype._facing_solid_tile = function(){
   var to_tile = this._get_to_tile();
-  if(to_tile.objects.length){
+  if(to_tile.objects.length || to_tile.tiles.length === 0){
     return true;
   }
   for(var i = 0; i < to_tile.tiles.length; i++){
