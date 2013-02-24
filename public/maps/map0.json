@@ -151,7 +151,7 @@
  "properties":
     {
      "background":"#000",
-     "music":"\/music\/overworld.ogg"
+     "music":"\/music\/pewter_city.mp3"
     },
  "tileheight":32,
  "tilesets":[
