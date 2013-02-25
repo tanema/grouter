@@ -22,18 +22,25 @@ layer
       heigth        if 0 given this will default to the map tile size
       margin        default 0
       spacing       default 0
+
       //movement mapping
       left          array of tile indexes
       down          array of tile indexes
       up            array of tile indexes
       right         array of tile indexes
       idle          array of tile indexes
-      //character definitions
+
+      //Displayable
       speed         number of how fast they are
+
+      //Actionable (Displayables inherit from Actionable)
       action        what happens when interacted with
+      action_src    a path to a script to download for longer scripts
       action_sound  sound made when interacted with
+
       //NPC
       onidle        behaviour script for player or NPC
+      onidle_src    a path to a behaviour script to download for longer scripts
       idletime      amount of time between the last action and the onidle call
 
 tilesheet

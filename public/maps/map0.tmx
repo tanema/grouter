@@ -170,7 +170,7 @@
   </object>
   <object name="talker" type="npc" x="736" y="352">
    <properties>
-    <property name="action" value="dialog.say(&quot;frank: don't talk to me&quot;)"/>
+    <property name="action" value="dialog.say([&quot;Frank: Don't talk to me&quot;, &quot;Harry: Whoa, chill dude.&quot;, &quot;Frank: ...&quot;])"/>
     <property name="down" value="10,11,12"/>
     <property name="height" value="42"/>
     <property name="idle" value="10"/>
@@ -184,7 +184,7 @@
   </object>
   <object name="house sign" type="actionable" x="640" y="256">
    <properties>
-    <property name="action" value="dialog.say(&quot;all are welcome in our house&quot;);"/>
+    <property name="action" value="dialog.say(&quot;All are welcome in our house&quot;);"/>
     <property name="action_sound" value="/sounds/action.wav"/>
    </properties>
   </object>
@@ -195,7 +195,7 @@
   </object>
   <object name="home picture" type="actionable" x="1312" y="128">
    <properties>
-    <property name="action" value="dialog.say(&quot; A beautiful Painting of a hill side, I feel very refreshed&quot;)"/>
+    <property name="action" value="dialog.say([&quot; A beautiful Painting of a hill side&quot;, &quot;I feel very refreshed&quot;])"/>
    </properties>
   </object>
   <object name="house door" type="actionable" x="576" y="224">

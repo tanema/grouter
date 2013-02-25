@@ -1,3 +1,4 @@
+//TODO stop the player while talking and timeout after the end of tlaking
 function Dialog(){
   this.dialog_height = 25,
   this.padding_left = 10,
@@ -22,6 +23,8 @@ Dialog.prototype.draw = function(ctx){
 };
 
 Dialog.prototype.say = function(script){
+  if(this.just_closed){return;}
+
   if(typeof script === "object"){ //pass in an array of things to say
     this.script = script;
   }else if(typeof script === "string"){
@@ -39,6 +42,11 @@ Dialog.prototype.next = function(){
     this.script.shift();
   }else{
     this.is_talking = false;
+    var _this = this;
+    this.just_closed = true;
+    setTimeout(function(){
+      _this.just_closed = false;
+    }, this.dialog_open_length);
   }
 
   this._after_new_dialog();

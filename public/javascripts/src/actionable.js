@@ -21,7 +21,8 @@ function Actionable(actionable_options, map){
   }
 }
 
-Actionable.prototype.react = function(){
+Actionable.prototype.react = function(actor){
+  console.log(actor)
   if(this.action){
 
     if(this.action_sound){

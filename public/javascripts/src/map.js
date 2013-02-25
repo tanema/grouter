@@ -1,3 +1,4 @@
+// TODO add options to turn off music and sound also volume
 function Map(map_src){
   this.map_src = map_src;
   this.layers = [];
@@ -16,6 +17,11 @@ Map.prototype.load = function (next){
     _map.properties = map_data.properties || {};
     _map.orientation = map_data.orientation;
 
+    if(_map.properties.music){
+      var sound = _map.audio_manager.load_src(_map.properties.music);
+      _map.audio_manager.loop(sound);
+    }
+
     console.log("["+ _map.map_src + "] loading " + map_data.tilesets.length + " tileset(s)");
     //load tilesets
     _map.spritesheet = new SpriteSheet(map_data.tilewidth, map_data.tileheight);
@@ -24,12 +30,6 @@ Map.prototype.load = function (next){
       console.log("["+ _map.map_src + "] setting up " + map_data.layers.length + " layer(s)");
       //load layers
       _map._load_layer(map_data.layers, function(){
-
-        if(_map.properties.music){
-          var sound = _map.audio_manager.load_src(_map.properties.music);
-          _map.audio_manager.loop(sound);
-        }
-
         console.log("finished loading map " + _map.map_src);
         // map loaded so continue
         if(next)

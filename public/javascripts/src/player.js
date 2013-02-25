@@ -40,7 +40,7 @@ Player.prototype.take_action = function(){
   this.is_acting = true;
 
   for(var i=0; i < to_tile.objects.length; i++){
-    if(to_tile.objects[i].react()){
+    if(to_tile.objects[i].react(this)){
       break; //if action succeeded then dont do any other action
     }
   }

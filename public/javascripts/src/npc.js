@@ -16,6 +16,7 @@ function Npc(npc_options, map, next){
 
 Npc.prototype = new Displayable();
 
+// TODO: cull actions these dont need to happen if not in view
 Npc.prototype.idle_action = function(){
   if(this.onidle){
     this._eval_script(this.onidle);

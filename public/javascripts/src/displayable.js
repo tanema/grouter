@@ -120,6 +120,19 @@ Displayable.prototype.animate = function(direction, distance){
   $(document).trigger("redraw");
 };
 
+//@OVERRIDE this just make sure the displayable is facing the speaker/actor
+Displayable.prototype.react = function(actor){
+  switch(actor.currentMovement){
+    case "left":  this.currentMovement = "right"; break;
+    case "right": this.currentMovement = "left"; break;
+    case "up":    this.currentMovement = "down"; break;
+    case "down":  this.currentMovement = "up"; break;
+  }
+  $(document).trigger("redraw");
+  //call Super
+  this.constructor.prototype.react.call(this, actor);
+};
+
 Displayable.prototype._get_frame = function(ctx){
   return this.spritesheet.get(this.movement[this.currentMovement][this.movementIndex]).img;
 };
