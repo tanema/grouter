@@ -18,18 +18,21 @@ TileEngine.prototype.register_events = function(){
 
 TileEngine.prototype.load_map = function(map_src){
   var _this = this;
-  this.map = new Map(map_src);
+  this.loaded = false;
+  this.map = new Map(map_src, this);
   this.map.load(function(){
     var tile_width = _this.map.spritesheet.tile_width,
         tile_height = _this.map.spritesheet.tile_height,
         screen = _this.ctx.screen = new Screen(_this.canvas, tile_width, tile_height);
     _this.ctx.viewport = new Viewport(screen, tile_width, tile_height, _this.map.properties.tiles_overflow);
     _this.ctx.orientation = _this.map.orientation;
+    _this.loaded = true;
     _this.draw();
   });
 };
 
 TileEngine.prototype.draw = function(){
+  if(!this.loaded){return;}
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   this.map.draw(this.ctx);
 };

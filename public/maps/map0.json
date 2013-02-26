@@ -71,8 +71,7 @@
                  "name":"house sign",
                  "properties":
                     {
-                     "action":"dialog.say(\"All are welcome in our house\");",
-                     "action_sound":"\/sounds\/action.wav"
+                     "action":"dialog.say(\"All are welcome in our house\");"
                     },
                  "type":"actionable",
                  "width":0,

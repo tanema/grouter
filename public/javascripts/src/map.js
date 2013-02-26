@@ -1,10 +1,10 @@
-// TODO add options to turn off music and sound also volume
-function Map(map_src){
+function Map(map_src, engine){
   this.map_src = map_src;
+  this.engine = engine;
   this.layers = [];
   this.player = null;
   this.npcs = [];
-  this.audio_manager = new AudioManager();
+  this.audio_manager = new AudioManager("music");
   this.dialog = new Dialog();
 }
 

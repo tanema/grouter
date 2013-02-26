@@ -16,14 +16,14 @@ function Npc(npc_options, map, next){
 
 Npc.prototype = new Displayable();
 
-// TODO: cull actions these dont need to happen if not in view
 Npc.prototype.idle_action = function(){
-  if(this.onidle){
-    this._eval_script(this.onidle);
-  }
-
   var _this = this;
-  setTimeout(function(){
-    _this.idle_action();
-  }, this.idletime);
+
+  if(this.onidle){
+    this._eval_script(this.onidle, function(){
+      setTimeout(function(){
+        _this.idle_action();
+      }, _this.idletime);
+    });
+  }
 };

@@ -1,3 +1,4 @@
+//TODO stop the player while talking and timeout after the end of tlaking
 function Displayable(display_object_options, map, next){
   display_object_options = display_object_options || {};
   this.map = map || {};
@@ -77,7 +78,7 @@ Displayable.prototype.teleport = function(x, y){
 
 Displayable.prototype.move = function(direction, distance){
   distance = distance || 1;
-  if(this.is_moving){ return; }
+  if(this.is_moving || this.is_interacting){ return; }
 
   this.currentMovement = direction;
   this.movementIndex = 0;
@@ -129,6 +130,7 @@ Displayable.prototype.react = function(actor){
     case "down":  this.currentMovement = "up"; break;
   }
   $(document).trigger("redraw");
+
   //call Super
   this.constructor.prototype.react.call(this, actor);
 };

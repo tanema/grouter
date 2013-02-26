@@ -185,7 +185,6 @@
   <object name="house sign" type="actionable" x="640" y="256">
    <properties>
     <property name="action" value="dialog.say(&quot;All are welcome in our house&quot;);"/>
-    <property name="action_sound" value="/sounds/action.wav"/>
    </properties>
   </object>
   <object name="home frame" type="actionable" x="1376" y="128">

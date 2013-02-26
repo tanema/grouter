@@ -25,25 +25,16 @@ Player.prototype.bind_key_events = function(){
   $(document).on("keypress_z", function(){
     if(_this.map.dialog.is_talking){
       _this.map.dialog.next();
-    }else{
+    }else if(!_this.is_busy){
       _this.take_action();
     }
   });
 };
 
 Player.prototype.take_action = function(){
-  if(this.is_acting){
-    return;
-  }
-
   var to_tile = this._get_to_tile();
-  this.is_acting = true;
 
   for(var i=0; i < to_tile.objects.length; i++){
-    if(to_tile.objects[i].react(this)){
-      break; //if action succeeded then dont do any other action
-    }
+    to_tile.objects[i].react(this);
   }
-
-  this.is_acting = false;
 };

@@ -1,4 +1,3 @@
-//TODO stop the player while talking and timeout after the end of tlaking
 function Dialog(){
   this.dialog_height = 25,
   this.padding_left = 10,
@@ -41,11 +40,13 @@ Dialog.prototype.next = function(){
   if(this.script.length > 1){
     this.script.shift();
   }else{
+    $(document).trigger("dialog_done");
     this.is_talking = false;
     var _this = this;
     this.just_closed = true;
     setTimeout(function(){
       _this.just_closed = false;
+      $(document).trigger("dialog_finished");
     }, this.dialog_open_length);
   }
 
