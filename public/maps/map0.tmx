@@ -156,7 +156,7 @@
   </data>
  </layer>
  <objectgroup name="actors" width="100" height="100">
-  <object name="player" type="player" x="480" y="224">
+  <object name="Harry" type="player" x="480" y="224">
    <properties>
     <property name="down" value="10,11,12"/>
     <property name="height" value="42"/>
@@ -168,14 +168,14 @@
     <property name="width" value="32"/>
    </properties>
   </object>
-  <object name="talker" type="npc" x="736" y="352">
+  <object name="Frank" type="npc" x="736" y="352">
    <properties>
-    <property name="action" value="dialog.say([&quot;Frank: Don't talk to me&quot;, &quot;Harry: Whoa, chill dude.&quot;, &quot;Frank: ...&quot;])"/>
+    <property name="action_src" value="/actors/frank_react.js"/>
     <property name="down" value="10,11,12"/>
     <property name="height" value="42"/>
     <property name="idle" value="10"/>
     <property name="left" value="7,8,9"/>
-    <property name="onidle" value="me.move([&quot;up&quot;, &quot;down&quot;, &quot;left&quot;, &quot;right&quot;][Math.floor(Math.random() * (3 - 0 + 1)) + 0], Math.floor(Math.random() * (3 - 1 + 1)) + 1)"/>
+    <property name="onidle_src" value="actors/frank_behaviour.js"/>
     <property name="right" value="1,2,3"/>
     <property name="source" value="/images/harry.png"/>
     <property name="up" value="4,5,6"/>

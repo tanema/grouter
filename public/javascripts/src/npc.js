@@ -4,12 +4,21 @@ function Npc(npc_options, map, next){
   var properties = npc_options.properties || {},
       _this = this;
 
-  this.onidle = properties.onidle;
   this.idletime = properties.idletime || 3000;
-
-  setTimeout(function(){
-    _this.idle_action();
-  }, this.idletime);
+  if(properties.onidle){
+    this.onidle = properties.onidle;
+    this._set_timer();
+  }else if(properties.onidle_src){
+    $.ajax({
+      url: properties.onidle_src,
+      dataType: 'text', // have to set as text otherwise get ref errors from me/dialog/ect
+      success: function(data){
+        _this.onidle = data;
+        _this._set_timer();
+      },
+      async: false
+    });
+  }
 
   Displayable.call(this, npc_options, map, next);
 }
@@ -21,9 +30,15 @@ Npc.prototype.idle_action = function(){
 
   if(this.onidle){
     this._eval_script(this.onidle, function(){
-      setTimeout(function(){
-        _this.idle_action();
-      }, _this.idletime);
+      _this._set_timer();
     });
   }
+};
+
+Npc.prototype._set_timer = function(){
+  var _this = this;
+
+  setTimeout(function(){
+    _this.idle_action();
+  }, this.idletime);
 };

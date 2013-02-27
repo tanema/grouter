@@ -13,7 +13,18 @@ function Actionable(actionable_options, map){
   }
 
   if(actionable_options.properties){
-    this.action = actionable_options.properties.action;
+    if(actionable_options.properties.action){
+      this.action = actionable_options.properties.action;
+    }else if(actionable_options.properties.action_src){
+      var _this = this;
+      $.ajax({
+        url: actionable_options.properties.action_src,
+        dataType: 'text', // have to set as text otherwise get ref errors from me/dialog/ect
+        success: function(data){_this.action = data;},
+        async: false
+      });
+    }
+
 
     if(actionable_options.properties.action_sound){
       this.action_sound = this.audio_manager.load_src(actionable_options.properties.action_sound);

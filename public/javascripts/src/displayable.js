@@ -1,4 +1,3 @@
-//TODO stop the player while talking and timeout after the end of tlaking
 function Displayable(display_object_options, map, next){
   display_object_options = display_object_options || {};
   this.map = map || {};

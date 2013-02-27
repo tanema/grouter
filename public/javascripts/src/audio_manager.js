@@ -1,6 +1,6 @@
 function AudioManager(type){
   this.type = type || "sfx";
-  this.volume = 1;
+  this.volume = localStorage[this.type+"_vol"] || 1;
   this.step_size = 0.05;
   this.sounds = {};
   this._bind_change_events();
@@ -12,6 +12,7 @@ AudioManager.prototype.load_src = function(src){
       filename = sound.src.substring(sound.src.lastIndexOf('/')+1);
   filename = filename.substring(0, filename.lastIndexOf('.'));
 
+  sound.volume = this.volume;
   this.sounds[filename] = sound;
 
   return filename;
@@ -44,6 +45,7 @@ AudioManager.prototype.loop = function(sound_name){
 };
 
 AudioManager.prototype._volume_changed = function(){
+  localStorage[this.type+"_vol"] = this.volume;
   for(var sound_name in this.sounds){
     this.sounds[sound_name].volume = this.volume;
   }
