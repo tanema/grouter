@@ -50,12 +50,12 @@
                  "name":"Frank",
                  "properties":
                     {
-                     "action_src":"\/actors\/frank_react.js",
+                     "action_src":"\/actors\/interaction\/frank.js",
                      "down":"10,11,12",
                      "height":"42",
                      "idle":"10",
                      "left":"7,8,9",
-                     "onidle_src":"actors\/frank_behaviour.js",
+                     "onidle_src":"\/actors\/behaviour\/frank.js",
                      "right":"1,2,3",
                      "source":"\/images\/harry.png",
                      "up":"4,5,6",
