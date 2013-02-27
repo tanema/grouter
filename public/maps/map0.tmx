@@ -147,12 +147,12 @@
  </tileset>
  <layer name="base" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1sEJACEMRUGr2oP9F2YDyyJE5C+ZgdzEQx6CYwD803Np2KNHltP7q943P6YDPbLokaWyv7fzetR4H1nS/lfdewAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQywJUIidD
+   eJzt1rsJw0AQRdFN1ZACV6EC3H8dDhztIn8E9s5jOQcmEYKBuQi0t9b2ydNePGN+i3eNqO+gR6+6gx696g569P59r+oetw+TRo8semT55b3O3tfjGt9Hlhn/Tnp87xhm9b3ptmFW35vuPszqe9PpkUWPLHpkGe9SNTxVd9CjV91BDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBzD4Xmfl0=
   </data>
  </layer>
  <layer name="background" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt1slKw1AUgOHoTpyHhfOwcMBpoSK6UgmoSx/A938Oj3iLITQlpiU25Pvg5xAKpenNKc0ygG5aipZbmHUtRPNpLqY5qA9motkhcyfabTCr3q+urWgzze00B/VB1fN8P6KVaDVai9ajjcJr4+5H31U9z3n28/3mQ9qL9qOD6DA6yn7PY9z9+HYcnRQ6bXhvXVRnP/LS9Xl0EV1GV9F1Ntn9uIluC901vbkOqnqeR/1ePaYeorM0J7kffT6PUftR3ovy9bAmsR9P0XOhl0Z31k1V/5P+6/1eo7fofYzP0GUfLUU9cy1FPZ8tRT3OY7o4j+niPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+IsvBilInw==
+   eJzt1slKw1AUgOHUnTgPC+dh4YDTQkV0pRJQlz6A7/8cHmnAGkq9DSS5he+Dn0MpNNB7T+mgKIq5aNDzZGg5WslgMtT3XtiPv/rei7b3YzFaqOZSNUfLTer93Y32Gsy+92M72qrmTjVHy03q/X2Y0Gq0Fq1HG9HmyHt978esSb2/ZTH8fssx7UcH0WF0FB0Xv+fR9378OIlOa521/MymmuxHWXt9EV1GV9F1dFPktR+30V2t+5af2VTq/Z30e/VU9RidVzOn/Zil85hmP+p7UX89rhz24zl6qfXa8jObSv2flOvn/+cteo8+WnxGmz47ijTzHUWar44ijfPIi/PIi/MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAa33ZdTrM=
   </data>
  </layer>
  <objectgroup name="actors" width="100" height="100">
@@ -187,23 +187,23 @@
     <property name="action" value="dialog.say(&quot;All are welcome in our house&quot;);"/>
    </properties>
   </object>
-  <object name="home frame" type="actionable" x="1376" y="128">
+  <object name="home frame" type="actionable" x="1888" y="128">
    <properties>
     <property name="action" value="dialog.say(&quot; Home Sweet Home&quot;)"/>
    </properties>
   </object>
-  <object name="home picture" type="actionable" x="1312" y="128">
+  <object name="home picture" type="actionable" x="1824" y="128">
    <properties>
     <property name="action" value="dialog.say([&quot; A beautiful Painting of a hill side&quot;, &quot;I feel very refreshed&quot;])"/>
    </properties>
   </object>
   <object name="house door" type="actionable" x="576" y="224">
    <properties>
-    <property name="action" value="player.teleport(41,10)"/>
+    <property name="action" value="player.teleport(57,10)"/>
     <property name="action_sound" value="/sounds/action.wav"/>
    </properties>
   </object>
-  <object name="house exit" type="actionable" x="1312" y="352">
+  <object name="house exit" type="actionable" x="1824" y="352">
    <properties>
     <property name="action" value="player.teleport(18,8)"/>
     <property name="action_sound" value="/sounds/action.wav"/>

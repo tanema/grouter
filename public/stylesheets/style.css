@@ -1,8 +1,8 @@
 body {
   font: 20px pokemon;
 }
+
 canvas {
-  border: thin solid lightslategray;
 }
 
 @font-face {
