@@ -62,9 +62,7 @@ AudioManager.prototype._bind_change_events = function(){
   $(document).on(this.type+"_off", function(){
     change_volume(0);
   }).on(this.type+"_on", function(){
-    if(_this.volume === 0){
-      change_volume(1);
-    }
+    change_volume(1);
   }).on(this.type+"_vol_down", function(){
     change_volume(_this.volume - _this.step_size);
   }).on(this.type+"_vol_up", function(){
