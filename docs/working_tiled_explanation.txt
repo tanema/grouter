@@ -1,7 +1,7 @@
 ****************************************************************************************************************
 
   This is an explanation of all the properties you can set on the different aspects of a Tiled map for instant
-usage in this tile engine.
+  usage in this tile engine.
 
 ****************************************************************************************************************
 
@@ -45,7 +45,9 @@ layer
 
 tilesheet
   properties
-    src             the source that the loader will fetch it from on the client side if not set the loader will try and load tilesheet.image the system path(probably wont work)
+    src             the source that the loader will fetch it from on the client
+                    side if not set the loader will try and load tilesheet image
+                    from the system path(probably wont work)
   tileproperties
     solid           true|false default:false
     animated        true|false default:false
