@@ -72,7 +72,6 @@ Displayable.prototype.draw = function(ctx){
 Displayable.prototype.teleport = function(x, y){
   this.x = x;
   this.y = y;
-  $(document).trigger("redraw");
 };
 
 Displayable.prototype.move = function(direction, distance){
@@ -83,7 +82,6 @@ Displayable.prototype.move = function(direction, distance){
   this.movementIndex = 0;
 
   if(this._facing_solid_tile()){
-    $(document).trigger("redraw");
     return;
   }
 
@@ -117,7 +115,6 @@ Displayable.prototype.animate = function(direction, distance){
       _this.animate(direction, distance);
     }, this.animation_speed);
   }
-  $(document).trigger("redraw");
 };
 
 //@OVERRIDE this just make sure the displayable is facing the speaker/actor
@@ -128,7 +125,6 @@ Displayable.prototype.react = function(actor){
     case "up":    this.currentMovement = "down"; break;
     case "down":  this.currentMovement = "up"; break;
   }
-  $(document).trigger("redraw");
 
   //call Super
   this.constructor.prototype.react.call(this, actor);

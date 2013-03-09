@@ -1,3 +1,5 @@
+var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+
 function TileEngine(map_src){
   var _this = this;
   this.canvas = document.getElementById('canvas');
@@ -9,10 +11,6 @@ function TileEngine(map_src){
 }
 
 TileEngine.prototype.register_events = function(){
-  var _this = this;
-  $(document).on('redraw', function(){
-    _this.draw();
-  });
   this.keyboard = new Keyboard();
 };
 
@@ -27,12 +25,23 @@ TileEngine.prototype.load_map = function(map_src){
     _this.ctx.viewport = new Viewport(screen, tile_width, tile_height, _this.map.properties.tiles_overflow);
     _this.ctx.orientation = _this.map.orientation;
     _this.loaded = true;
-    _this.draw();
+
+    requestAnimationFrame(function(){_this.draw();});
   });
 };
 
+//the time difference does not need to be regarded in the model of this engine since the
+//animations are done within thier own intervals
 TileEngine.prototype.draw = function(){
   if(!this.loaded){return;}
+
+  //clear last frame
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+  // draw down the hierarchy starting at the map
   this.map.draw(this.ctx);
+
+  //set the next animation frame
+  var _this = this;
+  requestAnimationFrame(function(){_this.draw();});
 };

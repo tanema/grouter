@@ -24,7 +24,6 @@ AnimatedTile.prototype.animate = function(){
   }else{
     this.img = this.spritesheet.get(this.frames[this.index]).img;
   }
-  $(document).trigger("redraw");
   setTimeout(function(){
     _this.animate();
   }, this.speed);

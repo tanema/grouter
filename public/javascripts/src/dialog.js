@@ -54,7 +54,6 @@ Dialog.prototype.next = function(){
 };
 
 Dialog.prototype._after_new_dialog = function(){
-  $(document).trigger("redraw");
   this.can_close = false;
   var _this = this;
   setTimeout(function(){
