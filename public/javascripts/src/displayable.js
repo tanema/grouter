@@ -1,7 +1,6 @@
 function Displayable(display_object_options, map, next){
   display_object_options = display_object_options || {};
   this.map = map || {};
-  this.type = display_object_options.type;
   this.properties = display_object_options.properties || {};
 
   Actionable.call(this, display_object_options, map);
@@ -38,7 +37,6 @@ Displayable.prototype.initalize_properties = function(next){
   this.currentMovement = "idle";
   this.movementIndex = 0;
 
-  this.script = this.properties.script;
   this.speed = this.properties.speed || 200;
   this.animation_speed = this.speed / this.movement["left"].length;
   this.animation_step_size = 1 / this.movement["left"].length;

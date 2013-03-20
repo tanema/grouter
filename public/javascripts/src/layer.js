@@ -7,7 +7,7 @@ function Layer(layer_options, map, next){
   this.visible = layer_options.visible;
 
   this.data = layer_options.data;
-  this.objects = [];
+  this.objects = {};
 
   this.x = layer_options.x;
   this.y = layer_options.y;
@@ -40,17 +40,17 @@ Layer.prototype._initiate_objects = function(objects, next){
   if(object.type.toLowerCase() == "player"){
     new Player(object, _this.map, function(player){
       _this.map.player = player;
-      _this.objects.push(player);
+      _this.map.objects[player.name] = _this.objects[player.name] = player;
       _this._initiate_objects(objects, next);
     });
   }else if(object.type.toLowerCase() == "npc"){
     new Npc(object, _this.map, function(npc){
-      _this.map.npcs.push(npc);
-      _this.objects.push(npc);
+      _this.map.objects[npc.name] = _this.objects[npc.name] = npc;
       _this._initiate_objects(objects, next);
     });
   }else if(object.type.toLowerCase() == "actionable"){
-    _this.objects.push(new Actionable(object, _this.map));
+    var actionable = new Actionable(object, _this.map);
+    _this.map.objects[actionable.name] = _this.objects[actionable.name] = actionable;
     _this._initiate_objects(objects, next);
   }else{
     _this._initiate_objects(objects, next);
@@ -95,11 +95,13 @@ Layer.prototype.draw = function(ctx){
       }
     }
   }else if(this.is_objectgroup()){
-    for(var i=0; i<this.objects.length; i++){
-      if(this.objects[i].type == 'player'){
-        this.objects[i].draw(ctx);
-      }else if(this.objects[i].type == 'npc' && ctx.viewport.isInside(this.objects[i].x, this.objects[i].y)){
-        this.objects[i].draw(ctx);
+    var object_name, object;
+    for(object_name in this.objects){
+      object = this.objects[object_name];
+      if(object.type == 'player'){
+        object.draw(ctx);
+      }else if(object.type == 'npc' && ctx.viewport.isInside(object.x, object.y)){
+        object.draw(ctx);
       }
     }
   }

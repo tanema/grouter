@@ -6,14 +6,6 @@
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="/javascripts/loader.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script type="text/javascript">
-      var socket = io.connect();
-
-      socket.on('session', function (session) {
-        console.log( 'Connected successfully to the socket.io server. My server session is ' + session );
-      });
-
-    </script>
   </head>
   <body>
     Arrows for movement, z-button for action <br>
@@ -33,7 +25,7 @@
     <script src='/javascripts/src/viewport.js'> </script>
     <script src='/javascripts/src/dialog.js'> </script>
     <script>
-      var engine = new TileEngine('/maps/map0.json');
+      var engine = new TileEngine('/maps/{{ map }}');
       Loader.init();
     </script>
   </body>

@@ -4,5 +4,9 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Tile Engine' });
+  if(req.originalUrl.substr(1) === ""){
+    res.redirect("/" + (new Date()).getTime());
+  }else {
+    res.render('index', { title: 'Tile Engine', map: 'map0.json'});
+  }
 };

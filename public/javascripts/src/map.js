@@ -3,7 +3,7 @@ function Map(map_src, engine){
   this.engine = engine;
   this.layers = [];
   this.player = null;
-  this.npcs = [];
+  this.objects = {};
   this.audio_manager = new AudioManager("music");
   this.dialog = new Dialog();
 }
@@ -73,8 +73,9 @@ Map.prototype.at = function(x,y){
         results.tiles.push(tile);
       }
     }else if(layer.is_objectgroup()){
-      for(var j=0; j< layer.objects.length; j++){
-        var object = layer.objects[j];
+      var object_name, object;
+      for(object_name in layer.objects){
+        object = layer.objects[object_name];
         if(object && object.x === x && object.y === y){
           results.objects.push(object);
         }

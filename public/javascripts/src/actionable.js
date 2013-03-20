@@ -2,6 +2,7 @@ function Actionable(actionable_options, map){
   actionable_options = actionable_options || {};
   this.map = map || {};
   this.name = actionable_options.name;
+  this.type = actionable_options.type;
   this.x = actionable_options.x || 0;
   this.y = actionable_options.y || 0;
   this.audio_manager = new AudioManager("sfx");
@@ -10,6 +11,8 @@ function Actionable(actionable_options, map){
     //convert x and y to tile co-ords because tiled gives objects in absolute co-ords
     this.x = this.x / map.spritesheet.tile_width;
     this.y = this.y / map.spritesheet.tile_height;
+    //set socket
+    this.socket = map.engine.socket;
   }
 
   if(actionable_options.properties){

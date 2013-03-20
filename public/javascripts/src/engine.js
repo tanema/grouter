@@ -1,6 +1,11 @@
 var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
 
 function TileEngine(map_src){
+  if(!this.canvasIsSupported() && !!requestAnimationFrame){
+    alert("Your browser does not support this game.");
+    return;
+  }
+
   var _this = this;
   this.canvas = document.getElementById('canvas');
   this.ctx = this.canvas.getContext('2d');
@@ -8,6 +13,8 @@ function TileEngine(map_src){
     _this.load_map(map_src);
   });
   this.register_events();
+  this.socket = io.connect();
+  //this.socket.emit("join room", window.location.pathname.substr(1));
 }
 
 TileEngine.prototype.register_events = function(){
@@ -44,4 +51,9 @@ TileEngine.prototype.draw = function(){
   //set the next animation frame
   var _this = this;
   requestAnimationFrame(function(){_this.draw();});
+};
+
+TileEngine.prototype.canvasIsSupported = function (){
+  var elem = document.createElement('canvas');
+  return !!(elem.getContext && elem.getContext('2d'));
 };
