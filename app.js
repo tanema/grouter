@@ -36,25 +36,23 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+/*
+ * Load up maps
+ */
 var files = fs.readdirSync(path.resolve(__dirname, 'public/maps'));
 for(var i =0; i < files.length; i++){
   var file_path = path.resolve(__dirname, 'public/maps', files[i]);
   if(file_path.indexOf('.json') !== -1){
+    file_name = file_path.substr(file_path.lastIndexOf('/')+1);
     fs.readFile(file_path, 'utf8', function (err, data) {
       if (err) {
         console.log(err);
         return;
       }
-
-      var map = new Map(JSON.parse(data));
-
-      console.dir(map);
+      maps[file_name] = new Map(JSON.parse(data));
     });
   }
 }
-
-
-
 
 app.get('*', routes.index);
 
@@ -78,8 +76,10 @@ sio.on('connection', function (err, socket, session) {
   //   socket.join(room);
   // });
 
-  // socket.on('join partner', function(room_id, partner_id){
-  //   socket.set('partner', partner, function(){} );
-  //   socket.join(partner);
-  // });
+  socket.on('join map', function(map_name){
+    socket.set('map', map_name, function(){} );
+    //spawn npc's
+    //spawn other player's avatars
+    socket.join(map_name);
+  });
 });

@@ -9,16 +9,25 @@ function TileEngine(map_src){
   var _this = this;
   this.canvas = document.getElementById('canvas');
   this.ctx = this.canvas.getContext('2d');
+  this.ctx.canvas = this.canvas;
   window.addEventListener('load', function(){
     _this.load_map(map_src);
   });
-  this.register_events();
-  this.socket = io.connect();
-  //this.socket.emit("join room", window.location.pathname.substr(1));
+  this.keyboard = new Keyboard();
+  this.register_socket_events(map_src);
 }
 
-TileEngine.prototype.register_events = function(){
-  this.keyboard = new Keyboard();
+TileEngine.prototype.register_socket_events = function(map_src){
+  this.socket = io.connect();
+  this.socket.emit("join map", map_src.substr(map_src.lastIndexOf('/')+1));
+
+  var map = this.map;
+  this.socket.on('spawn player', function(id, name, player_data, layer){
+    map.player_spawn(id, name, player_data, layer);
+  });
+  this.socket.on('spawn npc', function(layer, character_name, character_data){
+    map.npc_spawn(layer, character_name, character_data);
+  });
 };
 
 TileEngine.prototype.load_map = function(map_src){
@@ -32,6 +41,8 @@ TileEngine.prototype.load_map = function(map_src){
     _this.ctx.viewport = new Viewport(screen, tile_width, tile_height, _this.map.properties.tiles_overflow);
     _this.ctx.orientation = _this.map.orientation;
     _this.loaded = true;
+
+    _this.socket.emit("join map", map_src.substr(map_src.lastIndexOf("/")+1));
 
     requestAnimationFrame(function(){_this.draw();});
   });

@@ -1,7 +1,7 @@
 function Map(map_src, engine){
   this.map_src = map_src;
   this.engine = engine;
-  this.layers = [];
+  this.layers = {};
   this.player = null;
   this.objects = {};
   this.audio_manager = new AudioManager("music");
@@ -56,7 +56,7 @@ Map.prototype._load_layer = function(layers, next){
   if(layers.length === 0){return next();}
   var _map = this;
   new Layer(_map.data.layers[0], _map, function(layer){
-    _map.layers.push(layer);
+    _map.layers[layer.name] = layer;
     layers.shift();
     _map._load_layer(layers, next);
   });
@@ -65,8 +65,9 @@ Map.prototype._load_layer = function(layers, next){
 Map.prototype.at = function(x,y){
   var results = {tiles: [], objects: []};
 
-  for(var i=0; i<this.layers.length; i++){
-    var layer = this.layers[i];
+  var layer_name;
+  for(layer_name in this.layers){
+    var layer = this.layers[layer_name];
     if(layer.is_tilelayer()){
       var tile = this.spritesheet.get(layer.data[(x + y * layer.width)]);
       if(tile){
@@ -87,17 +88,24 @@ Map.prototype.at = function(x,y){
 };
 
 Map.prototype.draw = function (ctx){
-  //default bacground color
-  ctx.fillStyle = this.properties.background || '#FFFFFF';
-  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  //default background, using css
+  $(ctx.canvas).css("background", this.properties.background);
 
   //set viewport x,y from player
   ctx.viewport.x = this.player.x - (ctx.screen.width  - this.spritesheet.tile_width) / (this.spritesheet.tile_width * 2);
   ctx.viewport.y = this.player.y - (ctx.screen.height - this.spritesheet.tile_height) / (this.spritesheet.tile_height * 2);
 
-  for(var i=0; i<this.layers.length; i++){
-    this.layers[i].draw(ctx);
+  var layer_name;
+  for(layer_name in this.layers){
+    this.layers[layer_name].draw(ctx);
   }
 
   this.dialog.draw(ctx);
+};
+
+Map.prototype.player_spawn = function(id, name, player_data, layer){
+
+};
+Map.prototype.npc_spawn = function(layer, character_name, character_data){
+
 };
