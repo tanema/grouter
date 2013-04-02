@@ -7,7 +7,7 @@
     <link   href='/stylesheets/style.css' type="text/css" rel="stylesheet"  />
   </head>
   <body>
-    <div class="instructions">
+    <div class="title">
         This is the Title
     </div>
     <canvas id="canvas" width="800" height="416"></canvas>

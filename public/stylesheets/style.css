@@ -1,8 +1,3 @@
-body {
-  font: 20px pokemon;
-}
-canvas {}
-
 @font-face {
   font-family: 'pokemon';
   src: url('/fonts/pokemon.ttf');
@@ -13,6 +8,10 @@ canvas {}
   src: url('/fonts/kulminoituva.ttf');
 }
 
-.instructions{
+body {
+  font: 20px pokemon;
+}
+
+.instructions, .title{
   font: 30px kulminoituva;
 }
