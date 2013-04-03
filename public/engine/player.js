@@ -1,9 +1,14 @@
-function Player(player_options, map, next){
+function Player(player_options, map, layer, next){
+  Displayable.call(this, player_options, map, layer, next);
   this.bind_key_events();
-  Displayable.call(this, player_options, map, next);
+  this.register_socket_events();
 }
 
 Player.prototype = new Displayable();
+
+Player.prototype.register_socket_events = function(){
+  this.socket.emit("join map", this.map.name, this.layer.name);
+};
 
 Player.prototype.bind_key_events = function(){
   if(this.is_moving){return;}

@@ -57,7 +57,7 @@ SpriteSheet.prototype._calculateFrames = function(img_options) {
         if(tile_properties.animated === "true"){
           _this._frames.push(new AnimatedTile(canvas, tile_properties, _this));
         }else{
-          _this._frames.push({img: canvas, properties:  tile_properties});
+          _this._frames.push(new Tile(canvas, tile_properties, _this));
         }
       }
     }

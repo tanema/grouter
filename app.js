@@ -19,7 +19,7 @@ var io = require('socket.io'),
 var app = express();
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', process.env.PORT || 3001);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'hjs');
   app.use(express.favicon());
@@ -50,7 +50,7 @@ for(var i =0; i < files.length; i++){
         return;
       }
       maps[file_name] = new Map(JSON.parse(data));
-    });
+    })
   }
 }
 
@@ -70,16 +70,18 @@ sio.on('connection', function (err, socket, session) {
   // socket.get('nickname', function (err, name) {});
   // session.foo = value;
   // session.save();
+  // io.sockets.in('room').emit('event_name', data)
 
   // socket.on('join room', function (room) {
   //   socket.set('room', room, function(){} );
   //   socket.join(room);
   // });
 
-  socket.on('join map', function(map_name){
+  socket.on('join map', function(map_name, layer){
     socket.set('map', map_name, function(){} );
     //spawn npc's
     //spawn other player's avatars
-    socket.join(map_name);
+    //io.in(map_name).emit('player spawn', socket.id, socket.id, {}, layer);
+    //socket.join(map_name);
   });
 });

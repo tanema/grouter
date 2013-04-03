@@ -14,6 +14,7 @@ function TileEngine(map_src){
     _this.load_map(map_src);
   });
   this.keyboard = new Keyboard();
+  this.startTime = window.mozAnimationStartTime || Date.now();
   this.register_socket_events(map_src);
 }
 
@@ -42,26 +43,32 @@ TileEngine.prototype.load_map = function(map_src){
     _this.ctx.orientation = _this.map.orientation;
     _this.loaded = true;
 
-    _this.socket.emit("join map", map_src.substr(map_src.lastIndexOf("/")+1));
-
-    requestAnimationFrame(function(){_this.draw();});
+    requestAnimationFrame(function(timestamp){_this.draw(timestamp);});
   });
 };
 
 //the time difference does not need to be regarded in the model of this engine since the
 //animations are done within thier own intervals
-TileEngine.prototype.draw = function(){
+TileEngine.prototype.draw = function(timestamp){
   if(!this.loaded){return;}
 
+  //calculate difference since last repaint
+  var drawStart = (timestamp || Date.now()),
+      deltatime = (drawStart - this.startTime)/100;
+
+  $("#time_diff").html(deltatime);
   //clear last frame
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
   // draw down the hierarchy starting at the map
-  this.map.draw(this.ctx);
+  this.map.draw(this.ctx, deltatime);
+
+  //reset startTime to this repaint
+  this.startTime = drawStart;
 
   //set the next animation frame
   var _this = this;
-  requestAnimationFrame(function(){_this.draw();});
+  requestAnimationFrame(function(timestamp){_this.draw(timestamp);});
 };
 
 TileEngine.prototype.canvasIsSupported = function (){

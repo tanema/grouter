@@ -38,18 +38,17 @@ Layer.prototype._initiate_objects = function(objects, next){
       object = objects.shift();
 
   if(object.type.toLowerCase() == "player"){
-    new Player(object, _this.map, function(player){
-      _this.map.player = player;
-      _this.map.objects[player.name] = _this.objects[player.name] = player;
+    new Player(object, _this.map, _this, function(player){
+      _this.map.player = _this.map.objects[player.name] = _this.objects[player.name] = player;
       _this._initiate_objects(objects, next);
     });
   }else if(object.type.toLowerCase() == "npc"){
-    new Npc(object, _this.map, function(npc){
+    new Npc(object, _this.map, _this, function(npc){
       _this.map.objects[npc.name] = _this.objects[npc.name] = npc;
       _this._initiate_objects(objects, next);
     });
   }else if(object.type.toLowerCase() == "actionable"){
-    var actionable = new Actionable(object, _this.map);
+    var actionable = new Actionable(object, _this.map, _this);
     _this.map.objects[actionable.name] = _this.objects[actionable.name] = actionable;
     _this._initiate_objects(objects, next);
   }else{
@@ -58,7 +57,7 @@ Layer.prototype._initiate_objects = function(objects, next){
 };
 
 // TODO maybe: layers have x,y offset but I have not seen how tiled uses them
-Layer.prototype.draw = function(ctx){
+Layer.prototype.draw = function(ctx, deltatime){
   if(!this.visible){return;}
 
   //set layer opacity
@@ -90,7 +89,7 @@ Layer.prototype.draw = function(ctx){
         }
 
         if(tile){
-          ctx.drawImage(tile.img, draw_x - (ctx.viewport.x * tile_width), draw_y - (ctx.viewport.y * tile_height));
+          tile.draw(ctx, deltatime, draw_x - (ctx.viewport.x * tile_width), draw_y - (ctx.viewport.y * tile_height));
         }
       }
     }
@@ -99,9 +98,9 @@ Layer.prototype.draw = function(ctx){
     for(object_name in this.objects){
       object = this.objects[object_name];
       if(object.type == 'player'){
-        object.draw(ctx);
+        object.draw(ctx, deltatime);
       }else if(object.type == 'npc' && ctx.viewport.isInside(object.x, object.y)){
-        object.draw(ctx);
+        object.draw(ctx, deltatime);
       }
     }
   }

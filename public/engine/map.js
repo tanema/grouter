@@ -6,6 +6,7 @@ function Map(map_src, engine){
   this.objects = {};
   this.audio_manager = new AudioManager("music");
   this.dialog = new Dialog();
+  this.name = map_src.substr(map_src.lastIndexOf("/")+1);
 }
 
 Map.prototype.load = function (next){
@@ -87,7 +88,7 @@ Map.prototype.at = function(x,y){
   return results;
 };
 
-Map.prototype.draw = function (ctx){
+Map.prototype.draw = function (ctx, deltatime){
   //default background, using css
   $(ctx.canvas).css("background", this.properties.background);
 
@@ -97,7 +98,7 @@ Map.prototype.draw = function (ctx){
 
   var layer_name;
   for(layer_name in this.layers){
-    this.layers[layer_name].draw(ctx);
+    this.layers[layer_name].draw(ctx, deltatime);
   }
 
   this.dialog.draw(ctx);

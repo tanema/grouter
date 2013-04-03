@@ -1,9 +1,9 @@
-function Displayable(display_object_options, map, next){
+function Displayable(display_object_options, map, layer, next){
   display_object_options = display_object_options || {};
   this.map = map || {};
   this.properties = display_object_options.properties || {};
 
-  Actionable.call(this, display_object_options, map);
+  Actionable.call(this, display_object_options, map, layer);
 
   if(display_object_options.properties){
     this.initalize_properties(next);
@@ -35,6 +35,7 @@ Displayable.prototype.initalize_properties = function(next){
   }
 
   this.currentMovement = "idle";
+  this.frame_time = 0;
   this.movementIndex = 0;
 
   this.speed = this.properties.speed || 200;
@@ -53,7 +54,7 @@ Displayable.prototype.initalize_properties = function(next){
   }
 };
 
-Displayable.prototype.draw = function(ctx){
+Displayable.prototype.draw = function(ctx, deltatime){
   var draw_x, draw_y;
 
   if(ctx.orientation == "isometric"){
@@ -64,6 +65,8 @@ Displayable.prototype.draw = function(ctx){
     draw_y = ((this.y * this.map_tile_height) - this.offset_y);
   }
 
+  this.animate(deltatime);
+
   ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
 };
 
@@ -73,7 +76,7 @@ Displayable.prototype.teleport = function(x, y){
 };
 
 Displayable.prototype.move = function(direction, distance){
-  distance = distance || 1;
+  this.distance = distance || 1;
   if(this.is_moving || this.is_interacting){ return; }
 
   this.currentMovement = direction;
@@ -84,34 +87,37 @@ Displayable.prototype.move = function(direction, distance){
   }
 
   this.is_moving = true;
-  this.animate(direction, distance);
 };
 
-Displayable.prototype.animate = function(direction, distance){
-  switch(direction){
-    case "left":  this.x -= this.animation_step_size; break;
-    case "right": this.x += this.animation_step_size; break;
-    case "up":    this.y -= this.animation_step_size; break;
-    case "down":  this.y += this.animation_step_size; break;
-  }
-  this.movementIndex++;
-  if(this.movementIndex >= this.movement[direction].length){
-    //set our destination as whole values because the step size might be just out a bit
-    this.x = this.to_x;
-    this.y = this.to_y;
+Displayable.prototype.animate = function(deltatime){
+  if(this.is_moving){
+    if((this.frame_time += deltatime*100) >= this.animation_speed){
+      this.movementIndex++;
+      switch(this.currentMovement){
+        case "left":  this.x -= this.animation_step_size; break;
+        case "right": this.x += this.animation_step_size; break;
+        case "up":    this.y -= this.animation_step_size; break;
+        case "down":  this.y += this.animation_step_size; break;
+      }
+      if(this.movementIndex >= this.movement[this.currentMovement].length){
+        //set our destination as whole values because the step size might be just out a bit
+        this.x = this.to_x;
+        this.y = this.to_y;
 
-    //reset animation
-    this.movementIndex = 0;
-    this.is_moving = false;
-    //if the distance is set that means keep walking
-    if(distance > 1){
-      this.move(direction, --distance);
+        //reset animation
+        this.movementIndex = 0;
+        this.is_moving = false;
+        //if the distance is set that means keep walking
+        if(this.distance > 1){
+          this.move(this.currentMovement, --this.distance);
+        }
+      }
+
+      this.frame_time = 0;
     }
+
   }else{
-    var _this = this;
-    setTimeout(function(){
-      _this.animate(direction, distance);
-    }, this.animation_speed);
+    //do idle animations
   }
 };
 
@@ -128,7 +134,7 @@ Displayable.prototype.react = function(actor){
   this.constructor.prototype.react.call(this, actor);
 };
 
-Displayable.prototype._get_frame = function(ctx){
+Displayable.prototype._get_frame = function(){
   return this.spritesheet.get(this.movement[this.currentMovement][this.movementIndex]).img;
 };
 
