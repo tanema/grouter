@@ -92,6 +92,9 @@ Map.prototype.draw = function (ctx, deltatime){
   //default background, using css
   $(ctx.canvas).css("background", this.properties.background);
 
+  //update the spritesheet(animated tiles) for this frame
+  this.spritesheet.update(deltatime);
+
   //set viewport x,y from player
   ctx.viewport.x = this.player.x - (ctx.screen.width  - this.spritesheet.tile_width) / (this.spritesheet.tile_width * 2);
   ctx.viewport.y = this.player.y - (ctx.screen.height - this.spritesheet.tile_height) / (this.spritesheet.tile_height * 2);

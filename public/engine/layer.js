@@ -89,7 +89,7 @@ Layer.prototype.draw = function(ctx, deltatime){
         }
 
         if(tile){
-          tile.draw(ctx, deltatime, draw_x - (ctx.viewport.x * tile_width), draw_y - (ctx.viewport.y * tile_height));
+          tile.draw(ctx, draw_x - (ctx.viewport.x * tile_width), draw_y - (ctx.viewport.y * tile_height));
         }
       }
     }

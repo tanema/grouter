@@ -81,7 +81,7 @@ TileEngine.prototype.updateFPS = function(){
   this.fps = this.fps_count / 2; // every two seconds cut the fps by 2
   this.fps_count = 0;
   if($("#fps").length){
-    $("#fps").html(this.fps.toFixed(0));
+    $("#fps").html(this.fps | 0);
   }
 },
 

@@ -14,8 +14,8 @@ function AnimatedTile(base_image, tile_properties, spritesheet){
 
 AnimatedTile.prototype = new Tile();
 
-AnimatedTile.prototype.draw = function(ctx, deltatime, x, y){
-  if((this.frame_time += deltatime/100) >= this.animation_speed){
+AnimatedTile.prototype.update = function(deltatime){
+  if((this.frame_time += deltatime) >= this.animation_speed){
     this.index += (this.frame_time / this.animation_speed) | 0;
 
     if(this.index >= this.frames.length){
@@ -27,8 +27,5 @@ AnimatedTile.prototype.draw = function(ctx, deltatime, x, y){
 
     this.frame_time = 0;
   }
-
-  //call Super
-  this.constructor.prototype.draw.call(this, ctx, deltatime, x, y);
 };
 

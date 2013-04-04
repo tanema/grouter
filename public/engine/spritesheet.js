@@ -5,6 +5,7 @@ function SpriteSheet(tile_width, tile_height){
   this.image_properties = [];
   this.tile_properties = {};
   this._frames = [];
+  this._animated_tiles = [];
 }
 
 SpriteSheet.prototype.add_image = function(img_options, next){
@@ -55,12 +56,20 @@ SpriteSheet.prototype._calculateFrames = function(img_options) {
         ctx.drawImage(img, x, y, tile_width, tile_height, 0, 0, tile_width, tile_height);
 
         if(tile_properties.animated === "true"){
-          _this._frames.push(new AnimatedTile(canvas, tile_properties, _this));
+          var animated_tile = new AnimatedTile(canvas, tile_properties, _this)
+          _this._frames.push(animated_tile);
+          _this._animated_tiles.push(animated_tile);
         }else{
           _this._frames.push(new Tile(canvas, tile_properties, _this));
         }
       }
     }
+  }
+};
+
+SpriteSheet.prototype.update = function(deltatime){
+  for(var i = 0; i < this._animated_tiles.length; i++){
+    this._animated_tiles[i].update(deltatime);
   }
 };
 

@@ -4,6 +4,6 @@ function Tile(base_image, tile_properties, spritesheet){
   this.spritesheet = spritesheet;
 }
 
-Tile.prototype.draw = function(ctx, deltatime, x, y){
+Tile.prototype.draw = function(ctx, x, y){
   ctx.drawImage(this.img, x, y);
 };
