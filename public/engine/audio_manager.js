@@ -1,8 +1,8 @@
 function AudioManager(type){
   this.step_size = 0.05;
 
-  this.music_volume = localStorage["music_vol"] || 1;
-  this.sfx_volume   = localStorage["sfx_vol"] || 1;
+  this.music_volume = localStorage["music_vol"] || 0.5;
+  this.sfx_volume   = localStorage["sfx_vol"] || 0.5;
 
   this.music = {};
   this.sfx = {};
@@ -76,7 +76,7 @@ AudioManager.prototype._bind_change_events = function(){
   $(document).on("music_off", function(){
     _this.change_volume(0, "music");
   }).on("music_on", function(){
-    _this.change_volume(localStorage["prev_music_vol"] && localStorage["prev_music_vol"] != "0" ? localStorage["prev_music_vol"] : 1, "music");
+    _this.change_volume(localStorage["prev_music_vol"] && localStorage["prev_music_vol"] != "0" ? localStorage["prev_music_vol"] : 0.5, "music");
   }).on("music_vol_down", function(){
     _this.change_volume(_this.music_volume - _this.step_size, "music");
   }).on("music_vol_up", function(){
@@ -89,7 +89,7 @@ AudioManager.prototype._bind_change_events = function(){
   $(document).on("sfx_off", function(){
     _this.change_volume(0, "sfx");
   }).on("sfx_on", function(){
-    _this.change_volume(localStorage["prev_sfx_vol"] && localStorage["prev_sfx_vol"] != "0" ? localStorage["prev_sfx_vol"] : 1, "sfx");
+    _this.change_volume(localStorage["prev_sfx_vol"] && localStorage["prev_sfx_vol"] != "0" ? localStorage["prev_sfx_vol"] : 0.5, "sfx");
   }).on("sfx_vol_down", function(){
     _this.change_volume(_this.sfx_volume - _this.step_size, "sfx");
   }).on("sfx_vol_up", function(){
@@ -97,15 +97,4 @@ AudioManager.prototype._bind_change_events = function(){
   }).on("sfx_vol_change", function(e, vol){
     _this.change_volume(vol/100, "sfx");
   });
-
-  //user is in another tab
-  $(window).on("blur", function(){
-    $(document).trigger("music_off");
-    $(document).trigger("sfx_off");
-  })
-  //user came back
-  $(window).on("focus", function(){
-    $(document).trigger("music_on");
-    $(document).trigger("sfx_on");
-  })
 };
