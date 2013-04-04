@@ -58,7 +58,7 @@ TileEngine.prototype.draw = function(timestamp){
 
   //calculate difference since last repaint
   var drawStart = (timestamp || Date.now()),
-      deltatime = (drawStart - this.startTime)/100;
+      deltatime = drawStart - this.startTime;
 
   //clear last frame
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

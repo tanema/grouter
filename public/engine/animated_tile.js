@@ -6,18 +6,18 @@ function AnimatedTile(base_image, tile_properties, spritesheet){
     this.frames[i] = parseInt(this.frames[i],10);
   }
   this.base_image = base_image;
-  this.speed = tile_properties.speed || 1000;
+  this.speed = tile_properties.speed || (this.frames.length * 1000);
+  this.animation_speed = this.speed / this.frames.length;
   this.frame_time = 0;
   Tile.call(this, base_image, tile_properties, spritesheet);
-
-
 }
 
 AnimatedTile.prototype = new Tile();
 
 AnimatedTile.prototype.draw = function(ctx, deltatime, x, y){
-  if((this.frame_time += deltatime) >= this.speed){
-    this.index++;
+  if((this.frame_time += deltatime/100) >= this.animation_speed){
+    this.index += (this.frame_time / this.animation_speed) | 0;
+
     if(this.index >= this.frames.length){
       this.img = this.base_image;
       this.index = 0;

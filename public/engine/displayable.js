@@ -91,7 +91,7 @@ Displayable.prototype.move = function(direction, distance){
 
 Displayable.prototype.animate = function(deltatime){
   if(this.is_moving){
-    if((this.frame_time += deltatime*100) >= this.animation_speed){
+    if((this.frame_time += deltatime) >= this.animation_speed){
       var number_of_steps = (this.frame_time / this.animation_speed) | 0;
 
       this.movementIndex += number_of_steps;
