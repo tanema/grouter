@@ -12,6 +12,14 @@ body {
   font: 20px pokemon;
 }
 
+#contents{
+  text-align: center;
+}
+
+#fps_container{
+  padding-left: 540px;
+}
+
 .instructions, .title{
   font: 30px kulminoituva;
 }

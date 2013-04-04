@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 
-var io = require('socket.io'),
+var IO = require('socket.io'),
     express = require('express'),
     routes = require('./routes'),
     http = require('http'),
@@ -62,7 +62,8 @@ server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-var sio = new SessionSockets(io.listen(server), store, express.cookieParser(sessionSecret));
+var io = IO.listen(server),
+    sio = new SessionSockets(io, store, express.cookieParser(sessionSecret));
 
 sio.on('connection', function (err, socket, session) {
   // socket.emit('session', session);
@@ -81,7 +82,7 @@ sio.on('connection', function (err, socket, session) {
     socket.set('map', map_name, function(){} );
     //spawn npc's
     //spawn other player's avatars
-    //io.in(map_name).emit('player spawn', socket.id, socket.id, {}, layer);
-    //socket.join(map_name);
+    io.sockets.in(map_name).emit('player spawn', socket.id, socket.id, {}, layer);
+    socket.join(map_name);
   });
 });
