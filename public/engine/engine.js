@@ -16,6 +16,10 @@ function TileEngine(map_src){
   this.keyboard = new Keyboard();
   this.startTime = window.mozAnimationStartTime || Date.now();
   this.register_socket_events(map_src);
+
+  this.fps = 0;
+  this.fps_count = 0;
+  this.fps_timer = setInterval(function(){_this.updateFPS()}, 2000);
 }
 
 TileEngine.prototype.register_socket_events = function(map_src){
@@ -56,7 +60,6 @@ TileEngine.prototype.draw = function(timestamp){
   var drawStart = (timestamp || Date.now()),
       deltatime = (drawStart - this.startTime)/100;
 
-  $("#time_diff").html(deltatime);
   //clear last frame
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -66,10 +69,21 @@ TileEngine.prototype.draw = function(timestamp){
   //reset startTime to this repaint
   this.startTime = drawStart;
 
+  //increments frame for fps display
+  this.fps_count++;
+
   //set the next animation frame
   var _this = this;
   requestAnimationFrame(function(timestamp){_this.draw(timestamp);});
 };
+
+TileEngine.prototype.updateFPS = function(){
+  this.fps = this.fps_count / 2; // every two seconds cut the fps by 2
+  this.fps_count = 0;
+  if($("#fps").length){
+    $("#fps").html(this.fps.toFixed(0));
+  }
+},
 
 TileEngine.prototype.canvasIsSupported = function (){
   var elem = document.createElement('canvas');
