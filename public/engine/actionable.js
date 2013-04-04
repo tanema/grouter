@@ -6,7 +6,6 @@ function Actionable(actionable_options, map, layer){
   this.type = actionable_options.type;
   this.x = actionable_options.x || 0;
   this.y = actionable_options.y || 0;
-  this.audio_manager = new AudioManager("sfx");
 
   if(map){
     //convert x and y to tile co-ords because tiled gives objects in absolute co-ords
@@ -31,7 +30,7 @@ function Actionable(actionable_options, map, layer){
 
 
     if(actionable_options.properties.action_sound){
-      this.action_sound = this.audio_manager.load_src(actionable_options.properties.action_sound);
+      this.action_sound = this.map.audio_manager.load_sfx(actionable_options.properties.action_sound);
     }
   }
 }
@@ -40,7 +39,7 @@ Actionable.prototype.react = function(actor){
   if(!this.action || this.is_busy){return;}
 
   if(this.action_sound){
-    this.audio_manager.play(this.action_sound);
+    this.map.audio_manager.play(this.action_sound);
   }
 
   var _this = this;

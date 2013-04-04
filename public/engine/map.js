@@ -4,7 +4,7 @@ function Map(map_src, engine){
   this.layers = {};
   this.player = null;
   this.objects = {};
-  this.audio_manager = new AudioManager("music");
+  this.audio_manager = new AudioManager();
   this.dialog = new Dialog();
   this.name = map_src.substr(map_src.lastIndexOf("/")+1);
 }
@@ -19,7 +19,7 @@ Map.prototype.load = function (next){
     _map.orientation = map_data.orientation;
 
     if(_map.properties.music){
-      var sound = _map.audio_manager.load_src(_map.properties.music);
+      var sound = _map.audio_manager.load_music(_map.properties.music);
       _map.audio_manager.loop(sound);
     }
 

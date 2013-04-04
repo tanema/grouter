@@ -1,38 +1,56 @@
 function AudioManager(type){
-  this.type = type || "sfx";
-  this.volume = localStorage[this.type+"_vol"] || 1;
   this.step_size = 0.05;
-  this.sounds = {};
+
+  this.music_volume = localStorage["music_vol"] || 1;
+  this.sfx_volume   = localStorage["sfx_vol"] || 1;
+
+  this.music = {};
+  this.sfx = {};
+
   this._bind_change_events();
-  this._volume_changed();
 }
 
-AudioManager.prototype.load_src = function(src){
+AudioManager.prototype.load_music = function(src){
   var sound = new Audio(src),
       filename = sound.src.substring(sound.src.lastIndexOf('/')+1);
   filename = filename.substring(0, filename.lastIndexOf('.'));
 
-  sound.volume = this.volume;
-  this.sounds[filename] = sound;
+  sound.volume = this.music_volume;
+  this.music[filename] = sound;
+
+  return filename;
+};
+
+AudioManager.prototype.load_sfx = function(src){
+  var sound = new Audio(src),
+      filename = sound.src.substring(sound.src.lastIndexOf('/')+1);
+  filename = filename.substring(0, filename.lastIndexOf('.'));
+
+  sound.volume = this.sfx_volume;
+  this.sfx[filename] = sound;
 
   return filename;
 };
 
 AudioManager.prototype.play = function(sound_name){
-  this.sounds[sound_name].play();
+  this.getSound(sound_name).play();
+};
+
+AudioManager.prototype.getSound = function(sound_name){
+  return this.music[sound_name] || this.sfx[sound_name];
 };
 
 AudioManager.prototype.stop = function(sound_name){
-  this.sounds[sound_name].pause();
+  this.pause(sound_name);
   this.currentTime = 0;
 };
 
 AudioManager.prototype.pause = function(sound_name){
-  this.sounds[sound_name].pause();
+  this.getSound(sound_name).pause();
 };
 
 AudioManager.prototype.loop = function(sound_name){
-  var sound = this.sounds[sound_name];
+  var sound = this.getSound(sound_name);
   if (typeof sound.loop === 'boolean'){
     sound.loop = true;
   }else{
@@ -44,31 +62,50 @@ AudioManager.prototype.loop = function(sound_name){
   sound.play();
 };
 
-AudioManager.prototype._volume_changed = function(){
-  localStorage[this.type+"_vol"] = this.volume;
-  for(var sound_name in this.sounds){
-    this.sounds[sound_name].volume = this.volume;
+AudioManager.prototype.change_volume = function(vol, type){
+  localStorage["prev_"+type+"_vol"] = localStorage[type+"_vol"];
+  this[type+"_volume"] = localStorage[type+"_vol"] = vol;
+  for(var sound_name in this[type]){
+    this[type][sound_name].volume = this[type+"_volume"];
   }
 };
 
 AudioManager.prototype._bind_change_events = function(){
   var _this = this;
-
-  function change_volume(vol){
-    _this.volume = vol;
-    _this._volume_changed();
-  }
-
-  $(document).on(this.type+"_off", function(){
-    change_volume(0);
-  }).on(this.type+"_on", function(){
-    change_volume(1);
-  }).on(this.type+"_vol_down", function(){
-    change_volume(_this.volume - _this.step_size);
-  }).on(this.type+"_vol_up", function(){
-    change_volume(_this.volume + _this.step_size);
-  }).on(this.type+"_vol_change", function(e, vol){
-    change_volume(vol/100);
+  //music events
+  $(document).on("music_off", function(){
+    _this.change_volume(0, "music");
+  }).on("music_on", function(){
+    _this.change_volume(localStorage["prev_music_vol"] && localStorage["prev_music_vol"] != "0" ? localStorage["prev_music_vol"] : 1, "music");
+  }).on("music_vol_down", function(){
+    _this.change_volume(_this.music_volume - _this.step_size, "music");
+  }).on("music_vol_up", function(){
+    _this.change_volume(_this.music_volume + _this.step_size, "music");
+  }).on("music_vol_change", function(e, vol){
+    _this.change_volume(vol/100, "music");
   });
 
+  //sfx events
+  $(document).on("sfx_off", function(){
+    _this.change_volume(0, "sfx");
+  }).on("sfx_on", function(){
+    _this.change_volume(localStorage["prev_sfx_vol"] && localStorage["prev_sfx_vol"] != "0" ? localStorage["prev_sfx_vol"] : 1, "sfx");
+  }).on("sfx_vol_down", function(){
+    _this.change_volume(_this.sfx_volume - _this.step_size, "sfx");
+  }).on("sfx_vol_up", function(){
+    _this.change_volume(_this.sfx_volume + _this.step_size, "sfx");
+  }).on("sfx_vol_change", function(e, vol){
+    _this.change_volume(vol/100, "sfx");
+  });
+
+  //user is in another tab
+  $(window).on("blur", function(){
+    $(document).trigger("music_off");
+    $(document).trigger("sfx_off");
+  })
+  //user came back
+  $(window).on("focus", function(){
+    $(document).trigger("music_on");
+    $(document).trigger("sfx_on");
+  })
 };
