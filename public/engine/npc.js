@@ -4,11 +4,14 @@ function Npc(npc_options, map, layer, next){
   var properties = npc_options.properties || {},
       _this = this;
 
+  this.id = npc_options.id || Date.now();
+
   this.idletime = properties.idletime || 3000;
   if(properties.onidle){
     this.onidle = properties.onidle;
     this._set_timer();
   }else if(properties.onidle_src){
+    console.log(" → loading npc's behaviour " + properties.onidle_src);
     $.ajax({
       url: properties.onidle_src,
       dataType: 'text', // have to set as text otherwise get ref errors from me/dialog/ect

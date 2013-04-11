@@ -39,7 +39,7 @@ Layer.prototype._initiate_objects = function(objects, next){
 
   if(object.type.toLowerCase() == "player"){
     new Player(object, _this.map, _this, function(player){
-      _this.map.player = _this.map.objects[player.name] = _this.objects[player.name] = player;
+      _this.map.player = _this.map.objects[player.id] = _this.objects[player.id] = player;
       _this._initiate_objects(objects, next);
     });
   }else if(object.type.toLowerCase() == "npc"){

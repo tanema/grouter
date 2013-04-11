@@ -10,34 +10,45 @@ function Map(map_src, engine){
 }
 
 Map.prototype.load = function (next){
-  var _map = this, i;
+  var _this = this, i;
 
-  console.log("loading map " + this.map_src + " ...");
+  console.log("["+ _this.map_src + "] getting from server");
   $.getJSON(this.map_src, function(map_data){
-    _map.data = map_data;
-    _map.properties = map_data.properties || {};
-    _map.orientation = map_data.orientation;
+    _this.properties = map_data.properties || {};
+    _this.orientation = map_data.orientation;
 
-    if(_map.properties.music){
-      var sound = _map.audio_manager.load_music(_map.properties.music);
-      _map.audio_manager.loop(sound);
+    if(_this.properties.music){
+      var sound = _this.audio_manager.load_music(_this.properties.music);
+      _this.audio_manager.loop(sound);
     }
 
-    console.log("["+ _map.map_src + "] loading " + map_data.tilesets.length + " tileset(s)");
+    console.log("["+ _this.map_src + "] loading " + map_data.tilesets.length + " tileset(s)");
     //load tilesets
-    _map.spritesheet = new SpriteSheet(map_data.tilewidth, map_data.tileheight);
-    _map._load_tileset(map_data.tilesets, function(){
-      console.log("["+ _map.map_src + "] all loaded: " + _map.spritesheet.loaded());
-      console.log("["+ _map.map_src + "] setting up " + map_data.layers.length + " layer(s)");
+    _this.spritesheet = new SpriteSheet(map_data.tilewidth, map_data.tileheight);
+    _this._load_tileset(map_data.tilesets, function(){
+      console.log("["+ _this.map_src + "] spritesheet loaded: " + _this.spritesheet.loaded());
+      console.log("["+ _this.map_src + "] setting up " + map_data.layers.length + " layer(s)");
       //load layers
-      _map._load_layer(map_data.layers, function(){
-        console.log("finished loading map " + _map.map_src);
+      _this._load_layer(map_data.layers, function(){
+        console.log("["+ _this.map_src + "] finished loading");
+        //do socket stuff
+        _this.register_socket_events();
+        _this.engine.socket.emit("join map", _this.name, _this.player.layer.name, _this.player.name, _this.player.properties);
         // map loaded so continue
-        if(next)
-          next();
+        if(next){
+          next(_this);
+        }
       });
     });
   });
+};
+
+Map.prototype.register_socket_events = function(){
+  var _this = this;
+  this.engine.socket.on('spawn player', function(options){_this.player_spawn(options);});
+  this.engine.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
+  this.engine.socket.on('kill player', function(id){_this.npc_killed(id);});
+  this.engine.socket.on('kill npc', function(name){_this.npc_killed(name);});
 };
 
 Map.prototype.loaded = function (){
@@ -46,20 +57,20 @@ Map.prototype.loaded = function (){
 
 Map.prototype._load_tileset = function(tilesets, next){
   if(tilesets.length === 0){return next();}
-  var _map = this;
+  var _this = this;
   this.spritesheet.add_image(tilesets[0], function(){
     tilesets.shift();
-    _map._load_tileset(tilesets, next);
+    _this._load_tileset(tilesets, next);
   });
 };
 
 Map.prototype._load_layer = function(layers, next){
   if(layers.length === 0){return next();}
-  var _map = this;
-  new Layer(_map.data.layers[0], _map, function(layer){
-    _map.layers[layer.name] = layer;
+  var _this = this;
+  new Layer(layers[0], _this, function(layer){
+    _this.layers[layer.name] = layer;
     layers.shift();
-    _map._load_layer(layers, next);
+    _this._load_layer(layers, next);
   });
 };
 
@@ -107,9 +118,30 @@ Map.prototype.draw = function (ctx, deltatime){
   this.dialog.draw(ctx);
 };
 
-Map.prototype.player_spawn = function(id, name, player_data, layer){
-
+Map.prototype.player_spawn = function(options){
+  if(options.id == this.player.id){return;}
+  console.log("Spawning player " + options.id);
+  console.log(options);
+  var _this = this;
+  var layer = this.layers[options.layer_name];
+  new Npc(options, this, layer, function(npc){
+    _this.objects[npc.id] = npc;
+    layer.objects[npc.id] = npc;
+  });
 };
-Map.prototype.npc_spawn = function(layer, character_name, character_data){
 
+Map.prototype.npc_spawn = function(options){
+  console.log("Spawning npc " + options.name);
+};
+
+Map.prototype.player_killed = function(id){
+  console.log("Killing player " + id);
+  delete this.objects[id].layer.objects[id]
+  delete this.objects[id]
+};
+
+Map.prototype.npc_killed = function(name){
+  console.log("Killing npc " + name);
+  delete this.objects[name].layer.objects[name]
+  delete this.objects[name]
 };

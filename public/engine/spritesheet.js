@@ -18,7 +18,7 @@ SpriteSheet.prototype.add_image = function(img_options, next){
 
   this.image_properties.push(image_properties);
   img.src = image_properties.src || img_options.image;
-  console.log("Loading image " + img.src + " ...");
+  console.log(" → loading image " + img.src + " ...");
   img.onload = function () {
     _this.image_sources.push(img);
     _this._calculateFrames(img_options);

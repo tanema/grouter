@@ -20,6 +20,7 @@ function Actionable(actionable_options, map, layer){
       this.action = actionable_options.properties.action;
     }else if(actionable_options.properties.action_src){
       var _this = this;
+      console.log(" → loading actionable's reaction " + actionable_options.properties.onidle_src);
       $.ajax({
         url: actionable_options.properties.action_src,
         dataType: 'text', // have to set as text otherwise get ref errors from me/dialog/ect
@@ -27,7 +28,6 @@ function Actionable(actionable_options, map, layer){
         async: false
       });
     }
-
 
     if(actionable_options.properties.action_sound){
       this.action_sound = this.map.audio_manager.load_sfx(actionable_options.properties.action_sound);

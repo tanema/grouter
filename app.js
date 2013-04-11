@@ -3,20 +3,19 @@
  * Module dependencies.
  */
 
-var IO = require('socket.io'),
-    express = require('express'),
+var express = require('express'),
     routes = require('./routes'),
     http = require('http'),
     path = require('path'),
     sessionSecret = "secret",
+    cookieParser = express.cookieParser(sessionSecret),
     RedisStore = require("connect-redis")(express),
     store = new RedisStore(),
     SessionSockets = require('session.socket.io'),
     fs = require('fs'),
     Map = require("./lib/map.js"),
-    maps = {};
-
-var app = express();
+    maps = {},
+    app = express();
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3001);
@@ -26,8 +25,8 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.cookieParser());
-  app.use(express.cookieSession({store: store,secret: sessionSecret, key: 'express.sid'}));
+  app.use(cookieParser);
+  app.use(express.cookieSession({store: store}));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(app.router);
 });
@@ -56,33 +55,70 @@ for(var i =0; i < files.length; i++){
 
 app.get('*', routes.index);
 
-var server = http.createServer(app);
+var server = http.createServer(app),
+    io = require('socket.io').listen(server),
+    sio = new SessionSockets(io, store, cookieParser);
+
+sio.on('connection', function (err, socket, session) {
+
+  socket.on('join map', function(map_name, layer, name, properties){
+    set_data(map_name, layer, name, function(){
+      var player = maps[map_name].player_prototype;
+
+      player.id = socket.id
+      player.type = "npc";
+      player.layer_name = layer;
+
+      socket.broadcast.to(map_name).emit('spawn player', player);
+      socket.join(map_name);
+
+      var sockets = io.sockets.in(map_name).sockets,
+          npc_name, socket_id,
+          npcs = maps[map_name].npcs;
+
+      //spawn other characters
+      for(socket_id in sockets){
+        var data = sockets[socket_id].store.data;
+
+        player.id = socket_id
+        player.layer_name = layer;
+
+        socket.emit('spawn player', player);
+      }
+      //spawn all the npcs from the map
+      for(npc_name in npcs){
+        console.log(npc_name)
+        //socket.emit('spawn player', npcs[npc_name]);
+      }
+    })
+  });
+
+  socket.on('player move', function(direction, distance){
+    //socket.broadcast.to(socket.data.map).emit('npc move', socket.id, socket.data.layer, direction, distance);
+  });
+
+  socket.on('set name', function(name){
+    socket.set('name', name, function(){
+      socket.broadcast.to(socket.data.map).emit('change name', socket.id, name);
+    });
+  });
+
+  function set_data(map, layer, name, cb){
+    socket.set('map', map, function(){
+      socket.set('layer', layer, function(){
+        socket.set('name', name, function(){
+          cb();
+        });
+      });
+    });
+  }
+
+  socket.on('disconnect', function () {
+    io.sockets.emit('kill player', socket.id);
+  });
+
+});
 
 server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
-});
-
-var io = IO.listen(server),
-    sio = new SessionSockets(io, store, express.cookieParser(sessionSecret));
-
-sio.on('connection', function (err, socket, session) {
-  // socket.emit('session', session);
-  // socket.set('nickname', name, function () {});
-  // socket.get('nickname', function (err, name) {});
-  // session.foo = value;
-  // session.save();
-  // io.sockets.in('room').emit('event_name', data)
-
-  // socket.on('join room', function (room) {
-  //   socket.set('room', room, function(){} );
-  //   socket.join(room);
-  // });
-
-  socket.on('join map', function(map_name, layer){
-    socket.set('map', map_name, function(){} );
-    //spawn npc's
-    //spawn other player's avatars
-    io.sockets.in(map_name).emit('player spawn', socket.id, socket.id, {}, layer);
-    socket.join(map_name);
-  });
 });

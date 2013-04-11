@@ -1,32 +1,23 @@
 function Player(player_options, map, layer, next){
   Displayable.call(this, player_options, map, layer, next);
+
+  this.id = map.engine.socket.socket.sessionid
   this.bind_key_events();
-  this.register_socket_events();
 }
 
 Player.prototype = new Displayable();
-
-Player.prototype.register_socket_events = function(){
-  this.socket.emit("join map", this.map.name, this.layer.name);
-};
 
 Player.prototype.bind_key_events = function(){
   if(this.is_moving){return;}
 
   var _this = this;
 
-  $(document).on("keypress_up", function(){
-    _this.move("up");
+  $(document).on("keypress_up keypress_down keypress_left keypress_right", function(event){
+    var direction = event.type.replace("keypress_", "");
+    _this.socket.emit("player move", direction, 1, _this.x, _this.y);
+    _this.move(direction);
   });
-  $(document).on("keypress_down", function(){
-    _this.move("down");
-  });
-  $(document).on("keypress_left", function(){
-    _this.move("left");
-  });
-  $(document).on("keypress_right", function(){
-    _this.move("right");
-  });
+
   $(document).on("keypress_z", function(){
     if(_this.map.dialog.is_talking){
       _this.map.dialog.next();

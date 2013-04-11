@@ -10,41 +10,31 @@ function TileEngine(map_src){
   this.canvas = document.getElementById('canvas');
   this.ctx = this.canvas.getContext('2d');
   this.ctx.canvas = this.canvas;
-  window.addEventListener('load', function(){
-    _this.load_map(map_src);
-  });
+
   this.keyboard = new Keyboard();
   this.startTime = window.mozAnimationStartTime || Date.now();
-  this.register_socket_events(map_src);
 
   this.fps = 0;
   this.fps_count = 0;
   this.fps_timer = setInterval(function(){_this.updateFPS()}, 2000);
-}
 
-TileEngine.prototype.register_socket_events = function(map_src){
   this.socket = io.connect();
-  this.socket.emit("join map", map_src.substr(map_src.lastIndexOf('/')+1));
 
-  var map = this.map;
-  this.socket.on('spawn player', function(id, name, player_data, layer){
-    map.player_spawn(id, name, player_data, layer);
+  window.addEventListener('load', function(){
+    _this.load_map(map_src);
   });
-  this.socket.on('spawn npc', function(layer, character_name, character_data){
-    map.npc_spawn(layer, character_name, character_data);
-  });
-};
+}
 
 TileEngine.prototype.load_map = function(map_src){
   var _this = this;
   this.loaded = false;
   this.map = new Map(map_src, this);
-  this.map.load(function(){
-    var tile_width = _this.map.spritesheet.tile_width,
-        tile_height = _this.map.spritesheet.tile_height,
+  this.map.load(function(map){
+    var tile_width = map.spritesheet.tile_width,
+        tile_height = map.spritesheet.tile_height,
         screen = _this.ctx.screen = new Screen(_this.canvas, tile_width, tile_height);
-    _this.ctx.viewport = new Viewport(screen, tile_width, tile_height, _this.map.properties.tiles_overflow);
-    _this.ctx.orientation = _this.map.orientation;
+    _this.ctx.viewport = new Viewport(screen, tile_width, tile_height, map.properties.tiles_overflow);
+    _this.ctx.orientation = map.orientation;
     _this.loaded = true;
 
     requestAnimationFrame(function(timestamp){_this.draw(timestamp);});
