@@ -14,7 +14,10 @@ Player.prototype.bind_key_events = function(){
 
   $(document).on("keypress_up keypress_down keypress_left keypress_right", function(event){
     var direction = event.type.replace("keypress_", "");
-    _this.socket.emit("player move", direction, 1, _this.x, _this.y);
+    if(!_this.is_moving){
+      var to_tile = _this._get_to_tile();
+      _this.socket.emit("player move", direction, 1, _this.x, _this.y, to_tile.x, to_tile.y);
+    }
     _this.move(direction);
   });
 

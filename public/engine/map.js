@@ -49,6 +49,7 @@ Map.prototype.register_socket_events = function(){
   this.engine.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
   this.engine.socket.on('kill player', function(id){_this.npc_killed(id);});
   this.engine.socket.on('kill npc', function(name){_this.npc_killed(name);});
+  this.engine.socket.on('actor move', function(id, direction, distance){_this.actor_move(id, direction, distance);});
 };
 
 Map.prototype.loaded = function (){
@@ -121,7 +122,7 @@ Map.prototype.draw = function (ctx, deltatime){
 Map.prototype.player_spawn = function(options){
   if(options.id == this.player.id){return;}
   console.log("Spawning player " + options.id);
-  console.log(options);
+
   var _this = this;
   var layer = this.layers[options.layer_name];
   new Npc(options, this, layer, function(npc){
@@ -136,12 +137,20 @@ Map.prototype.npc_spawn = function(options){
 
 Map.prototype.player_killed = function(id){
   console.log("Killing player " + id);
-  delete this.objects[id].layer.objects[id]
-  delete this.objects[id]
+  if(this.objects[id]){
+    delete this.objects[id].layer.objects[id];
+    delete this.objects[id];
+  }
 };
 
 Map.prototype.npc_killed = function(name){
   console.log("Killing npc " + name);
-  delete this.objects[name].layer.objects[name]
-  delete this.objects[name]
+  if(this.objects[name]){
+    delete this.objects[name].layer.objects[name];
+    delete this.objects[name];
+  }
+};
+
+Map.prototype.actor_move = function(id, direction, distance){
+  this.objects[id].move(direction, distance);
 };

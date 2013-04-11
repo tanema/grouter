@@ -10,7 +10,7 @@ var express = require('express'),
     sessionSecret = "secret",
     cookieParser = express.cookieParser(sessionSecret),
     RedisStore = require("connect-redis")(express),
-    store = new RedisStore(),
+    sessionStore = new RedisStore(),
     SessionSockets = require('session.socket.io'),
     fs = require('fs'),
     Map = require("./lib/map.js"),
@@ -26,7 +26,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(cookieParser);
-  app.use(express.cookieSession({store: store}));
+  app.use(express.session({ store: sessionStore }));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(app.router);
 });
@@ -53,65 +53,75 @@ for(var i =0; i < files.length; i++){
   }
 }
 
+/*
+ * Routes
+ */
+
 app.get('*', routes.index);
 
-var server = http.createServer(app),
-    io = require('socket.io').listen(server),
-    sio = new SessionSockets(io, store, cookieParser);
 
-sio.on('connection', function (err, socket, session) {
+
+var server = http.createServer(app),
+    io = require('socket.io').listen(server);
+
+var SessionSockets = require('session.socket.io'),
+    sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
+
+sessionSockets.on('connection', function (err, socket, session) {
 
   socket.on('join map', function(map_name, layer, name, properties){
-    set_data(map_name, layer, name, function(){
-      var player = maps[map_name].player_prototype;
+    session.map = map_name;
+    session.layer = layer;
+    session.name = name;
+    session.save();
 
-      player.id = socket.id
-      player.type = "npc";
-      player.layer_name = layer;
+    var player = maps[map_name].player_prototype,
+        map = maps[map_name],
+        npc_name,
+        npcs = map.npcs
 
-      socket.broadcast.to(map_name).emit('spawn player', player);
-      socket.join(map_name);
+    player.id = socket.id
+    player.layer_name = layer;
 
-      var sockets = io.sockets.in(map_name).sockets,
-          npc_name, socket_id,
-          npcs = maps[map_name].npcs;
+    // tell everyone else about this player
+    socket.broadcast.to(map_name).emit('spawn player', player);
 
-      //spawn other characters
-      for(socket_id in sockets){
-        var data = sockets[socket_id].store.data;
-
-        player.id = socket_id
+    //spawn other characters
+    io.sockets.in(map_name).clients().forEach(function (player_socket) {
+      sessionSockets.getSession(player_socket, function (err, player_session) {
+        player.id = player_socket.id;
         player.layer_name = layer;
-
+        player.x = player_session.x ? map.data.tilewidth * player_session.x : player.x;
+        player.y = player_session.y ? map.data.tileheight * player_session.y : player.y;
         socket.emit('spawn player', player);
-      }
-      //spawn all the npcs from the map
-      for(npc_name in npcs){
-        console.log(npc_name)
-        //socket.emit('spawn player', npcs[npc_name]);
-      }
-    })
+      });
+    });
+    // player.id = socket_id;
+    // player.layer_name = layer;
+    // socket.emit('spawn player', player);
+
+    //join here to avoid sending own self to self
+    socket.join(map_name);
+
+    //spawn all the npcs from the map
+    //for(npc_name in npcs){
+      // console.log(npc_name)
+      // socket.emit('spawn npc', npcs[npc_name]);
+    //}
   });
 
-  socket.on('player move', function(direction, distance){
-    //socket.broadcast.to(socket.data.map).emit('npc move', socket.id, socket.data.layer, direction, distance);
+  socket.on('player move', function(direction, distance, x, y, to_x, to_y){
+    session.x = to_x;
+    session.y = to_y;
+    session.save();
+    socket.broadcast.to(session.map).emit('actor move', socket.id, direction, distance, x, y, to_x, to_y);
   });
 
   socket.on('set name', function(name){
-    socket.set('name', name, function(){
-      socket.broadcast.to(socket.data.map).emit('change name', socket.id, name);
-    });
+    session.name = name;
+    session.save();
+    socket.broadcast.to(socket.data.map).emit('change name', socket.id, name);
   });
-
-  function set_data(map, layer, name, cb){
-    socket.set('map', map, function(){
-      socket.set('layer', layer, function(){
-        socket.set('name', name, function(){
-          cb();
-        });
-      });
-    });
-  }
 
   socket.on('disconnect', function () {
     io.sockets.emit('kill player', socket.id);
@@ -119,6 +129,7 @@ sio.on('connection', function (err, socket, session) {
 
 });
 
+//Start The server
 server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

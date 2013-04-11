@@ -24,6 +24,7 @@ function Npc(npc_options, map, layer, next){
   }
 
   Displayable.call(this, npc_options, map, layer, next);
+  this.type = "npc"; //this is just for spawning players so I don't have to set it everytime
 }
 
 Npc.prototype = new Displayable();
