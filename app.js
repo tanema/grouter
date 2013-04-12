@@ -75,20 +75,25 @@ sessionSockets.on('connection', function (err, socket, session) {
     session.name = name;
     session.save();
 
-    var player = maps[map_name].player_prototype,
-        map = maps[map_name],
+    var map = maps[map_name],
+        player = JSON.parse(JSON.stringify(map.player_prototype)), //quick clone hack
         npc_name,
         npcs = map.npcs
+
+    console.log(player.x)
 
     player.id = socket.id
     player.layer_name = layer;
 
+    // set player back to where they were last time
+    socket.emit("player connected", session.x || player.x / map.data.tilewidth, session.y || player.y / map.data.tileheight)
     // tell everyone else about this player
     socket.broadcast.to(map_name).emit('spawn player', player);
 
     //spawn other characters
     io.sockets.in(map_name).clients().forEach(function (player_socket) {
       sessionSockets.getSession(player_socket, function (err, player_session) {
+        player = JSON.parse(JSON.stringify(map.player_prototype)), //quick clone hack
         player.id = player_socket.id;
         player.layer_name = layer;
         player.x = player_session.x ? map.data.tilewidth * player_session.x : player.x;

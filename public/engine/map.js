@@ -45,6 +45,7 @@ Map.prototype.load = function (next){
 
 Map.prototype.register_socket_events = function(){
   var _this = this;
+  this.engine.socket.on('player connected', function(x, y){_this.player_connected(x, y);});
   this.engine.socket.on('spawn player', function(options){_this.player_spawn(options);});
   this.engine.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
   this.engine.socket.on('kill player', function(id){_this.npc_killed(id);});
@@ -117,6 +118,10 @@ Map.prototype.draw = function (ctx, deltatime){
   }
 
   this.dialog.draw(ctx);
+};
+
+Map.prototype.player_connected = function(x, y){
+  this.player.teleport(x,y);
 };
 
 Map.prototype.player_spawn = function(options){
