@@ -84,9 +84,11 @@ sessionSockets.on('connection', function (err, socket, session) {
 
     player.id = socket.id
     player.layer_name = layer;
+    player.x = session.x * map.data.tilewidth || player.x;
+    player.y = session.y * map.data.tileheight || player.y;
 
     // set player back to where they were last time
-    socket.emit("player connected", session.x || player.x / map.data.tilewidth, session.y || player.y / map.data.tileheight)
+    socket.emit("player connected", player.x / map.data.tilewidth, player.y / map.data.tileheight)
     // tell everyone else about this player
     socket.broadcast.to(map_name).emit('spawn player', player);
 
@@ -116,10 +118,10 @@ sessionSockets.on('connection', function (err, socket, session) {
   });
 
   socket.on('player move', function(direction, distance, x, y, to_x, to_y){
+    socket.broadcast.to(session.map).emit('actor move', socket.id, direction, distance, x, y, to_x, to_y);
     session.x = to_x;
     session.y = to_y;
     session.save();
-    socket.broadcast.to(session.map).emit('actor move', socket.id, direction, distance, x, y, to_x, to_y);
   });
 
   socket.on('set name', function(name){

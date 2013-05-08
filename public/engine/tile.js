@@ -5,5 +5,5 @@ function Tile(base_image, tile_properties, spritesheet){
 }
 
 Tile.prototype.draw = function(ctx, x, y){
-  ctx.drawImage(this.img, x, y);
+  ctx.drawImage(this.img, Math.round(x), Math.round(y));
 };
