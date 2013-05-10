@@ -11,6 +11,7 @@
     "connect": "*",
     "socket.io": "*",
     "connect-redis": "*",
-    "session.socket.io": "*"
+    "session.socket.io": "*",
+    "underscore": "*"
   }
 }

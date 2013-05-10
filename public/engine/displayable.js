@@ -1,7 +1,5 @@
 function Displayable(display_object_options, map, layer, next){
   display_object_options = display_object_options || {};
-  this.map = map || {};
-  this.properties = display_object_options.properties || {};
 
   Actionable.call(this, display_object_options, map, layer);
 

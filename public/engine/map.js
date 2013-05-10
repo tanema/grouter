@@ -138,6 +138,7 @@ Map.prototype.player_spawn = function(options){
 
 Map.prototype.npc_spawn = function(options){
   console.log("Spawning npc " + options.name);
+  this.objects[options.name].teleport(options.x, options.y);
 };
 
 Map.prototype.player_killed = function(id){
@@ -157,5 +158,6 @@ Map.prototype.npc_killed = function(name){
 };
 
 Map.prototype.actor_move = function(id, direction, distance){
+  console.log("actor move: " + id);
   this.objects[id].move(direction, distance);
 };

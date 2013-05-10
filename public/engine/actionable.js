@@ -33,6 +33,7 @@ function Actionable(actionable_options, map, layer){
       this.action_sound = this.map.audio_manager.load_sfx(actionable_options.properties.action_sound);
     }
   }
+  this.properties = actionable_options.properties || {};
 }
 
 Actionable.prototype.react = function(actor){
