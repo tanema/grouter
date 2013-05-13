@@ -32,8 +32,10 @@ Map.prototype.load = function (next){
       _this._load_layer(map_data.layers, function(){
         console.log("["+ _this.map_src + "] finished loading");
         //do socket stuff
-        _this.register_socket_events();
-        _this.engine.socket.emit("join map", _this.name, _this.player.layer.name, _this.player.name, _this.player.properties);
+        if(Grouter.ServerEnabled){
+          _this.register_socket_events();
+          _this.engine.socket.emit("join map", _this.name, _this.player.layer.name, _this.player.name, _this.player.properties);
+        }
         // map loaded so continue
         if(next){
           next(_this);

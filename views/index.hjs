@@ -53,7 +53,7 @@
     <script src='/engine/dialog.js'         type="text/javascript"></script>
 
     <script type="text/javascript">
-      var engine = new TileEngine('/maps/{{ map }}');
+      var engine = new Grouter("#canvas", '/maps/{{ map }}');
 
       $("#vol_controls").find("div").each(function(){
         var control = $(this);

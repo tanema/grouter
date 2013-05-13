@@ -1,13 +1,15 @@
 var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
 
-function TileEngine(map_src){
+Grouter.ServerEnabled = true;
+
+function Grouter(canvas_el, map_src){
   if(!this.canvasIsSupported() && !!requestAnimationFrame){
     alert("Your browser does not support this game.");
     return;
   }
 
   var _this = this;
-  this.canvas = document.getElementById('canvas');
+  this.canvas = $(canvas_el).get(0);
   this.ctx = this.canvas.getContext('2d');
   this.ctx.canvas = this.canvas;
 
@@ -18,14 +20,15 @@ function TileEngine(map_src){
   this.fps_count = 0;
   this.fps_timer = setInterval(function(){_this.updateFPS()}, 2000);
 
-  this.socket = io.connect();
-
+  if(Grouter.ServerEnabled){
+    this.socket = io.connect();
+  }
   window.addEventListener('load', function(){
     _this.load_map(map_src);
   });
 }
 
-TileEngine.prototype.load_map = function(map_src){
+Grouter.prototype.load_map = function(map_src){
   var _this = this;
   this.loaded = false;
   this.map = new Map(map_src, this);
@@ -43,7 +46,7 @@ TileEngine.prototype.load_map = function(map_src){
 
 //the time difference does not need to be regarded in the model of this engine since the
 //animations are done within thier own intervals
-TileEngine.prototype.draw = function(timestamp){
+Grouter.prototype.draw = function(timestamp){
   if(!this.loaded){return;}
 
   //calculate difference since last repaint
@@ -67,7 +70,7 @@ TileEngine.prototype.draw = function(timestamp){
   requestAnimationFrame(function(timestamp){_this.draw(timestamp);});
 };
 
-TileEngine.prototype.updateFPS = function(){
+Grouter.prototype.updateFPS = function(){
   this.fps = this.fps_count / 2; // every two seconds cut the fps by 2
   this.fps_count = 0;
   if($("#fps").length){
@@ -75,7 +78,7 @@ TileEngine.prototype.updateFPS = function(){
   }
 },
 
-TileEngine.prototype.canvasIsSupported = function (){
+Grouter.prototype.canvasIsSupported = function (){
   var elem = document.createElement('canvas');
   return !!(elem.getContext && elem.getContext('2d'));
 };
