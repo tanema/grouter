@@ -169,7 +169,7 @@ Displayable.prototype._get_to_tile = function(){
 
 Displayable.prototype._facing_solid_tile = function(){
   var to_tile = this._get_to_tile();
-  if(to_tile.objects.length || to_tile.tiles.length === 0){
+  if(to_tile.objects.length > 0){
     return true;
   }
   for(var i = 0; i < to_tile.tiles.length; i++){

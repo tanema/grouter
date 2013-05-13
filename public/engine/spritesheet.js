@@ -17,51 +17,47 @@ SpriteSheet.prototype.add_image = function(img_options, next){
   img_options.spacing = img_options.spacing || 0;
 
   this.image_properties.push(image_properties);
+  //there will be no conflicts because it offsets the tileset numbers
+  $.extend(this.tile_properties, img_options.tileproperties);
+
   img.src = image_properties.src || img_options.image;
   console.log(" → loading image " + img.src + " ...");
   img.onload = function () {
     _this.image_sources.push(img);
-    _this._calculateFrames(img_options);
+    _this._calculateFrames(img, img_options);
     if(next){next();}
   };
-
-  //there will be no conflicts because it offsets the tileset numbers
-  $.extend(this.tile_properties, img_options.tileproperties);
 };
 
 SpriteSheet.prototype.get = function(idx){
   return this._frames[idx - 1];
 };
 
-SpriteSheet.prototype._calculateFrames = function(img_options) {
-  if(!this.loaded()){return;}
+SpriteSheet.prototype._calculateFrames = function(img, img_options) {
   var _this = this,
       tile_width = this.tile_width,
-      tile_height = this.tile_height;
-  for (var i=0; i<this.image_sources.length; i++) {
-    var img = this.image_sources[i],
-        cols = (img.width+1)/tile_width|0,
-        rows = (img.height+1)/tile_height|0;
+      tile_height = this.tile_height,
+      cols = (img.width+1)/tile_width|0,
+      rows = (img.height+1)/tile_height|0;
 
-    for(var row=0; row < rows; row++){
-      for(var col=0; col < cols; col++){
-        var canvas = document.createElement('canvas'),
-            ctx = canvas.getContext('2d'),
-            tile_properties = _this.tile_properties[_this._frames.length] || {},
-            x = (col*tile_width) + (img_options.margin + (col*img_options.spacing)),
-            y = (row*tile_height) + (img_options.margin + (row*img_options.spacing));
+  for(var row=0; row < rows; row++){
+    for(var col=0; col < cols; col++){
+      var canvas = document.createElement('canvas'),
+          ctx = canvas.getContext('2d'),
+          tile_properties = _this.tile_properties[_this._frames.length] || {},
+          x = (col*tile_width) + (img_options.margin + (col*img_options.spacing)),
+          y = (row*tile_height) + (img_options.margin + (row*img_options.spacing));
 
-        canvas.setAttribute('width', _this.tile_width);
-        canvas.setAttribute('height', _this.tile_height);
-        ctx.drawImage(img, x, y, tile_width, tile_height, 0, 0, tile_width, tile_height);
+      canvas.setAttribute('width', _this.tile_width);
+      canvas.setAttribute('height', _this.tile_height);
+      ctx.drawImage(img, x, y, tile_width, tile_height, 0, 0, tile_width, tile_height);
 
-        if(tile_properties.animated === "true"){
-          var animated_tile = new AnimatedTile(canvas, tile_properties, _this)
-          _this._frames.push(animated_tile);
-          _this._animated_tiles.push(animated_tile);
-        }else{
-          _this._frames.push(new Tile(canvas, tile_properties, _this));
-        }
+      if(tile_properties.animated === "true"){
+        var animated_tile = new AnimatedTile(canvas, tile_properties, _this)
+        _this._frames.push(animated_tile);
+        _this._animated_tiles.push(animated_tile);
+      }else{
+        _this._frames.push(new Tile(canvas, tile_properties, _this));
       }
     }
   }
