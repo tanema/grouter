@@ -1,18 +1,23 @@
-Lightweight Tile Engine For HTML5 Game Creation
+Grouter.js For HTML5 Game Creation
 =============
-  This is only the basic building blocks for a top down type game, for either isometric or orthogonal views
+  This is a work in progress, not really meant to compete with anything out there but I wanted to build a 
+tile engine around tiled. It makes it easy to quickly generate worlds and games in a 2D environment. I would
+love if someone would help if you are interested in the project. I am hoping to build it into a npm module
+so that it can plugin into express and work right out of the box, both multiplayer and a more simple single
+player.
 
 Status
 ------
 
-  This project is just something I put together to share and then build a game off of its foundations
+  This is really just a hobby project for me to work on and keep learning and possibly use to make a real game or
+two in the future. I am looking for contributors to help speed up the process though.
 
 
 License
 -------
 
-  Lightweight Tile Engine For HTML5 Game Creation
-  Copyright (C) 2011  Tim Anema
+  Grouter.js
+  Copyright (C) 2013  Tim Anema
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
