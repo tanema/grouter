@@ -6,7 +6,7 @@ function Npc(npc_options, map, layer, next){
 
   this.id = npc_options.id || Date.now();
 
-  if(Grouter.ServerEnabled){
+  if(!Grouter.ServerEnabled){
     this.idletime = properties.idletime || 3000;
     if(properties.onidle){
       this.onidle = properties.onidle;
