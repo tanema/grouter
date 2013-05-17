@@ -122,8 +122,15 @@ Map.prototype.draw = function (ctx, deltatime){
   this.dialog.draw(ctx);
 };
 
-Map.prototype.player_connected = function(x, y){
-  this.player.teleport(x,y);
+Map.prototype.player_connected = function(connection_data){
+  //handle player connection
+  this.player.teleport(connection_data.player.x, connection_data.player.y);
+  for(var player_id in connection_data.players){
+    this.player_spawn(connection_data.players[player_id]);
+  }
+  for(var npc_id in connection_data.npcs){
+    this.npc_spawn(connection_data.npcs[npc_id]);
+  }
 };
 
 Map.prototype.player_spawn = function(options){
