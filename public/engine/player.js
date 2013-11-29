@@ -15,11 +15,10 @@ Player.prototype.bind_key_events = function(){
     var direction = event.type.replace("keypress_", "");
     if(!_this.is_moving){
       var to_tile = _this._get_to_tile();
-      if(_this.socket){
+      if(_this.socket && _this.move(direction)){
         _this.socket.emit("player move", _this.x, _this.y, to_tile.x, to_tile.y);
       }
     }
-    _this.move(direction);
   });
 
   $(document).on("keypress_z", function(){
