@@ -1,6 +1,6 @@
 var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
 
-Grouter.ServerEnabled = true;
+Grouter.ServerEnabled = Grouter.ServerEnabled || true;
 
 function Grouter(canvas_el, map_src){
   if(!this.canvasIsSupported() && !!requestAnimationFrame){

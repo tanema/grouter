@@ -1,7 +1,6 @@
 function Player(player_options, map, layer, next){
   Displayable.call(this, player_options, map, layer, next);
-
-  this.id = map.engine.socket.socket.sessionid
+  this.id = "player"
   this.bind_key_events();
 }
 
@@ -16,7 +15,9 @@ Player.prototype.bind_key_events = function(){
     var direction = event.type.replace("keypress_", "");
     if(!_this.is_moving){
       var to_tile = _this._get_to_tile();
-      _this.socket.emit("player move", direction, 1, _this.x, _this.y, to_tile.x, to_tile.y);
+      if(_this.socket){
+        _this.socket.emit("player move", _this.x, _this.y, to_tile.x, to_tile.y);
+      }
     }
     _this.move(direction);
   });

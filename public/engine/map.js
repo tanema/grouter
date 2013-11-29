@@ -34,7 +34,7 @@ Map.prototype.load = function (next){
         //do socket stuff
         if(Grouter.ServerEnabled){
           _this.register_socket_events();
-          _this.engine.socket.emit("join map", _this.name, _this.player.layer.name, _this.player.name, _this.player.properties);
+          _this.engine.socket.emit("join map", _this.name, _this.player.layer.name, _this.player.name);
         }
         // map loaded so continue
         if(next){
