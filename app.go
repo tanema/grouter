@@ -3,23 +3,19 @@ package main
 import (
 	"net/http"
   "log"
-  "github.com/googollee/go-socket.io"
+  "github.com/tanema/go-socket.io"
   "github.com/tanema/grouter/json_map"
-  "github.com/gorilla/mux"
 )
 
+var players map[string]*json_map.Player
+
 func main() {
-  sock_config := &socketio.Config{}
-  sock_config.HeartbeatTimeout = 2
-  sock_config.ClosingTimeout = 4
-
-  sio := socketio.NewSocketIOServer(sock_config)
-
+  sio := socketio.NewSocketIOServer(&socketio.Config{})
   sio.On("connect", func(ns *socketio.NameSpace){
-    log.Println("Connected")
+    log.Println("Connected: ", ns.Id())
   })
-  sio.Of("/ws").On("disconnect", func(ns *socketio.NameSpace){
-    log.Println("DisConnected")
+  sio.On("disconnect", func(ns *socketio.NameSpace){
+    log.Println("Disconnected: ", ns.Id())
   })
   sio.On("player move", func(ns *socketio.NameSpace, from_x, from_y, to_x, to_y int){
     log.Println("player move")
@@ -34,13 +30,8 @@ func main() {
 
   json_map.NewMap("public/maps/map0.json")
 
-  r := mux.NewRouter()
-  r.PathPrefix("/socket.io").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    sio.ServeHTTP(w, r)
-  })
-  r.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
-  http.Handle("/", r)
+  sio.Handle("/", http.FileServer(http.Dir("./public/")))
 
 	println("listening on port 3000")
-  log.Fatal(http.ListenAndServe(":3000", nil))
+  log.Fatal(http.ListenAndServe(":3000", sio))
 }
