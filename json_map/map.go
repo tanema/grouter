@@ -16,7 +16,7 @@ type Map struct {
   Orientation string            `json:"orientation"`
   TileSets    []*TileSet        `json:"tilesets"`
   Properties  map[string]string `json:"properties"`
-  Player      *Sprite
+  Player      *Player
   Players     []*Sprite
   Version     float32           `json:"version"`
 }
@@ -27,13 +27,24 @@ func NewMap(map_path string) *Map {
     fmt.Printf("File error: %v\n", e)
     os.Exit(1)
   }
-
   var new_map Map
   json.Unmarshal(file, &new_map)
-
+  new_map.normalizeObjects()
   new_map.setPlayer()
-
   return &new_map
+}
+
+//this method normalizes all the objects position to tile position
+//rather than abs coordinates
+func (m *Map) normalizeObjects(){
+  for _, layer := range m.Layers {
+    if layer.IsObjectGroup() {
+      for _, sprite := range layer.Sprites {
+        sprite.X = sprite.X / m.TileWidth
+        sprite.Y = sprite.Y / m.TileHeight
+      }
+    }
+  }
 }
 
 func (m *Map) setPlayer(){
@@ -41,7 +52,11 @@ func (m *Map) setPlayer(){
     if layer.IsObjectGroup() {
       for _, sprite := range layer.Sprites {
         if sprite.IsPlayer() {
-          m.Player = sprite
+          m.Player = &Player{
+            Sprite: sprite,
+            LayerName: layer.Name,
+            Layer: layer,
+          }
           return
         }
       }

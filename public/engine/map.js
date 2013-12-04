@@ -34,7 +34,7 @@ Map.prototype.load = function (next){
         //do socket stuff
         if(Grouter.ServerEnabled){
           _this.register_socket_events();
-          _this.engine.socket.emit("join map", _this.name, _this.player.layer.name, _this.player.name);
+          _this.engine.socket.emit("join map", _this.name, _this.player.name);
         }
         // map loaded so continue
         if(next){
@@ -52,7 +52,7 @@ Map.prototype.register_socket_events = function(){
   this.engine.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
   this.engine.socket.on('kill player', function(id){_this.npc_killed(id);});
   this.engine.socket.on('kill npc', function(name){_this.npc_killed(name);});
-  this.engine.socket.on('actor move', function(id, direction, distance){_this.actor_move(id, direction, distance);});
+  this.engine.socket.on('actor move', function(id, from_x, from_y, to_x, to_y){_this.actor_move(id, from_x, from_y, to_x, to_y);});
 };
 
 Map.prototype.loaded = function (){
@@ -135,10 +135,13 @@ Map.prototype.player_connected = function(connection_data){
 };
 
 Map.prototype.player_spawn = function(options){
-  console.log("Spawning player " + options.id);
+  console.log("Spawning player " + options.id + " at " + options.x + "," + options.y);
 
   var _this = this;
   var layer = this.layers[options.layer_name];
+  //convert tile coords to abs coords for init
+  options.x = options.x * this.tilewidth;
+  options.y = options.y * this.tileheight;
   new Npc(options, this, layer, function(npc){
     _this.objects[npc.id] = npc;
     layer.objects[npc.id] = npc;
@@ -166,7 +169,16 @@ Map.prototype.npc_killed = function(name){
   }
 };
 
-Map.prototype.actor_move = function(id, direction, distance){
+Map.prototype.actor_move = function(id, from_x, from_y, to_x, to_y){
   console.log("actor move: " + id);
+  var direction = "",
+      distance = 0;
+  if (from_x != to_x) {
+    direction = (from_x < to_x) ? "right" : "left";
+    distance = Math.abs(from_x - to_x);
+  } else {
+    direction = (from_y < to_y) ? "up" : "down";
+    distance = Math.abs(from_y - to_y);
+  }
   this.objects[id].move(direction, distance);
 };

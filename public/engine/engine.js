@@ -82,3 +82,11 @@ Grouter.prototype.canvasIsSupported = function (){
   var elem = document.createElement('canvas');
   return !!(elem.getContext && elem.getContext('2d'));
 };
+
+Grouter.prototype.getSocketId = function () {
+  if(Grouter.ServerEnabled){
+    return this.socket.socket.sessionid;
+  } else {
+    return  "player"
+  }
+}

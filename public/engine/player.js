@@ -1,6 +1,6 @@
 function Player(player_options, map, layer, next){
   Displayable.call(this, player_options, map, layer, next);
-  this.id = "player"
+  this.id = map.engine.getSocketId();
   this.bind_key_events();
 }
 
