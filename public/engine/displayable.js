@@ -32,7 +32,7 @@ Displayable.prototype.initalize_properties = function(next){
     }
   }
 
-  this.currentMovement = "idle";
+  this.currentMovement = "down";
   this.frame_time = 0;
   this.movementIndex = 0;
 
@@ -80,7 +80,7 @@ Displayable.prototype.move = function(direction, distance){
   this.currentMovement = direction;
   this.movementIndex = 0;
 
-  if(this._facing_solid_tile()){
+  if(this._facing_solid_tile(direction)){
     return false
   }
 
@@ -113,7 +113,6 @@ Displayable.prototype.animate = function(deltatime){
           this.move(this.currentMovement, --this.distance);
         }
       }
-
       this.frame_time = 0;
     }
 
@@ -142,7 +141,7 @@ Displayable.prototype._get_frame = function(){
 //we set to_x and to_y here so that the animation has a defined end so we dont get rounding
 //problems if the animation step is off by decimals, we round x and y to make sure are on the grid
 //at the end of the animation
-Displayable.prototype._get_to_tile = function(){
+Displayable.prototype._get_to_tile = function(direction){
   var to_tile;
 
   if(this.is_moving){
@@ -153,7 +152,7 @@ Displayable.prototype._get_to_tile = function(){
     var next_x = this.x,
         next_y = this.y;
 
-    switch(this.currentMovement){
+    switch(direction || this.currentMovement){
       case "left":  next_x--; break;
       case "right": next_x++; break;
       case "up":    next_y--; break;
@@ -168,8 +167,8 @@ Displayable.prototype._get_to_tile = function(){
   return to_tile;
 };
 
-Displayable.prototype._facing_solid_tile = function(){
-  var to_tile = this._get_to_tile();
+Displayable.prototype._facing_solid_tile = function(direction){
+  var to_tile = this._get_to_tile(direction);
   if(to_tile.objects.length > 0 || to_tile.tiles.length == 0){
     return true;
   }

@@ -16,6 +16,8 @@ Map.prototype.load = function (next){
   $.getJSON(this.map_src, function(map_data){
     _this.properties = map_data.properties || {};
     _this.orientation = map_data.orientation;
+    _this.tilewidth = map_data.tilewidth;
+    _this.tileheight = map_data.tileheight;
 
     if(_this.properties.music){
       var sound = _this.audio_manager.load_music(_this.properties.music);
@@ -136,7 +138,6 @@ Map.prototype.player_connected = function(connection_data){
 
 Map.prototype.player_spawn = function(options){
   console.log("Spawning player " + options.id + " at " + options.x + "," + options.y);
-
   var _this = this;
   var layer = this.layers[options.layer_name];
   //convert tile coords to abs coords for init
@@ -169,16 +170,16 @@ Map.prototype.npc_killed = function(name){
   }
 };
 
-Map.prototype.actor_move = function(id, from_x, from_y, to_x, to_y){
+Map.prototype.actor_move = function(id, to_x, to_y){
   console.log("actor move: " + id);
   var direction = "",
       distance = 0;
-  if (from_x != to_x) {
-    direction = (from_x < to_x) ? "right" : "left";
-    distance = Math.abs(from_x - to_x);
+  if (this.objects[id].x != to_x) {
+    direction = (this.objects[id].x < to_x) ? "right" : "left";
+    distance = Math.abs(this.objects[id].x - to_x);
   } else {
-    direction = (from_y < to_y) ? "up" : "down";
-    distance = Math.abs(from_y - to_y);
+    direction = (this.objects[id].y < to_y) ? "down" : "up";
+    distance = Math.abs(this.objects[id].y - to_y);
   }
   this.objects[id].move(direction, distance);
 };
