@@ -1,0 +1,3 @@
+
+js for only client side stuff, and if server is not enabled
+go for server side stuff

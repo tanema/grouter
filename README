@@ -12,6 +12,13 @@ Status
   This is really just a hobby project for me to work on and keep learning and possibly use to make a real game or
 two in the future. I am looking for contributors to help speed up the process though.
 
+TODO List
+--------
+- teleport connector
+- latency handling
+- server side behaviour/interaction definition
+- server side npc
+
 
 License
 -------

@@ -22,8 +22,11 @@ func main() {
   })
   sio.On("player move", func(ns *socketio.NameSpace, to_x, to_y int){
     //TODO validate move
-    ns.Session.Values["x"] = to_x
-    ns.Session.Values["y"] = to_y
+    player := players[ns.Id()]
+    player.X = float32(to_x)
+    player.Y = float32(to_y)
+    ns.Session.Values["x"] = player.X
+    ns.Session.Values["y"] = player.Y
     sio.Except(ns).Broadcast("actor move", ns.Id(), to_x, to_y);
   })
   sio.On("join map", func(ns *socketio.NameSpace, map_name, player_name string){
@@ -35,8 +38,8 @@ func main() {
     new_player.Id = ns.Id()
     new_player.Name = player_name
     if ns.Session.Values["x"] != nil && ns.Session.Values["y"] != nil {
-      new_player.X = float32(ns.Session.Values["x"].(int))
-      new_player.Y = float32(ns.Session.Values["y"].(int))
+      new_player.X = ns.Session.Values["x"].(float32)
+      new_player.Y = ns.Session.Values["y"].(float32)
     }
 
     connected_data := struct {
