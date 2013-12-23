@@ -29,6 +29,15 @@ func main() {
     ns.Session.Values["y"] = player.Y
     sio.Except(ns).Broadcast("actor move", ns.Id(), to_x, to_y);
   })
+  sio.On("player teleport", func(ns *socketio.NameSpace, to_x, to_y int){
+    //TODO validate move
+    player := players[ns.Id()]
+    player.X = float32(to_x)
+    player.Y = float32(to_y)
+    ns.Session.Values["x"] = player.X
+    ns.Session.Values["y"] = player.Y
+    sio.Except(ns).Broadcast("actor teleport", ns.Id(), to_x, to_y);
+  })
   sio.On("join map", func(ns *socketio.NameSpace, map_name, player_name string){
     log.Println("join map")
     ns.Session.Values["map"] = map_name

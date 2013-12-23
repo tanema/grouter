@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" width="150" height="100" tilewidth="32" tileheight="32">
  <properties>
   <property name="background" value="#000"/>
   <property name="music" value="/music/pewter_city.mp3"/>
@@ -119,7 +119,7 @@
   </tile>
   <tile id="42">
    <properties>
-    <property name="solid" value="true"/>
+    <property name="stair_down" value="true"/>
    </properties>
   </tile>
   <tile id="43">
@@ -144,19 +144,77 @@
     <property name="solid" value="true"/>
    </properties>
   </tile>
+  <tile id="102">
+   <properties>
+    <property name="stair_down" value="true"/>
+   </properties>
+  </tile>
+  <tile id="103">
+   <properties>
+    <property name="stair_up" value="true"/>
+   </properties>
+  </tile>
  </tileset>
- <layer name="base" width="100" height="100">
+ <layer name="inside_base" width="150" height="100">
+  <properties>
+   <property name="group" value="inside"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1rsJw0AQRdFN1ZACV6EC3H8dDhztIn8E9s5jOQcmEYKBuQi0t9b2ydNePGN+i3eNqO+gR6+6gx696g569P59r+oetw+TRo8semT55b3O3tfjGt9Hlhn/Tnp87xhm9b3ptmFW35vuPszqe9PpkUWPLHpkGe9SNTxVd9CjV91BDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBzD4Xmfl0=
+   eJzt0rEJgEAQBMDP1Vwt5Suy/wr84ILPhINDkRlYNt1gW4NvWkeW6C16DmQcI3v0GT0HMvpDIMOvqOBXVPArKvgVFfyKKtfbAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgx25SaQxx
   </data>
  </layer>
- <layer name="background" width="100" height="100">
+ <layer name="inside_background" width="150" height="100">
+  <properties>
+   <property name="group" value="inside"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1slKw1AUgOHUnTgPC+dh4YDTQkV0pRJQlz6A7/8cHmnAGkq9DSS5he+Dn0MpNNB7T+mgKIq5aNDzZGg5WslgMtT3XtiPv/rei7b3YzFaqOZSNUfLTer93Y32Gsy+92M72qrmTjVHy03q/X2Y0Gq0Fq1HG9HmyHt978esSb2/ZTH8fssx7UcH0WF0FB0Xv+fR9378OIlOa521/MymmuxHWXt9EV1GV9F1dFPktR+30V2t+5af2VTq/Z30e/VU9RidVzOn/Zil85hmP+p7UX89rhz24zl6qfXa8jObSv2flOvn/+cteo8+WnxGmz47ijTzHUWar44ijfPIi/PIi/MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAa33ZdTrM=
+   eJzt0jEOQFAQRdG/GfTo0WD/KzL1VBoZ+Tknuf0rXmsAAPzREI2pqXQRPZijJbWWLqIHfsUXtmhPHWVr6MEZXdFdPQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgNceqv0Fng==
   </data>
  </layer>
- <objectgroup name="actors" width="100" height="100">
-  <object name="Harry" type="player" x="480" y="224">
+ <objectgroup name="inside_actors" width="150" height="100">
+  <properties>
+   <property name="group" value="inside"/>
+  </properties>
+  <object name="home picture" type="actionable" x="576" y="64">
+   <properties>
+    <property name="action" value="dialog.say([&quot; A beautiful Painting of a hill side&quot;, &quot;I feel very refreshed&quot;])"/>
+   </properties>
+  </object>
+  <object name="home frame" type="actionable" x="640" y="64">
+   <properties>
+    <property name="action" value="dialog.say(&quot; Home Sweet Home&quot;)"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer name="inside_foreground" width="150" height="100">
+  <properties>
+   <property name="group" value="inside"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvgzqYAAB
+  </data>
+ </layer>
+ <layer name="overworld_base" width="150" height="100">
+  <properties>
+   <property name="group" value="overworld"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1rEKwjAYhdGuPpB1V3d19/2fwzh0EUFKAn+4ngN3KSXTR9p1WZZ1gpFlRBOXL9PVf6u+p3SVqbonXWWq7klXmXr+qX492/OfRZbelka8q6s8I+4p30E+jfwO6orNiJZObcedZ+kqW+89827t2nbuPIcs9wF7tN06zyDLYZKR5TnJyFLdk64yVfekq0zVPekqU3VPuspU3ZOuMlX3pCsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyPcCOZ2xDw==
+  </data>
+ </layer>
+ <layer name="overworld_background" width="150" height="100">
+  <properties>
+   <property name="group" value="overworld"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1zkOwkAUREGbA7Bn7Blii7n/yeiAA1hoLNtDlfQ02Q9bmrZpmllqB36pyzwtRvBSl6F3yl7Vaeidsld16ronu7T/4bVX/6nvPbFX/6nEnizTKq3TJm0L32d6SuzJIR3TKZ3TpfB9pqfEntzSPT3SM70K32d6Su7JO12/bx/3mY6u/7qx3gcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYmw8iUg4R
+  </data>
+ </layer>
+ <objectgroup name="overworld_actors" width="150" height="100">
+  <properties>
+   <property name="group" value="overworld"/>
+  </properties>
+  <object name="Harry" type="player" x="576" y="320">
    <properties>
     <property name="down" value="10,11,12"/>
     <property name="height" value="42"/>
@@ -182,37 +240,18 @@
     <property name="width" value="32"/>
    </properties>
   </object>
-  <object name="house sign" type="actionable" x="640" y="256">
+  <object name="house sign" type="actionable" x="640" y="288">
    <properties>
     <property name="action" value="dialog.say(&quot;All are welcome in our house&quot;);"/>
    </properties>
   </object>
-  <object name="home frame" type="actionable" x="1888" y="128">
-   <properties>
-    <property name="action" value="dialog.say(&quot; Home Sweet Home&quot;)"/>
-   </properties>
-  </object>
-  <object name="home picture" type="actionable" x="1824" y="128">
-   <properties>
-    <property name="action" value="dialog.say([&quot; A beautiful Painting of a hill side&quot;, &quot;I feel very refreshed&quot;])"/>
-   </properties>
-  </object>
-  <object name="house door" type="actionable" x="576" y="224">
-   <properties>
-    <property name="action" value="player.teleport(57,10)"/>
-    <property name="action_sound" value="/sounds/action.wav"/>
-   </properties>
-  </object>
-  <object name="house exit" type="actionable" x="1824" y="352">
-   <properties>
-    <property name="action" value="player.teleport(18,8)"/>
-    <property name="action_sound" value="/sounds/action.wav"/>
-   </properties>
-  </object>
  </objectgroup>
- <layer name="foreground" width="100" height="100">
+ <layer name="overworld_foreground" width="150" height="100">
+  <properties>
+   <property name="group" value="overworld"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJzt0csJACAMRMGAv1rsv0FTgBdByGUG3jGwkAgAqNGyno1sZqt2DgAAPNlFt9z5BwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPDTAayNAL4=
+   eJzt1bsJACAQREHBXy3236AX2IKoOAMvv2DhUgIAAH6QoxLVqEX97DkAcNxYAcDr/DN2sCsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOAGEwPyAL4=
   </data>
  </layer>
 </map>

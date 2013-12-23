@@ -18,6 +18,8 @@ function Actionable(actionable_options, map, layer){
   if(actionable_options.properties){
     if(actionable_options.properties.action){
       this.action = actionable_options.properties.action;
+    }else if(actionable_options.properties.enter_action){
+      this.enter_action = actionable_options.properties.enter_action;
     }else if(actionable_options.properties.action_src){
       var _this = this;
       console.log(" → loading actionable's reaction " + actionable_options.properties.onidle_src);
@@ -37,7 +39,7 @@ function Actionable(actionable_options, map, layer){
 }
 
 Actionable.prototype.react = function(actor){
-  if(!this.action || this.is_busy){return;}
+  if((!this.action && !this.enter_action) || this.is_busy){return;}
 
   if(this.action_sound){
     this.map.audio_manager.play(this.action_sound);
@@ -45,7 +47,7 @@ Actionable.prototype.react = function(actor){
 
   var _this = this;
   this.is_interacting = actor.is_interacting = true;
-  this._eval_script(this.action, function(){
+  this._eval_script(this.action || this.enter_action, function(){
     _this.is_interacting = actor.is_interacting = false;
   });
 };

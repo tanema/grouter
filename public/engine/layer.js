@@ -2,6 +2,7 @@ function Layer(layer_options, map, next){
   this.name = layer_options.name;
   this.type = layer_options.type;
   this.properties = layer_options.properties || {};
+  this.group = this.properties.group;
 
   this.opacity = layer_options.opacity;
   this.visible = layer_options.visible;
@@ -58,7 +59,9 @@ Layer.prototype._initiate_objects = function(objects, next){
 
 // TODO maybe: layers have x,y offset but I have not seen how tiled uses them
 Layer.prototype.draw = function(ctx, deltatime){
-  if(!this.visible){return;}
+  if(!this.visible || this.map.player.layer.group != this.group){
+    return;
+  }
 
   //set layer opacity
   ctx.globalAlpha = this.opacity;
@@ -72,6 +75,7 @@ Layer.prototype.draw = function(ctx, deltatime){
         to_x = ctx.viewport.right(),
         to_y = ctx.viewport.bottom();
 
+    //we only draw the screen rather than culling just draw screen range
     for (y = from_y; y < to_y; y++) {
       for (x = from_x; x < to_x; x++) {
 

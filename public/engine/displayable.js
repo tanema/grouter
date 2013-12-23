@@ -69,6 +69,7 @@ Displayable.prototype.draw = function(ctx, deltatime){
 };
 
 Displayable.prototype.teleport = function(x, y){
+  this.is_moving = false
   this.x = x;
   this.y = y;
 };
@@ -85,6 +86,7 @@ Displayable.prototype.move = function(direction, distance){
   }
 
   this.is_moving = true;
+  this.do_tile_actions(direction);
   return true
 };
 
@@ -145,9 +147,9 @@ Displayable.prototype._get_to_tile = function(direction){
   var to_tile;
 
   if(this.is_moving){
-    to_tile = this.map.at(this.to_x, this.to_x);
+    to_tile = this.map.at(this.to_x, this.to_y);
     to_tile.x = this.to_x;
-    to_tile.y = this.to_x;
+    to_tile.y = this.to_y;
   }else{
     var next_x = this.x,
         next_y = this.y;
@@ -179,3 +181,56 @@ Displayable.prototype._facing_solid_tile = function(direction){
   }
   return false;
 };
+
+Displayable.prototype.do_tile_actions = function(direction){
+  var to_tile = this._get_to_tile(direction);
+  for(var i=0; i < to_tile.tiles.length; i++){
+    var tile = to_tile.tiles[i];
+    if(tile.properties.stair_up){
+      this.stair_up()
+    }
+    if(tile.properties.stair_down){
+      this.stair_down()
+    }
+  }
+}
+
+Displayable.prototype.stair_down = function(){
+  this.set_layer(this.next_layer(false));
+}
+
+Displayable.prototype.stair_up = function(){
+  this.set_layer(this.next_layer(true));
+}
+
+
+Displayable.prototype.next_layer = function(up){
+  var current_layer = this.layer,
+      current_found = false,
+      next_layer,
+      keys = Object.keys(this.map.layers),
+      from = (up ? 0 : (keys.length -1)),
+      to = (up ? (keys.length -1) : 0);
+
+  for(var i = from; i != to; (up ? i++ : i--)){
+    var layer = this.map.layers[keys[i]];
+    if(current_found && layer.is_objectgroup()){
+      next_layer = layer;
+      break;
+    }
+    if(layer == current_layer){
+      current_found = true;
+    }
+  }
+  return next_layer;
+}
+
+Displayable.prototype.set_layer = function(layer){
+  if(!layer || !this.is_player){
+    return;
+  }
+  var current_layer = this.layer;
+  this.map.objects[this.id] = layer.objects[this.id] = this;
+  delete(current_layer.objects, this.id)
+  this.layer = layer;
+}

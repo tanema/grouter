@@ -14,7 +14,7 @@ two in the future. I am looking for contributors to help speed up the process th
 
 TODO List
 --------
-- teleport connector
+- load new map event and connector
 - latency handling
 - server side behaviour/interaction definition
 - server side npc
@@ -38,3 +38,8 @@ License
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ideas
+-----
+- multiple worlds
+- small worlds that you can wander completely around

@@ -54,7 +54,8 @@ Map.prototype.register_socket_events = function(){
   this.engine.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
   this.engine.socket.on('kill player', function(id){_this.npc_killed(id);});
   this.engine.socket.on('kill npc', function(name){_this.npc_killed(name);});
-  this.engine.socket.on('actor move', function(id, from_x, from_y, to_x, to_y){_this.actor_move(id, from_x, from_y, to_x, to_y);});
+  this.engine.socket.on('actor move', function(id, to_x, to_y){_this.actor_move(id, to_x, to_y);});
+  this.engine.socket.on('actor teleport', function(id, to_x, to_y){_this.actor_teleport(id, to_x, to_y);});
 };
 
 Map.prototype.loaded = function (){
@@ -86,6 +87,11 @@ Map.prototype.at = function(x,y){
   var layer_name;
   for(layer_name in this.layers){
     var layer = this.layers[layer_name];
+
+    if(!layer.visible || this.player.layer.group != layer.group){
+      continue;
+    }
+
     if(layer.is_tilelayer()){
       var tile = this.spritesheet.get(layer.data[(x + y * layer.width)]);
       if(tile){
@@ -127,7 +133,7 @@ Map.prototype.draw = function (ctx, deltatime){
 Map.prototype.player_connected = function(connection_data){
   //handle player connection
   this.player.id = connection_data.player.id;
-  this.player.teleport(connection_data.player.x, connection_data.player.y);
+  this.player.teleport(connection_data.player.x, connection_data.player.y, true);
   for(var player_id in connection_data.players){
     this.player_spawn(connection_data.players[player_id]);
   }
@@ -169,6 +175,11 @@ Map.prototype.npc_killed = function(name){
     delete this.objects[name];
   }
 };
+
+Map.prototype.actor_teleport = function(id, to_x, to_y){
+  console.log("actor teleport")
+  this.objects[id].teleport(to_x, to_y);
+}
 
 Map.prototype.actor_move = function(id, to_x, to_y){
   console.log("actor move: " + id);

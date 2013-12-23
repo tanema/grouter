@@ -5,6 +5,7 @@ function Player(player_options, map, layer, next){
 }
 
 Player.prototype = new Displayable();
+Player.prototype.is_player = true
 
 Player.prototype.bind_key_events = function(){
   if(this.is_moving){return;}
@@ -36,5 +37,14 @@ Player.prototype.take_action = function(){
 
   for(var i=0; i < to_tile.objects.length; i++){
     to_tile.objects[i].react(this);
+  }
+};
+
+Player.prototype.teleport = function(x, y, skip_notify){
+  //call Superto_x, to_y
+  this.x = x;
+  this.y = y;
+  if(!skip_notify){
+    this.socket.emit("player teleport", x, y);
   }
 };
