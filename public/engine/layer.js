@@ -59,14 +59,9 @@ Layer.prototype._initiate_objects = function(objects, next){
 
 // TODO maybe: layers have x,y offset but I have not seen how tiled uses them
 Layer.prototype.draw = function(ctx, deltatime){
-  if(!this.visible || this.map.player.layer.group != this.group){
-    return;
-  }
-
   //set layer opacity
   ctx.globalAlpha = this.opacity;
-
-  if(this.is_tilelayer()){
+  if(this.is_tilelayer() && this.visible && this.map.player.layer.group == this.group){
     var x, y,
         tile_height = this.map.spritesheet.tile_height,
         tile_width  = this.map.spritesheet.tile_width,
@@ -103,8 +98,11 @@ Layer.prototype.draw = function(ctx, deltatime){
       object = this.objects[object_name];
       if(object.type == 'player'){
         object.draw(ctx, deltatime);
-      }else if(object.type == 'npc' && ctx.viewport.isInside(object.x, object.y)){
+      }else if(object.type == 'npc' && ctx.viewport.isInside(object.x, object.y) && this.map.player.layer.group == this.group){
         object.draw(ctx, deltatime);
+      }else if(object.type == 'npc' && (!ctx.viewport.isInside(object.x, object.y) || this.map.player.layer.group != this.group)){
+        //skip drawing but still update position
+        object.draw(ctx, deltatime, true);
       }
     }
   }

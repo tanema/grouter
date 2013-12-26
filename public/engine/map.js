@@ -56,6 +56,7 @@ Map.prototype.register_socket_events = function(){
   this.engine.socket.on('kill npc', function(name){_this.npc_killed(name);});
   this.engine.socket.on('actor move', function(id, to_x, to_y){_this.actor_move(id, to_x, to_y);});
   this.engine.socket.on('actor teleport', function(id, to_x, to_y){_this.actor_teleport(id, to_x, to_y);});
+  this.engine.socket.on('actor change layer', function(id, layer){_this.actor_change_layer(id, layer);});
 };
 
 Map.prototype.loaded = function (){
@@ -81,14 +82,14 @@ Map.prototype._load_layer = function(layers, next){
   });
 };
 
-Map.prototype.at = function(x,y){
+Map.prototype.at = function(x, y, group){
   var results = {tiles: [], objects: []};
 
   var layer_name;
   for(layer_name in this.layers){
     var layer = this.layers[layer_name];
 
-    if(!layer.visible || this.player.layer.group != layer.group){
+    if(!layer.visible || group != layer.group){
       continue;
     }
 
@@ -194,3 +195,13 @@ Map.prototype.actor_move = function(id, to_x, to_y){
   }
   this.objects[id].move(direction, distance);
 };
+
+Map.prototype.actor_change_layer = function(id, layer_name){
+  console.log("actor " + id + " change layer to " + layer_name);
+  for(var layer in this.layers){
+    if(layer == layer_name){
+      this.objects[id].set_layer(this.layers[layer], true);
+      break;
+    }
+  }
+}

@@ -52,7 +52,7 @@ Displayable.prototype.initalize_properties = function(next){
   }
 };
 
-Displayable.prototype.draw = function(ctx, deltatime){
+Displayable.prototype.draw = function(ctx, deltatime, only_update){
   var draw_x, draw_y;
 
   if(ctx.orientation == "isometric"){
@@ -62,10 +62,10 @@ Displayable.prototype.draw = function(ctx, deltatime){
     draw_x = ((this.x * this.map_tile_width)  - this.offset_x);
     draw_y = ((this.y * this.map_tile_height) - this.offset_y);
   }
-
   this.animate(deltatime);
-
-  ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
+  if(!only_update){
+    ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
+  }
 };
 
 Displayable.prototype.teleport = function(x, y){
@@ -76,7 +76,7 @@ Displayable.prototype.teleport = function(x, y){
 
 Displayable.prototype.move = function(direction, distance){
   this.distance = distance || 1;
-  if(this.is_moving || this.is_interacting){ return; }
+  if(this.is_moving || this.is_interacting){ return false; }
 
   this.currentMovement = direction;
   this.movementIndex = 0;
@@ -147,7 +147,7 @@ Displayable.prototype._get_to_tile = function(direction){
   var to_tile;
 
   if(this.is_moving){
-    to_tile = this.map.at(this.to_x, this.to_y);
+    to_tile = this.map.at(this.to_x, this.to_y, this.layer.group);
     to_tile.x = this.to_x;
     to_tile.y = this.to_y;
   }else{
@@ -161,7 +161,7 @@ Displayable.prototype._get_to_tile = function(direction){
       case "down":  next_y++; break;
     }
 
-    to_tile = this.map.at(next_x, next_y);
+    to_tile = this.map.at(next_x, next_y, this.layer.group);
     this.to_x = to_tile.x = next_x;
     this.to_y = to_tile.y = next_y;
   }
@@ -225,12 +225,13 @@ Displayable.prototype.next_layer = function(up){
   return next_layer;
 }
 
-Displayable.prototype.set_layer = function(layer){
-  if(!layer || !this.is_player){
-    return;
-  }
+Displayable.prototype.set_layer = function(layer, skip_socket){
+  if(!layer || layer == this.layer){ return; }
   var current_layer = this.layer;
-  this.map.objects[this.id] = layer.objects[this.id] = this;
-  delete(current_layer.objects, this.id)
+  layer.objects[this.id] = this;
+  delete current_layer.objects[this.id]
   this.layer = layer;
+  if(!skip_socket && this.socket && this.is_player) {
+    this.socket.emit("player change layer", layer.name);
+  }
 }

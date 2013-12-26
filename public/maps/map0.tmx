@@ -207,7 +207,7 @@
    <property name="group" value="overworld"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1zkOwkAUREGbA7Bn7Blii7n/yeiAA1hoLNtDlfQ02Q9bmrZpmllqB36pyzwtRvBSl6F3yl7Vaeidsld16ronu7T/4bVX/6nvPbFX/6nEnizTKq3TJm0L32d6SuzJIR3TKZ3TpfB9pqfEntzSPT3SM70K32d6Su7JO12/bx/3mY6u/7qx3gcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYmw8iUg4R
+   eJzt1zkOwkAUREGbA7Bn7Bl7zP1PRgccAKGx7DFV0tNkP2xp2qZpJqnt+WVcpmk2gJdx6Xun7NU49b1T9mqcvt2TTdr+8Nqr/9TFnlw6vs/wldiTeVqkZVqldeH71KfEnuzSPh3SMZ0K36c+Jfbkmm7pnh7pWfg+9Sm5J690/rxd3Kce3/7rhnofAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYGjev9MOOg==
   </data>
  </layer>
  <objectgroup name="overworld_actors" width="150" height="100">
