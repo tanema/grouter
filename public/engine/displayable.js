@@ -52,7 +52,7 @@ Displayable.prototype.initalize_properties = function(next){
   }
 };
 
-Displayable.prototype.draw = function(ctx, deltatime, only_update){
+Displayable.prototype.draw = function(ctx, deltatime){
   var draw_x, draw_y;
 
   if(ctx.orientation == "isometric"){
@@ -62,10 +62,10 @@ Displayable.prototype.draw = function(ctx, deltatime, only_update){
     draw_x = ((this.x * this.map_tile_width)  - this.offset_x);
     draw_y = ((this.y * this.map_tile_height) - this.offset_y);
   }
+
   this.animate(deltatime);
-  if(!only_update){
-    ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
-  }
+
+  ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
 };
 
 Displayable.prototype.teleport = function(x, y){

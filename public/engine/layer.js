@@ -101,8 +101,8 @@ Layer.prototype.draw = function(ctx, deltatime){
       }else if(object.type == 'npc' && ctx.viewport.isInside(object.x, object.y) && this.map.player.layer.group == this.group){
         object.draw(ctx, deltatime);
       }else if(object.type == 'npc' && (!ctx.viewport.isInside(object.x, object.y) || this.map.player.layer.group != this.group)){
-        //skip drawing but still update position
-        object.draw(ctx, deltatime, true);
+        // update position
+        object.animate(deltatime);
       }
     }
   }
