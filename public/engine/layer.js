@@ -57,6 +57,13 @@ Layer.prototype._initiate_objects = function(objects, next){
   }
 };
 
+Layer.prototype.get_tile_index = function(x, y) {
+  function coord(x, width){return Math.floor(((2*width) + (x % width)) % width)}
+  var sphere_x = coord(x, this.width),
+      sphere_y = coord(y, this.height);
+  return this.data[(sphere_x + sphere_y * this.width)]
+}
+
 // TODO maybe: layers have x,y offset but I have not seen how tiled uses them
 Layer.prototype.draw = function(ctx, deltatime){
   //set layer opacity
@@ -73,18 +80,15 @@ Layer.prototype.draw = function(ctx, deltatime){
     //we only draw the screen rather than culling just draw screen range
     for (y = from_y; y < to_y; y++) {
       for (x = from_x; x < to_x; x++) {
-
-        var this_x = Math.floor(x),
-            this_y = Math.floor(y),
-            tile = this.map.spritesheet.get(this.data[(this_x + this_y * this.width)]),
+        var tile = this.map.spritesheet.get(this.get_tile_index(x, y)),
             draw_x, draw_y;
 
         if(ctx.orientation == "isometric"){
           draw_x = (300 + x * tile_width/2 - y * tile_width/2);
           draw_y = (y * tile_height/2 + x * tile_height/2);
         }else if (ctx.orientation == "orthogonal"){
-          draw_x = (this_x * tile_width);
-          draw_y = (this_y * tile_height);
+          draw_x = (Math.floor(x) * tile_width);
+          draw_y = (Math.floor(y) * tile_height);
         }
 
         if(tile){
