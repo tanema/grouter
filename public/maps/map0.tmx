@@ -155,7 +155,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="inside_base" width="50" height="50" visible="0">
+ <layer name="inside_base" width="50" height="50">
   <properties>
    <property name="group" value="inside"/>
   </properties>
@@ -163,7 +163,7 @@
    eJztzzEKgEAMRcH0aq8exRN5/xO4QoTtLN3IDDx+m0TwmFtT7pLbV8XWWnP33L4qjpeq8MdY/DGWv/xxO78+AAAAAAAAAACICwYxDHE=
   </data>
  </layer>
- <layer name="inside_background" width="50" height="50" visible="0">
+ <layer name="inside_background" width="50" height="50">
   <properties>
    <property name="group" value="inside"/>
   </properties>
@@ -171,7 +171,7 @@
    eJztzzEKgEAQBMH7jJqruZqo/3+RG294IAtHFXQ+0xrwtymaU0vpoj5rtKX20kV9RvlxRGfqKlvT546e6K0eAgAAAAAAAAAM4QM9UQWe
   </data>
  </layer>
- <objectgroup name="inside_actors" width="50" height="50" visible="0">
+ <objectgroup name="inside_actors" width="50" height="50">
   <properties>
    <property name="group" value="inside"/>
   </properties>
@@ -186,7 +186,7 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="inside_foreground" width="50" height="50" visible="0">
+ <layer name="inside_foreground" width="50" height="50">
   <properties>
    <property name="group" value="inside"/>
   </properties>
@@ -207,10 +207,10 @@
    <property name="group" value="overworld"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1EsKgzAURuHYBVSrnVn7mGlbO+7+V+YvGMgkRUMxCZwPDhncgZILKYwxB1Ukflq++VGVGZyWbx77ntlH2D5adQk4U9vHFsOK+4u1j18qdVK1atTZmeW0j05d1U3d1cOZ5bSPp3qptxrVx5nltA/rq/rltPbax9p3J1ToO+f7/r//DwAAAAAAAAAAAACA2QQ93hQb
+   eJztmLkOwjAQRBM+gLvj7rhr/v/LGAksuXGwFxTPknnSaIotEvkpjuW2aZoR0pJ3IDUfIxMHHUjNa6+zfNh8rJC1odl8lHDKWL9aPrqYIjNkjiyQZTTz5GODbJEdskcO0cyTjzNyQa7IDblHM08+Ag/k+O5AXz5y9x0r1n0u9fxfv58YBqXfByupc0CgZB9lwLuPgHcf//J9lP7PWZEPDqznKzas51025IML+eBCPriQjxe1722/vS/JXQeW/vS+tde57/vE2i0fXC0fXC0fXC0fXC0fXC0fXC0fXD0UH09X8TgK
   </data>
  </layer>
- <objectgroup name="overworld_actors" width="50" height="50" visible="0">
+ <objectgroup name="overworld_actors" width="50" height="50">
   <properties>
    <property name="group" value="overworld"/>
   </properties>
@@ -246,12 +246,12 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="overworld_foreground" width="50" height="50" visible="0">
+ <layer name="overworld_foreground" width="50" height="50">
   <properties>
    <property name="group" value="overworld"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt0rENgDAMRUFLgTAL+y+Ii1RuUoLRnfT6b8kRAHsjO7Izm9n17hx+7F5B1f0v6v7u9wAAAAAAAAB80QNL+ADn
+   eJzt1z0KgDAMBtCCf2fxPHr/s5jBqVoKDhXte/CRIUsC6dCUAOqGyBiZInNkeXccfmw9A7mv30U+f8t9tsh+U0t96Im7hyvvAgCeK/2/WlcAAADo2QFnlxCP
   </data>
  </layer>
 </map>
