@@ -94,7 +94,7 @@ Map.prototype.at = function(x, y, group){
     }
 
     if(layer.is_tilelayer()){
-      var tile = this.spritesheet.get(layer.data[(x + y * layer.width)]);
+      var tile = this.spritesheet.get(layer.get_tile_index(x, y));
       if(tile){
         results.tiles.push(tile);
       }
