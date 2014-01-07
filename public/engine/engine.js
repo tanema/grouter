@@ -90,3 +90,12 @@ Grouter.prototype.getSocketId = function () {
     return  "player"
   }
 }
+
+function normalize_coord(h, j){
+  return Math.floor(((2*j)+(h%j))%j)
+}
+
+function truncate(value) {
+  if (value<0) return Math.ceil(value);
+  else return Math.floor(value);
+}

@@ -58,9 +58,8 @@ Layer.prototype._initiate_objects = function(objects, next){
 };
 
 Layer.prototype.get_tile_index = function(x, y) {
-  function coord(x, width){return Math.floor(((2*width) + (x % width)) % width)}
-  var sphere_x = coord(x, this.width),
-      sphere_y = coord(y, this.height);
+  var sphere_x = normalize_coord(x, this.width),
+      sphere_y = normalize_coord(y, this.height);
   return this.data[(sphere_x + sphere_y * this.width)]
 }
 
@@ -82,33 +81,37 @@ Layer.prototype.draw = function(ctx, deltatime){
       for (x = from_x; x < to_x; x++) {
         var tile = this.map.spritesheet.get(this.get_tile_index(x, y)),
             draw_x, draw_y;
-
-        if(ctx.orientation == "isometric"){
-          draw_x = (300 + x * tile_width/2 - y * tile_width/2);
-          draw_y = (y * tile_height/2 + x * tile_height/2);
-        }else if (ctx.orientation == "orthogonal"){
-          draw_x = (Math.floor(x) * tile_width);
-          draw_y = (Math.floor(y) * tile_height);
-        }
-
         if(tile){
+          if(ctx.orientation == "isometric"){
+            draw_x = ( Math.floor(x) * tile_width/2  - y * tile_width/2  );
+            draw_y = ( Math.floor(y) * tile_height/2 + x * tile_height/2 );
+          }else if (ctx.orientation == "orthogonal"){
+            draw_x = (Math.floor(x) * tile_width);
+            draw_y = (Math.floor(y) * tile_height);
+          }
           tile.draw(ctx, draw_x - (ctx.viewport.x * tile_width), draw_y - (ctx.viewport.y * tile_height));
         }
       }
     }
-  }else if(this.is_objectgroup()){
+  }else if(this.is_objectgroup() && this.visible && this.map.player.layer.group == this.group){
     var object_name, object;
     for(object_name in this.objects){
       object = this.objects[object_name];
       if(object.type == 'player'){
         object.draw(ctx, deltatime);
-      }else if(object.type == 'npc' && ctx.viewport.isInside(object.x, object.y) && this.map.player.layer.group == this.group){
+      }else if(object.type == 'npc' && ctx.viewport.isInside(object.x, object.y)){
         object.draw(ctx, deltatime);
-      }else if(object.type == 'npc' && (!ctx.viewport.isInside(object.x, object.y) || this.map.player.layer.group != this.group)){
-        // update position
-        object.animate(deltatime);
+      }else if(object.type == 'npc'){ //this means it is not in viewport
+        object.animate(deltatime);    // update position 
+      }
+    }
+  }else if(this.is_objectgroup()){ //object group that is not in the displayable group
+    var object_name, object;
+    for(object_name in this.objects){
+      object = this.objects[object_name];
+      if(object.type == 'npc'){
+        object.animate(deltatime);// update position 
       }
     }
   }
-
 };

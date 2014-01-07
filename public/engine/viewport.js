@@ -29,7 +29,9 @@ Viewport.prototype.bottom = function(){
   return this.y + this.screen.tilesY + this.overflowTile;
 };
 
-Viewport.prototype.isInside = function(x, y)
-{
-   return x > this.left() && x < this.right() && y > this.top() && y < this.bottom();
+Viewport.prototype.isInside = function(x, y, layer) {
+   return x > this.left() && 
+          x < this.right() && 
+          y > this.top() && 
+          y < this.bottom();
 };

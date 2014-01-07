@@ -207,7 +207,7 @@
    <property name="group" value="overworld"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztmLkOwjAQRBM+gLvj7rhr/v/LGAksuXGwFxTPknnSaIotEvkpjuW2aZoR0pJ3IDUfIxMHHUjNa6+zfNh8rJC1odl8lHDKWL9aPrqYIjNkjiyQZTTz5GODbJEdskcO0cyTjzNyQa7IDblHM08+Ag/k+O5AXz5y9x0r1n0u9fxfv58YBqXfByupc0CgZB9lwLuPgHcf//J9lP7PWZEPDqznKzas51025IML+eBCPriQjxe1722/vS/JXQeW/vS+tde57/vE2i0fXC0fXC0fXC0fXC0fXC0fXC0fXD0UH09X8TgK
+   eJztmLkKwzAQROV8QO4ul9PlrvP/X5aBZEGNgrUEaxTNg2GKLWz8kCzUhRAmSEfeRmo+RWYVtJGal/7O8uHzsUG2jmbzkcN5wPcr5eMbc2SBLJEVso5mNfnYIXvkgPTIMZrV5OOCXJEbckce0awmH8YTOX3aGMvH0H3Hi3efSz3/1+8n2iB3fbCSOgcYOfsoA7X7MGr38S/rI/d/zop8cOA9X7HhPe+yIR9cyAcX8sGFfLwpfW879v1V6U75aPW+vXTLB1fLB1fLB1fLB1fLB1fLB1fLB1e34uMF8Hw4Jw==
   </data>
  </layer>
  <objectgroup name="overworld_actors" width="50" height="50">
@@ -251,7 +251,7 @@
    <property name="group" value="overworld"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1z0KgDAMBtCCf2fxPHr/s5jBqVoKDhXte/CRIUsC6dCUAOqGyBiZInNkeXccfmw9A7mv30U+f8t9tsh+U0t96Im7hyvvAgCeK/2/WlcAAADo2QFnlxCP
+   eJzt1zsKgDAQBcCAv7N4Hr3/WdzCKhoEhUh0Bh5bpHmBTZGUAK51kT4yRMbI9G4dPmzeA7nW9yLvX/M+S2Q9maVz+BN7D0feBQDcV/p/1Z5P+wMAAEDLNhr9ETY=
   </data>
  </layer>
 </map>

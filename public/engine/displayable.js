@@ -104,8 +104,8 @@ Displayable.prototype.animate = function(deltatime){
       }
       if(this.movementIndex >= this.movement[this.currentMovement].length){
         //set our destination as whole values because the step size might be just out a bit
-        this.x = this.to_x;
-        this.y = this.to_y;
+        this.x = normalize_coord(this.to_x, this.map.width);
+        this.y = normalize_coord(this.to_y, this.map.height);
 
         //reset animation
         this.movementIndex = 0;
@@ -117,7 +117,6 @@ Displayable.prototype.animate = function(deltatime){
       }
       this.frame_time = 0;
     }
-
   }else{
     //do idle animations
   }

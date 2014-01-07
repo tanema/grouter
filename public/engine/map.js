@@ -18,6 +18,8 @@ Map.prototype.load = function (next){
     _this.orientation = map_data.orientation;
     _this.tilewidth = map_data.tilewidth;
     _this.tileheight = map_data.tileheight;
+    _this.width = map_data.width;
+    _this.height = map_data.height;
 
     if(_this.properties.music){
       var sound = _this.audio_manager.load_music(_this.properties.music);
