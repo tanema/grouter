@@ -52,15 +52,18 @@ Displayable.prototype.initalize_properties = function(next){
   }
 };
 
-Displayable.prototype.draw = function(ctx, deltatime){
+Displayable.prototype.draw = function(ctx, deltatime, x, y){
   var draw_x, draw_y;
 
+  x = x || this.x;
+  y = y || this.y;
+
   if(ctx.orientation == "isometric"){
-    draw_x = ((300 + this.x * this.map_tile_width/2 - this.y * this.map_tile_width/2) - this.offset_x);
-    draw_y = ((this.y * this.map_tile_height/2 + this.x * this.map_tile_height/2) - this.offset_y);
+    draw_x = ((x * this.map_tile_width/2 - y * this.map_tile_width/2) - this.offset_x);
+    draw_y = ((y * this.map_tile_height/2 + x * this.map_tile_height/2) - this.offset_y);
   }else if (ctx.orientation == "orthogonal"){
-    draw_x = ((this.x * this.map_tile_width)  - this.offset_x);
-    draw_y = ((this.y * this.map_tile_height) - this.offset_y);
+    draw_x = ((x * this.map_tile_width)  - this.offset_x);
+    draw_y = ((y * this.map_tile_height) - this.offset_y);
   }
 
   this.animate(deltatime);

@@ -16,9 +16,10 @@ function Grouter(canvas_el, map_src){
   this.keyboard = new Keyboard();
   this.startTime = window.mozAnimationStartTime || Date.now();
 
-  this.fps = 0;
-  this.fps_count = 0;
-  this.fps_timer = setInterval(function(){_this.updateFPS()}, 2000);
+  if($("#fps").length){
+    this.fps = 0;
+    this.fps_timer = setInterval(function(){_this.updateFPS()}, 1000);
+  }
 
   if(Grouter.ServerEnabled){
     this.socket = io.connect();
@@ -63,24 +64,25 @@ Grouter.prototype.draw = function(timestamp){
   this.startTime = drawStart;
 
   //increments frame for fps display
-  this.fps_count++;
+  if(this.fps_timer){
+    this.fps++;
+  }
 
   //set the next animation frame
   var _this = this;
-  requestAnimationFrame(function(timestamp){_this.draw(timestamp);});
+  requestAnimationFrame(function(timestamp){
+    _this.draw(timestamp);
+  });
 };
 
 Grouter.prototype.updateFPS = function(){
-  this.fps = this.fps_count / 2; // every two seconds cut the fps by 2
-  this.fps_count = 0;
-  if($("#fps").length){
-    $("#fps").html(this.fps | 0);
-  }
+  $("#fps").html(this.fps || 0);
+  this.fps = 0;
 },
 
 Grouter.prototype.canvasIsSupported = function (){
   var elem = document.createElement('canvas');
-  return !!(elem.getContext && elem.getContext('2d'));
+  return !!(elem && elem.getContext && elem.getContext('2d'));
 };
 
 Grouter.prototype.getSocketId = function () {
@@ -93,9 +95,4 @@ Grouter.prototype.getSocketId = function () {
 
 function normalize_coord(h, j){
   return Math.floor(((2*j)+(h%j))%j)
-}
-
-function truncate(value) {
-  if (value<0) return Math.ceil(value);
-  else return Math.floor(value);
 }
