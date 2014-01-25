@@ -79,28 +79,22 @@ Layer.prototype.draw = function(ctx, deltatime){
     //we only draw the screen rather than culling just draw screen range
     for (y = from_y; y < to_y; y++) {
       for (x = from_x; x < to_x; x++) {
-        var tile = this.map.spritesheet.get(this.get_tile_index(x, y)),
-            draw_x, draw_y;
+        var tile = this.map.spritesheet.get(this.get_tile_index(x, y));
         if(tile){
-          if(ctx.orientation == "isometric"){
-            draw_x = ( Math.floor(x) * tile_width/2  - y * tile_width/2  );
-            draw_y = ( Math.floor(y) * tile_height/2 + x * tile_height/2 );
-          }else if (ctx.orientation == "orthogonal"){
-            draw_x = (Math.floor(x) * tile_width);
-            draw_y = (Math.floor(y) * tile_height);
-          }
+          var draw_x = (Math.floor(x) * tile_width),
+              draw_y = (Math.floor(y) * tile_height);
           tile.draw(ctx, draw_x - (ctx.viewport.x * tile_width), draw_y - (ctx.viewport.y * tile_height));
         }
       }
     }
   }else if(this.is_objectgroup() && this.visible && this.map.player.layer.group == this.group){
-    var object_name, object;
+    var object_name, object, object_pos;
     for(object_name in this.objects){
       object = this.objects[object_name];
       if(object.type == 'player'){
         object.draw(ctx, deltatime);
-      }else if(object.type == 'npc' && ctx.viewport.isInside(object.x, object.y)){
-        object.draw(ctx, deltatime);
+      }else if(object.type == 'npc' && (object_pos = ctx.viewport.isInside(object.x, object.y, this))){
+        object.draw(ctx, deltatime, object_pos[0], object_pos[1]);
       }else if(object.type == 'npc'){ //this means it is not in viewport
         object.animate(deltatime);    // update position 
       }

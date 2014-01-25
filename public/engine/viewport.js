@@ -30,8 +30,24 @@ Viewport.prototype.bottom = function(){
 };
 
 Viewport.prototype.isInside = function(x, y, layer) {
-   return x > this.left() && 
-          x < this.right() && 
-          y > this.top() && 
-          y < this.bottom();
+   if(x > this.left() && x < this.right() && y > this.top() && y < this.bottom()){
+     return [x,y]
+   } else if((x+layer.width) > this.left() && (x+layer.width) < this.right()){
+     if(y > this.top() && y < this.bottom()){
+      return [x+layer.width, y]
+     } else if((y+layer.height) > this.top() && (y+layer.height) < this.bottom()){
+      return [x+layer.width, y+layer.height]
+     } else if((y-layer.height) > this.top() && (y-layer.height) < this.bottom()){
+      return [x+layer.width, y-layer.height]
+     }
+   } else if((x-layer.width) > this.left() && (x-layer.width) < this.right()){
+     if(y > this.top() && y < this.bottom()){
+      return [x-layer.width, y]
+     } else if((y+layer.height) > this.top() && (y+layer.height) < this.bottom()){
+      return [x-layer.width, y+layer.height]
+     } else if((y-layer.height) > this.top() && (y-layer.height) < this.bottom()){
+      return [x-layer.width, y-layer.height]
+     }
+   }
+   return false
 };

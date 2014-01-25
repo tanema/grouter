@@ -53,18 +53,11 @@ Displayable.prototype.initalize_properties = function(next){
 };
 
 Displayable.prototype.draw = function(ctx, deltatime, x, y){
-  var draw_x, draw_y;
-
   x = x || this.x;
   y = y || this.y;
 
-  if(ctx.orientation == "isometric"){
-    draw_x = ((x * this.map_tile_width/2 - y * this.map_tile_width/2) - this.offset_x);
-    draw_y = ((y * this.map_tile_height/2 + x * this.map_tile_height/2) - this.offset_y);
-  }else if (ctx.orientation == "orthogonal"){
-    draw_x = ((x * this.map_tile_width)  - this.offset_x);
-    draw_y = ((y * this.map_tile_height) - this.offset_y);
-  }
+  var draw_x = ((x * this.map_tile_width)  - this.offset_x),
+      draw_y = ((y * this.map_tile_height) - this.offset_y);
 
   this.animate(deltatime);
 

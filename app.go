@@ -4,7 +4,7 @@ import (
 	"net/http"
   "log"
   "github.com/tanema/go-socket.io"
-  "github.com/tanema/grouter/json_map"
+  "grouter/json_map"
 )
 
 var players map[string]*json_map.Player
