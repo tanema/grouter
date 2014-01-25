@@ -1,10 +1,7 @@
 Grouter.js For HTML5 Game Creation
 =============
   This is a work in progress, not really meant to compete with anything out there but I wanted to build a 
-tile engine around tiled. It makes it easy to quickly generate worlds and games in a 2D environment. I would
-love if someone would help if you are interested in the project. I am hoping to build it into a npm module
-so that it can plugin into express and work right out of the box, both multiplayer and a more simple single
-player.
+tile engine around Tiled. It makes it easy to quickly generate worlds and games in a 2D environment.
 
 Status
 ------
@@ -14,9 +11,14 @@ two in the future. I am looking for contributors to help speed up the process th
 
 TODO List
 --------
+- create npc from server and make independant connection
+- make independant connection for players as well(channel)
 - server side npc
 - load new map event and connector
-- latency handling
+  - unload socket connections
+  -
+- Better latency handling and checking
+- server side validation of interactions
 - server side behaviour/interaction definition
 
 License
@@ -44,4 +46,4 @@ ideas
 - small worlds that you can wander completely around.
 - activate portals to new worlds as you progress.
 - maybe have to go to the core to unlock next portal and multidriectional maze to get to the core
-  like you some times you have to go furthur away to find a way to the portal.
+- like you some times you have to go furthur away to find a way to the portal.
