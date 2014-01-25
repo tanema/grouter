@@ -17,7 +17,8 @@ type Map struct {
   TileSets    []*TileSet        `json:"tilesets"`
   Properties  map[string]string `json:"properties"`
   Player      *Player
-  Players     []*Sprite
+  Players     map[string]*Player
+  Npcs        map[string]*Sprite
   Version     float32           `json:"version"`
 }
 
@@ -29,6 +30,10 @@ func NewMap(map_path string) *Map {
   }
   var new_map Map
   json.Unmarshal(file, &new_map)
+
+  new_map.Players = map[string]*Player{}
+  new_map.Npcs = map[string]*Sprite{}
+
   new_map.normalizeObjects()
   new_map.setPlayer()
   return &new_map
@@ -42,6 +47,7 @@ func (m *Map) normalizeObjects(){
       for _, sprite := range layer.Sprites {
         sprite.X = sprite.X / m.TileWidth
         sprite.Y = sprite.Y / m.TileHeight
+        m.Npcs[sprite.Name] = sprite
       }
     }
   }

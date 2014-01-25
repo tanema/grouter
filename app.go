@@ -16,37 +16,46 @@ func main() {
     log.Println("Connected: ", ns.Id())
   })
   sio.On("disconnect", func(ns *socketio.NameSpace){
-    player := players[ns.Id()]
+    map_name := ns.Session.Values["map"].(string)
+    player_map := maps[map_name]
+
+    player := player_map.Players[ns.Id()]
     ns.Session.Values["x"] = player.X
     ns.Session.Values["y"] = player.Y
     ns.Session.Values["layer"] = player.LayerName
     ns.Session.Values["name"] = player.Name
     log.Println("Disconnected: ", ns.Id())
     sio.Broadcast("kill player", ns.Id());
-    delete(players, ns.Id())
+    delete(player_map.Players, ns.Id())
   })
   sio.On("player move", func(ns *socketio.NameSpace, to_x, to_y int){
     //TODO validate move
-    player := players[ns.Id()]
+    map_name := ns.Session.Values["map"].(string)
+    player_map := maps[map_name]
+    player := player_map.Players[ns.Id()]
     player.X = float32(to_x)
     player.Y = float32(to_y)
     sio.Except(ns).Broadcast("actor move", ns.Id(), to_x, to_y);
   })
   sio.On("player change layer", func(ns *socketio.NameSpace, layer string){
-    log.Println("player change layer: ", ns.Id())
-    player := players[ns.Id()]
+    map_name := ns.Session.Values["map"].(string)
+    player_map := maps[map_name]
+    player := player_map.Players[ns.Id()]
     player.LayerName = layer
     sio.Except(ns).Broadcast("actor change layer", ns.Id(), layer);
   })
   sio.On("player teleport", func(ns *socketio.NameSpace, to_x, to_y int){
     //TODO validate move
-    player := players[ns.Id()]
+    map_name := ns.Session.Values["map"].(string)
+    player_map := maps[map_name]
+    player := player_map.Players[ns.Id()]
     player.X = float32(to_x)
     player.Y = float32(to_y)
     sio.Except(ns).Broadcast("actor teleport", ns.Id(), to_x, to_y);
   })
   sio.On("join map", func(ns *socketio.NameSpace, map_name, player_name string){
     log.Println("join map")
+    player_map := maps[map_name]
     ns.Session.Values["map"] = map_name
     ns.Session.Values["name"] = player_name
 
@@ -66,13 +75,15 @@ func main() {
       Players   map[string]*json_map.Player `json:"players"`
       Npcs      map[string]*json_map.Sprite `json:"npcs"`
     }{
-      new_player, players, map[string]*json_map.Sprite{},
+      new_player,
+      player_map.Players,
+      player_map.Npcs,
     }
 
     //set the players initial data
     ns.Emit("player connected", connected_data);
     //tell everyone else about this player
-    players[new_player.Id] = new_player
+    player_map.Players[new_player.Id] = new_player
     sio.Except(ns).Broadcast("spawn player", new_player);
   })
   sio.On("set name", func(ns *socketio.NameSpace, name string){
@@ -81,7 +92,6 @@ func main() {
     sio.Broadcast("change name", ns.Id(), name)
   })
 
-  players = map[string]*json_map.Player{}
   maps = map[string]*json_map.Map{
     "map0.json": json_map.NewMap("public/maps/map0.json"),
   }
