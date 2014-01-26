@@ -44,10 +44,11 @@ Layer.prototype._initiate_objects = function(objects, next){
       _this._initiate_objects(objects, next);
     });
   }else if(object.type.toLowerCase() == "npc"){
-    new Npc(object, _this.map, _this, function(npc){
-      _this.map.objects[npc.name] = _this.objects[npc.name] = npc;
-      _this._initiate_objects(objects, next);
-    });
+    //new Npc(object, _this.map, _this, function(npc){
+    //  _this.map.objects[npc.name] = _this.objects[npc.name] = npc;
+    //  _this._initiate_objects(objects, next);
+    //});
+    _this._initiate_objects(objects, next);
   }else if(object.type.toLowerCase() == "actionable"){
     var actionable = new Actionable(object, _this.map, _this);
     _this.map.objects[actionable.name] = _this.objects[actionable.name] = actionable;

@@ -7,7 +7,6 @@ import (
   "grouter/json_map"
 )
 
-var players map[string]*json_map.Player
 var maps map[string]*json_map.Map
 
 func main() {
@@ -71,8 +70,8 @@ func main() {
     }
 
     connected_data := struct {
-      Player    *json_map.Player            `json:"player"`
-      Players   map[string]*json_map.Player `json:"players"`
+      Player    *json_map.Sprite            `json:"player"`
+      Players   map[string]*json_map.Sprite `json:"players"`
       Npcs      map[string]*json_map.Sprite `json:"npcs"`
     }{
       new_player,

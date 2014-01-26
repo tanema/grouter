@@ -52,7 +52,7 @@ Map.prototype.load = function (next){
 Map.prototype.register_socket_events = function(){
   var _this = this;
   this.engine.socket.on('player connected', function(x, y){_this.player_connected(x, y);});
-  this.engine.socket.on('spawn player', function(options){_this.player_spawn(options);});
+  this.engine.socket.on('spawn player', function(options){_this.npc_spawn(options);});
   this.engine.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
   this.engine.socket.on('kill player', function(id){_this.npc_killed(id);});
   this.engine.socket.on('kill npc', function(name){_this.npc_killed(name);});
@@ -145,7 +145,7 @@ Map.prototype.player_connected = function(connection_data){
   }
 };
 
-Map.prototype.player_spawn = function(options){
+Map.prototype.npc_spawn = function(options){
   console.log("Spawning player " + options.id + " at " + options.x + "," + options.y);
   var _this = this;
   var layer = this.layers[options.layer_name];
@@ -156,11 +156,6 @@ Map.prototype.player_spawn = function(options){
     _this.objects[npc.id] = npc;
     layer.objects[npc.id] = npc;
   });
-};
-
-Map.prototype.npc_spawn = function(options){
-  console.log("Spawning npc " + options.name);
-  this.objects[options.name].teleport(options.x, options.y);
 };
 
 Map.prototype.player_killed = function(id){
