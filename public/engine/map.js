@@ -38,7 +38,7 @@ Map.prototype.load = function (next){
         //do socket stuff
         if(Grouter.ServerEnabled){
           _this.register_socket_events();
-          _this.engine.socket.emit("join map", _this.name, _this.player.name);
+          _this.engine.socket.emit("join map", _this.name);
         }
         // map loaded so continue
         if(next){
@@ -135,8 +135,11 @@ Map.prototype.draw = function (ctx, deltatime){
 
 Map.prototype.player_connected = function(connection_data){
   //handle player connection
-  this.player.id = connection_data.player.id;
-  this.player.teleport(connection_data.player.x, connection_data.player.y, true);
+  var layer = this.layers[connection_data.player.layer_name];
+  connection_data.player.x = connection_data.player.x * this.tilewidth;
+  connection_data.player.y = connection_data.player.y * this.tileheight;
+  this.player = this.objects[connection_data.player.id] = layer.objects[connection_data.player.id] = new Player(connection_data.player, this, layer);
+
   for(var player_id in connection_data.players){
     this.player_spawn(connection_data.players[player_id]);
   }

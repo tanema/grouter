@@ -52,15 +52,13 @@ func main() {
     player.Y = float32(to_y)
     sio.Except(ns).Broadcast("actor teleport", ns.Id(), to_x, to_y);
   })
-  sio.On("join map", func(ns *socketio.NameSpace, map_name, player_name string){
+  sio.On("join map", func(ns *socketio.NameSpace, map_name string){
     log.Println("join map")
     player_map := maps[map_name]
     ns.Session.Values["map"] = map_name
-    ns.Session.Values["name"] = player_name
 
     new_player := maps[map_name].Player.ShallowClone()
     new_player.Id = ns.Id()
-    new_player.Name = player_name
     if ns.Session.Values["x"] != nil && ns.Session.Values["y"] != nil {
       new_player.X = ns.Session.Values["x"].(float32)
       new_player.Y = ns.Session.Values["y"].(float32)

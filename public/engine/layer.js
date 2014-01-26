@@ -18,8 +18,10 @@ function Layer(layer_options, map, next){
   this.map = map;
 
   if(this.is_objectgroup()){
-    this._initiate_objects(layer_options.objects, next);
-  }else if(next){
+    this.initiate_objects(layer_options.objects);
+  }
+  
+  if(next){
     next(this);
   }
 }
@@ -32,29 +34,16 @@ Layer.prototype.is_objectgroup = function(){
   return this.type == "objectgroup";
 };
 
-Layer.prototype._initiate_objects = function(objects, next){
-  if(objects.length === 0){return next(this);}
-
-  var _this = this,
-      object = objects.shift();
-
-  if(object.type.toLowerCase() == "player"){
-    new Player(object, _this.map, _this, function(player){
-      _this.map.player = _this.map.objects[player.id] = _this.objects[player.id] = player;
-      _this._initiate_objects(objects, next);
-    });
-  }else if(object.type.toLowerCase() == "npc"){
-    //new Npc(object, _this.map, _this, function(npc){
-    //  _this.map.objects[npc.name] = _this.objects[npc.name] = npc;
-    //  _this._initiate_objects(objects, next);
-    //});
-    _this._initiate_objects(objects, next);
-  }else if(object.type.toLowerCase() == "actionable"){
-    var actionable = new Actionable(object, _this.map, _this);
-    _this.map.objects[actionable.name] = _this.objects[actionable.name] = actionable;
-    _this._initiate_objects(objects, next);
-  }else{
-    _this._initiate_objects(objects, next);
+Layer.prototype.initiate_objects = function(objects){
+  for(var i = 0; i < objects.length; i++){
+    var object = objects[i];
+    if(object.type.toLowerCase() == "player"){
+      object.layer = this;
+      this.map.player = object;//set it to inital object so we have a starting x y to render
+    }else if(object.type.toLowerCase() == "actionable"){
+      var actionable = new Actionable(object, this.map, this);
+      this.map.objects[actionable.name] = this.objects[actionable.name] = actionable;
+    }
   }
 };
 
