@@ -12,7 +12,7 @@ function Actionable(actionable_options, map, layer){
     this.x = this.x / map.spritesheet.tile_width;
     this.y = this.y / map.spritesheet.tile_height;
     //set socket
-    this.socket = map.engine.socket;
+    this.socket = map.socket;
   }
 
   if(actionable_options.properties){
@@ -22,7 +22,7 @@ function Actionable(actionable_options, map, layer){
       this.enter_action = actionable_options.properties.enter_action;
     }else if(actionable_options.properties.action_src){
       var _this = this;
-      console.log(" → loading actionable's reaction " + actionable_options.properties.onidle_src);
+      console.log(" → loading actionable's reaction " + actionable_options.properties.action_src);
       $.ajax({
         url: actionable_options.properties.action_src,
         dataType: 'text', // have to set as text otherwise get ref errors from me/dialog/ect

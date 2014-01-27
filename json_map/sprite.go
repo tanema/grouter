@@ -1,5 +1,9 @@
 package json_map
 
+import (
+  "github.com/tanema/go-socket.io"
+)
+
 type Sprite struct {
   Id          string            `json:"id"`
   Type        string            `json:"type"`
@@ -38,4 +42,8 @@ func (sp *Sprite) IsNPC() bool {
 
 func (sp *Sprite) IsActionable() bool {
   return sp.Type == "actionable"
+}
+
+func (sp *Sprite) SetupSocket(sio *socketio.SocketIOServer){
+
 }

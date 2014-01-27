@@ -1,7 +1,5 @@
 var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
 
-Grouter.ServerEnabled = Grouter.ServerEnabled || true;
-
 function Grouter(canvas_el, map_src){
   if(!this.canvasIsSupported() && !!requestAnimationFrame){
     alert("Your browser does not support this game.");
@@ -21,9 +19,7 @@ function Grouter(canvas_el, map_src){
     this.fps_timer = setInterval(function(){_this.updateFPS()}, 1000);
   }
 
-  if(Grouter.ServerEnabled){
-    this.socket = io.connect();
-  }
+  this.socket = io.connect();
   window.addEventListener('load', function(){
     _this.load_map(map_src);
   });
@@ -86,11 +82,7 @@ Grouter.prototype.canvasIsSupported = function (){
 };
 
 Grouter.prototype.getSocketId = function () {
-  if(Grouter.ServerEnabled){
-    return this.socket.socket.sessionid;
-  } else {
-    return  "player"
-  }
+  return this.socket.socket.sessionid;
 }
 
 function normalize_coord(h, j){

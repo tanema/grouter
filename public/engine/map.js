@@ -36,10 +36,8 @@ Map.prototype.load = function (next){
       _this._load_layer(map_data.layers, function(){
         console.log("["+ _this.map_src + "] finished loading");
         //do socket stuff
-        if(Grouter.ServerEnabled){
-          _this.register_socket_events();
-          _this.engine.socket.emit("join map", _this.name);
-        }
+        _this.socket = _this.engine.socket.of(_this.name);
+        _this.register_socket_events();
         // map loaded so continue
         if(next){
           next(_this);
@@ -51,14 +49,14 @@ Map.prototype.load = function (next){
 
 Map.prototype.register_socket_events = function(){
   var _this = this;
-  this.engine.socket.on('player connected', function(x, y){_this.player_connected(x, y);});
-  this.engine.socket.on('spawn player', function(options){_this.npc_spawn(options);});
-  this.engine.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
-  this.engine.socket.on('kill player', function(id){_this.npc_killed(id);});
-  this.engine.socket.on('kill npc', function(name){_this.npc_killed(name);});
-  this.engine.socket.on('actor move', function(id, to_x, to_y){_this.actor_move(id, to_x, to_y);});
-  this.engine.socket.on('actor teleport', function(id, to_x, to_y){_this.actor_teleport(id, to_x, to_y);});
-  this.engine.socket.on('actor change layer', function(id, layer){_this.actor_change_layer(id, layer);});
+  this.socket.on('player connected', function(x, y){_this.player_connected(x, y);});
+  this.socket.on('spawn player', function(options){_this.npc_spawn(options);});
+  this.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
+  this.socket.on('kill player', function(id){_this.npc_killed(id);});
+  this.socket.on('kill npc', function(name){_this.npc_killed(name);});
+  this.socket.on('actor move', function(id, to_x, to_y){_this.actor_move(id, to_x, to_y);});
+  this.socket.on('actor teleport', function(id, to_x, to_y){_this.actor_teleport(id, to_x, to_y);});
+  this.socket.on('actor change layer', function(id, layer){_this.actor_change_layer(id, layer);});
 };
 
 Map.prototype.loaded = function (){
@@ -139,9 +137,8 @@ Map.prototype.player_connected = function(connection_data){
   connection_data.player.x = connection_data.player.x * this.tilewidth;
   connection_data.player.y = connection_data.player.y * this.tileheight;
   this.player = this.objects[connection_data.player.id] = layer.objects[connection_data.player.id] = new Player(connection_data.player, this, layer);
-
   for(var player_id in connection_data.players){
-    this.player_spawn(connection_data.players[player_id]);
+    this.npc_spawn(connection_data.players[player_id]);
   }
   for(var npc_id in connection_data.npcs){
     this.npc_spawn(connection_data.npcs[npc_id]);
