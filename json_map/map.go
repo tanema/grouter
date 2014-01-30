@@ -54,6 +54,8 @@ func (m *Map) initializeObjects(){
         sprite.X = sprite.X / m.TileWidth
         sprite.Y = sprite.Y / m.TileHeight
         sprite.LayerName = layer.Name
+        sprite.Map = m
+        sprite.Layer = layer
         sprite.SetupSocket(m.sio)
         if sprite.IsNPC() {
           m.Npcs[sprite.Name] = sprite
@@ -67,17 +69,13 @@ func (m *Map) initializeObjects(){
 
 func (m *Map) setupConnections() {
   m.sio.Of(m.Name).On("connect", m.join)
-  m.sio.Of(m.Name).On("player move", m.player_move)
-  m.sio.Of(m.Name).On("player change layer", m.player_change_layer)
-  m.sio.Of(m.Name).On("player teleport", m.player_teleport)
-  m.sio.Of(m.Name).On("set name", m.player_change_name)
+  m.sio.Of(m.Name).On("disconnect", m.leave)
 }
 
 func (m *Map) join(ns *socketio.NameSpace){
-  println("player joined map")
   ns.Session.Values["map"] = m.Name
 
-  new_player := m.Player.ShallowClone()
+  new_player := m.Player.Clone()
   new_player.Id = ns.Id()
   if ns.Session.Values["x"] != nil && ns.Session.Values["y"] != nil {
     new_player.X = ns.Session.Values["x"].(float32)
@@ -86,6 +84,7 @@ func (m *Map) join(ns *socketio.NameSpace){
   if ns.Session.Values["layer"] != nil {
     new_player.LayerName = ns.Session.Values["layer"].(string)
   }
+  new_player.SetupSocket(m.sio)
 
   connected_data := struct {
     Player    *Sprite            `json:"player"`
@@ -101,34 +100,18 @@ func (m *Map) join(ns *socketio.NameSpace){
   ns.Emit("player connected", connected_data);
   //tell everyone else about this player
   m.Players[new_player.Id] = new_player
-  m.sio.In(m.Name).Except(ns).Broadcast("spawn player", new_player);
+  m.sio.In(m.Name).Except(ns).Broadcast("spawn", new_player);
 }
 
-func (m *Map) player_move(ns *socketio.NameSpace, to_x, to_y int){
-  //TODO validate move
+func (m *Map) leave(ns *socketio.NameSpace){
   player := m.Players[ns.Id()]
-  player.X = float32(to_x)
-  player.Y = float32(to_y)
-  m.sio.In(m.Name).Except(ns).Broadcast("actor move", ns.Id(), to_x, to_y);
-}
-
-func (m *Map) player_change_layer(ns *socketio.NameSpace, layer string){
-  player := m.Players[ns.Id()]
-  player.LayerName = layer
-  m.sio.In(m.Name).Except(ns).Broadcast("actor change layer", ns.Id(), layer);
-}
-
-func (m *Map) player_teleport(ns *socketio.NameSpace, to_x, to_y int){
-  //TODO validate move
-  player := m.Players[ns.Id()]
-  player.X = float32(to_x)
-  player.Y = float32(to_y)
-  m.sio.In(m.Name).Except(ns).Broadcast("actor teleport", ns.Id(), to_x, to_y);
-}
-
-func (m *Map) player_change_name(ns *socketio.NameSpace, name string){
-  ns.Session.Values["name"] = name
-  m.sio.In(m.Name).Broadcast("change name", ns.Id(), name)
+  println(player.channel()+" disconnected")
+  ns.Session.Values["x"] = player.X
+  ns.Session.Values["y"] = player.Y
+  ns.Session.Values["layer"] = player.LayerName
+  ns.Session.Values["name"] = player.Name
+  m.sio.In(player.channel()).Broadcast("kill");
+  delete(m.Players, ns.Id())
 }
 
 func (m *Map) At(x, y float32) []MapObject {

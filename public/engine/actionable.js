@@ -11,8 +11,9 @@ function Actionable(actionable_options, map, layer){
     //convert x and y to tile co-ords because tiled gives objects in absolute co-ords
     this.x = this.x / map.spritesheet.tile_width;
     this.y = this.y / map.spritesheet.tile_height;
-    //set socket
-    this.socket = map.socket;
+    //set socket to be for only this object
+    //at this point the map socket is not setup yet
+    this.socket = this.map.engine.socket.of(this.map.name+(this.id || this.name));
   }
 
   if(actionable_options.properties){

@@ -61,13 +61,34 @@ Displayable.prototype.draw = function(ctx, deltatime, x, y){
 
   this.animate(deltatime);
 
-  ctx.drawImage(this._get_frame(), draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
+  var draw_frame = this._get_frame();
+  if(draw_frame){
+    ctx.drawImage(draw_frame, draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
+  }
 };
 
 Displayable.prototype.teleport = function(x, y){
   this.is_moving = false
   this.x = x;
   this.y = y;
+};
+
+Displayable.prototype.kill = function(){
+  delete this.layer.objects[this.id || this.name];
+  delete this.map.objects[this.id || this.name];
+};
+
+Displayable.prototype.move_to = function(to_x, to_y){
+  var direction = "",
+      distance = 0;
+  if (this.x != to_x) {
+    direction = (this.x < to_x) ? "right" : "left";
+    distance = Math.abs(this.x - to_x);
+  } else {
+    direction = (this.y < to_y) ? "down" : "up";
+    distance = Math.abs(this.y - to_y);
+  }
+  this.move(direction, distance);
 };
 
 Displayable.prototype.move = function(direction, distance){
@@ -132,7 +153,8 @@ Displayable.prototype.react = function(actor){
 };
 
 Displayable.prototype._get_frame = function(){
-  return this.spritesheet.get(this.movement[this.currentMovement][this.movementIndex]).img;
+  var sprite = this.spritesheet.get(this.movement[this.currentMovement][this.movementIndex]);
+  return sprite ? sprite.img : null;
 };
 
 //we set to_x and to_y here so that the animation has a defined end so we dont get rounding

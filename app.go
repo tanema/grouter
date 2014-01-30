@@ -16,19 +16,6 @@ func main() {
   })
   sio.On("disconnect", func(ns *socketio.NameSpace){
     log.Println("Disconnected: ", ns.Id())
-    if ns.Session.Values["map"] == nil {
-      return
-    }
-    map_name := ns.Session.Values["map"].(string)
-    if player_map := maps[map_name]; player_map != nil {
-      player := player_map.Players[ns.Id()]
-      ns.Session.Values["x"] = player.X
-      ns.Session.Values["y"] = player.Y
-      ns.Session.Values["layer"] = player.LayerName
-      ns.Session.Values["name"] = player.Name
-      sio.In(map_name).Broadcast("kill player", ns.Id());
-      delete(player_map.Players, ns.Id())
-    }
   })
 
   maps = map[string]*json_map.Map{

@@ -50,13 +50,7 @@ Map.prototype.load = function (next){
 Map.prototype.register_socket_events = function(){
   var _this = this;
   this.socket.on('player connected', function(x, y){_this.player_connected(x, y);});
-  this.socket.on('spawn player', function(options){_this.npc_spawn(options);});
-  this.socket.on('spawn npc', function(options){_this.npc_spawn(options);});
-  this.socket.on('kill player', function(id){_this.npc_killed(id);});
-  this.socket.on('kill npc', function(name){_this.npc_killed(name);});
-  this.socket.on('actor move', function(id, to_x, to_y){_this.actor_move(id, to_x, to_y);});
-  this.socket.on('actor teleport', function(id, to_x, to_y){_this.actor_teleport(id, to_x, to_y);});
-  this.socket.on('actor change layer', function(id, layer){_this.actor_change_layer(id, layer);});
+  this.socket.on('spawn', function(options){_this.npc_spawn(options);});
 };
 
 Map.prototype.loaded = function (){
@@ -146,7 +140,7 @@ Map.prototype.player_connected = function(connection_data){
 };
 
 Map.prototype.npc_spawn = function(options){
-  console.log("Spawning player " + options.id + " at " + options.x + "," + options.y);
+  console.log("Spawning " + (options.id || options.name) + " at " + options.x + "," + options.y);
   var _this = this;
   var layer = this.layers[options.layer_name];
   //convert tile coords to abs coords for init
@@ -157,48 +151,3 @@ Map.prototype.npc_spawn = function(options){
     layer.objects[npc.id] = npc;
   });
 };
-
-Map.prototype.player_killed = function(id){
-  console.log("Killing player " + id);
-  if(this.objects[id]){
-    delete this.objects[id].layer.objects[id];
-    delete this.objects[id];
-  }
-};
-
-Map.prototype.npc_killed = function(name){
-  console.log("Killing npc " + name);
-  if(this.objects[name]){
-    delete this.objects[name].layer.objects[name];
-    delete this.objects[name];
-  }
-};
-
-Map.prototype.actor_teleport = function(id, to_x, to_y){
-  console.log("actor teleport")
-  this.objects[id].teleport(to_x, to_y);
-}
-
-Map.prototype.actor_move = function(id, to_x, to_y){
-  console.log("actor move: " + id);
-  var direction = "",
-      distance = 0;
-  if (this.objects[id].x != to_x) {
-    direction = (this.objects[id].x < to_x) ? "right" : "left";
-    distance = Math.abs(this.objects[id].x - to_x);
-  } else {
-    direction = (this.objects[id].y < to_y) ? "down" : "up";
-    distance = Math.abs(this.objects[id].y - to_y);
-  }
-  this.objects[id].move(direction, distance);
-};
-
-Map.prototype.actor_change_layer = function(id, layer_name){
-  console.log("actor " + id + " change layer to " + layer_name);
-  for(var layer in this.layers){
-    if(layer == layer_name){
-      this.objects[id].set_layer(this.layers[layer], true);
-      break;
-    }
-  }
-}

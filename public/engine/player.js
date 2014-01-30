@@ -1,6 +1,8 @@
 function Player(player_options, map, layer, next){
+  player_options = player_options || {};
+  this.id = player_options.id = map.engine.getSocketId();
+  player_options.type = "player";
   Displayable.call(this, player_options, map, layer, next);
-  this.id = map.engine.getSocketId();
   this.bind_key_events();
 }
 
@@ -17,7 +19,7 @@ Player.prototype.bind_key_events = function(){
     if(!_this.is_moving){
       var to_tile = _this._get_to_tile(direction);
       if(_this.move(direction) && _this.socket){
-        _this.socket.emit("player move", to_tile.x, to_tile.y);
+        _this.socket.emit("move", to_tile.x, to_tile.y);
       }
     }
   });
