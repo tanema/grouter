@@ -66,20 +66,33 @@ func (sp *Sprite) IsActionable() bool {
 }
 
 func (sp *Sprite) InitalizeBehaviour(){
-  file, e := ioutil.ReadFile("public/maps/"+sp.Map.Name+"/actors/behaviour/"+sp.Name+".js")
+  behaviour_tree_def, e := ioutil.ReadFile("public/maps/"+sp.Map.Name+"/actors/behaviour/"+sp.Name+".js")
   if e == nil {
-    sp.behaviour = otto.New()
-    sp.behaviour.Set("move", func(call otto.FunctionCall) {
-      direction, _ := call.Argument(0).ToString()
-      distance, _ := call.Argument(0).ToInteger()
-      sp.Move(direction, distance)
-    })
-    _, e = sp.behaviour.Run(string(file[:]))
+    sp.setupBehaviour()
+    _, e = sp.behaviour.Run(string(behaviour_tree_def[:]))
     if e != nil {
       fmt.Println("Javascript error in " + sp.Name + ".js : ", e)
       return
+    } else {
+      fmt.Println("Loaded " + sp.Name + ".js behaviour")
     }
+  } else {
+      fmt.Println("No behaviour found for " + sp.Name + " : ", e)
   }
+}
+
+func (sp *Sprite) setupBehaviour() {
+  sp.behaviour = otto.New()
+  //set custom methods in javascript
+  sp.behaviour.Set("move", func(call otto.FunctionCall) {
+    direction, _ := call.Argument(0).ToString()
+    distance, _ := call.Argument(0).ToInteger()
+    sp.Move(direction, distance)
+  })
+
+  //load behaviour tree dependancy into environment
+  behaviour_tree_dep, _ := ioutil.ReadFile("lib/btree.min.js")
+  sp.behaviour.Run(string(behaviour_tree_dep[:]))
 }
 
 func (sp *Sprite) SetupSocket(sio *socketio.SocketIOServer){
