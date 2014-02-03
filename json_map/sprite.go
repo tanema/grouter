@@ -1,7 +1,10 @@
 package json_map
 
 import (
+  "fmt"
   "github.com/tanema/go-socket.io"
+  "github.com/robertkrimen/otto"
+  "io/ioutil"
 )
 
 type Sprite struct {
@@ -17,6 +20,7 @@ type Sprite struct {
   Map         *Map              `json:"-"`
   Layer       *Layer            `json:"-"`
   sio         *socketio.SocketIOServer `json:"-"`
+  behaviour   *otto.Otto        `json:"-"`
 }
 
 func (sp *Sprite) Clone() *Sprite {
@@ -61,35 +65,70 @@ func (sp *Sprite) IsActionable() bool {
   return sp.Type == "actionable"
 }
 
-func (sp *Sprite) SetupSocket(sio *socketio.SocketIOServer){
-  sp.sio = sio
-  sp.sio.Of(sp.channel()).On("move", sp.Move)
-  sp.sio.Of(sp.channel()).On("change layer", sp.ChangeLayer)
-  sp.sio.Of(sp.channel()).On("teleport", sp.Teleport)
-  sp.sio.Of(sp.channel()).On("set name", sp.ChangeName)
+func (sp *Sprite) InitalizeBehaviour(){
+  file, e := ioutil.ReadFile("public/maps/"+sp.Map.Name+"/actors/behaviour/"+sp.Name+".js")
+  if e == nil {
+    sp.behaviour = otto.New()
+    sp.behaviour.Set("move", func(call otto.FunctionCall) {
+      direction, _ := call.Argument(0).ToString()
+      distance, _ := call.Argument(0).ToInteger()
+      sp.Move(direction, distance)
+    })
+    _, e = sp.behaviour.Run(string(file[:]))
+    if e != nil {
+      fmt.Println("Javascript error in " + sp.Name + ".js : ", e)
+      return
+    }
+  }
 }
 
-func (sp *Sprite) Move(ns *socketio.NameSpace, to_x, to_y int){
-  println(sp.channel() +"moving")
+func (sp *Sprite) SetupSocket(sio *socketio.SocketIOServer){
+  sp.sio = sio
+  sp.sio.Of(sp.channel()).On("move", func(ns *socketio.NameSpace, to_x, to_y int64){sp.MoveTo(to_x, to_y)})
+  sp.sio.Of(sp.channel()).On("change layer", func(ns *socketio.NameSpace, layer string){sp.ChangeLayer(layer)})
+  sp.sio.Of(sp.channel()).On("teleport", func(ns *socketio.NameSpace, to_x, to_y int64){sp.Teleport(to_x, to_y)})
+  sp.sio.Of(sp.channel()).On("set name", func(ns *socketio.NameSpace, name string){sp.ChangeName(name)})
+}
+
+func (sp *Sprite) Move(direction string, distance int64){
+  if distance < 1 {
+    distance = 1
+  }
+  to_x := int64(sp.X)
+  to_y := int64(sp.Y)
+  switch direction {
+    case "left":
+      to_x -= distance
+    case "right":
+      to_x += distance
+    case "up":
+      to_y -= distance
+    case "down":
+      to_y += distance
+  }
+  sp.MoveTo(to_x, to_y)
+}
+
+func (sp *Sprite) MoveTo(to_x, to_y int64){
   //TODO validate move
   sp.X = float32(to_x)
   sp.Y = float32(to_y)
   sp.sio.In(sp.channel()).Broadcast("move", to_x, to_y);
 }
 
-func (sp *Sprite) ChangeLayer(ns *socketio.NameSpace, layer string){
+func (sp *Sprite) ChangeLayer(layer string){
   sp.LayerName = layer
   sp.sio.In(sp.channel()).Broadcast("change layer", layer);
 }
 
-func (sp *Sprite) Teleport(ns *socketio.NameSpace, to_x, to_y int){
+func (sp *Sprite) Teleport(to_x, to_y int64){
   //TODO validate move
   sp.X = float32(to_x)
   sp.Y = float32(to_y)
   sp.sio.In(sp.channel()).Broadcast("teleport", to_x, to_y);
 }
 
-func (sp *Sprite) ChangeName(ns *socketio.NameSpace, name string){
+func (sp *Sprite) ChangeName(name string){
   sp.Name = name
   sp.sio.In(sp.channel()).Broadcast("change name", name)
 }

@@ -6,7 +6,7 @@ function Map(map_src, engine){
   this.objects = {};
   this.audio_manager = new AudioManager();
   this.dialog = new Dialog();
-  this.name = map_src.substr(map_src.lastIndexOf("/")+1);
+  this.name = map_src.substring(map_src.lastIndexOf("/")+1, map_src.lastIndexOf("."));
 }
 
 Map.prototype.load = function (next){

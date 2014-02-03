@@ -1,6 +1,6 @@
 function Npc(npc_options, map, layer, next){
   npc_options = npc_options || {};
-  this.id = npc_options.id || npc_options.name;
+  this.id = npc_options.id;
   npc_options.type = "npc";//this is just for spawning players so I don't have to set it everytime 
   Displayable.call(this, npc_options, map, layer, next);
   this.register_socket_events()

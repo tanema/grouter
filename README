@@ -11,12 +11,12 @@ two in the future. I am looking for contributors to help speed up the process th
 
 TODO List
 --------
-- create npc from server and make independant connection
-- make independant connection for players as well(channel)
+- interaction server work
+  - handle both react and onenter
+  - load all from server side no json setup
 - server side npc
 - load new map event and connector
   - unload socket connections
-  -
 - Better latency handling and checking
 - server side validation of interactions
 - server side behaviour/interaction definition

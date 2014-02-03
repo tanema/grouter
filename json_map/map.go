@@ -35,7 +35,7 @@ func NewMap(map_path string, sio *socketio.SocketIOServer) *Map {
   var new_map Map
   json.Unmarshal(file, &new_map)
 
-  new_map.Name = map_path[strings.LastIndex(map_path, "/")+1:len(map_path)]
+  new_map.Name = map_path[strings.LastIndex(map_path, "/")+1:strings.LastIndex(map_path, ".")]
   new_map.sio = sio
   new_map.Players = map[string]*Sprite{}
   new_map.Npcs = map[string]*Sprite{}
@@ -58,6 +58,7 @@ func (m *Map) initializeObjects(){
         sprite.Layer = layer
         sprite.SetupSocket(m.sio)
         if sprite.IsNPC() {
+          sprite.InitalizeBehaviour()
           m.Npcs[sprite.Name] = sprite
         } else if sprite.IsPlayer() {
           m.Player = sprite
@@ -73,17 +74,19 @@ func (m *Map) setupConnections() {
 }
 
 func (m *Map) join(ns *socketio.NameSpace){
-  ns.Session.Values["map"] = m.Name
-
   new_player := m.Player.Clone()
   new_player.Id = ns.Id()
-  if ns.Session.Values["x"] != nil && ns.Session.Values["y"] != nil {
-    new_player.X = ns.Session.Values["x"].(float32)
-    new_player.Y = ns.Session.Values["y"].(float32)
+
+  if ns.Session.Values["map"] != nil && ns.Session.Values["map"] == m.Name{
+    if ns.Session.Values["x"] != nil && ns.Session.Values["y"] != nil {
+      new_player.X = ns.Session.Values["x"].(float32)
+      new_player.Y = ns.Session.Values["y"].(float32)
+    }
+    if ns.Session.Values["layer"] != nil {
+      new_player.LayerName = ns.Session.Values["layer"].(string)
+    }
   }
-  if ns.Session.Values["layer"] != nil {
-    new_player.LayerName = ns.Session.Values["layer"].(string)
-  }
+
   new_player.SetupSocket(m.sio)
 
   connected_data := struct {
@@ -105,7 +108,7 @@ func (m *Map) join(ns *socketio.NameSpace){
 
 func (m *Map) leave(ns *socketio.NameSpace){
   player := m.Players[ns.Id()]
-  println(player.channel()+" disconnected")
+  ns.Session.Values["map"] = m.Name
   ns.Session.Values["x"] = player.X
   ns.Session.Values["y"] = player.Y
   ns.Session.Values["layer"] = player.LayerName
