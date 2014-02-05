@@ -1,0 +1,37 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <script src="./btree.js"></script>
+    <script type="text/javascript">
+      var Frank = new BehaviorTree({
+        title: "Frank",
+        tree: new BehaviorTree.Sequence({
+          nodes: [
+            new BehaviorTree.Task({
+              title: 'lookaround',
+              run: function() {
+                var _this = this
+                console.log("starting look")
+                setTimeout(function(){
+                  console.log("done look")
+                  _this.success()
+                }, 3000)
+              }
+            }),
+            new BehaviorTree.Task({
+              title: 'walk',
+              run: function() {
+                console.log("walking")
+                this.success()
+              },
+            })
+          ]
+        })
+      });
+      setInterval(function(){
+        Frank.step()
+      }, 1000/60)
+    </script>
+  </body>
+</html>

@@ -5,6 +5,7 @@ import (
   "github.com/tanema/go-socket.io"
   "github.com/robertkrimen/otto"
   "io/ioutil"
+  "time"
 )
 
 type Sprite struct {
@@ -72,27 +73,51 @@ func (sp *Sprite) InitalizeBehaviour(){
     _, e = sp.behaviour.Run(string(behaviour_tree_def[:]))
     if e != nil {
       fmt.Println("Javascript error in " + sp.Name + ".js : ", e)
-      return
+      panic(0)
     } else {
       fmt.Println("Loaded " + sp.Name + ".js behaviour")
     }
   } else {
-      fmt.Println("No behaviour found for " + sp.Name + " : ", e)
+    fmt.Println("No behaviour found for " + sp.Name + " : ", e)
+  }
+}
+
+func (sp *Sprite) Step(){
+  _, e := sp.behaviour.Run(sp.Name + ".step()")
+  if e != nil {
+    fmt.Println("Javascript error in " + sp.Name + ".js while stepping : ", e)
   }
 }
 
 func (sp *Sprite) setupBehaviour() {
   sp.behaviour = otto.New()
   //set custom methods in javascript
-  sp.behaviour.Set("move", func(call otto.FunctionCall) {
+  //look
+  //position
+  sp.behaviour.Set("setTimeout", func(call otto.FunctionCall) otto.Value {
+    scope := call.Argument(0)
+    callback := call.Argument(1)
+    timeout, _ := call.Argument(2).ToInteger()
+    go func(){
+      time.Sleep(time.Duration(timeout) * time.Millisecond)
+      callback.Call(scope)
+    }()
+    return otto.UndefinedValue()
+  })
+  sp.behaviour.Set("move", func(call otto.FunctionCall) otto.Value {
     direction, _ := call.Argument(0).ToString()
     distance, _ := call.Argument(0).ToInteger()
     sp.Move(direction, distance)
+    return otto.UndefinedValue()
   })
 
   //load behaviour tree dependancy into environment
-  behaviour_tree_dep, _ := ioutil.ReadFile("lib/btree.min.js")
-  sp.behaviour.Run(string(behaviour_tree_dep[:]))
+  behaviour_tree_dep, _ := ioutil.ReadFile("lib/btree.js")
+  _, e := sp.behaviour.Run(string(behaviour_tree_dep[:]))
+  if e != nil {
+    fmt.Println("Javascript error in btree.js : ", e)
+    panic(0)
+  }
 }
 
 func (sp *Sprite) SetupSocket(sio *socketio.SocketIOServer){

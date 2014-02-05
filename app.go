@@ -7,10 +7,12 @@ import (
   "grouter/json_map"
 )
 
-var maps map[string]*json_map.Map
+var maps = []string{"map0"}
 
 func main() {
   sio := socketio.NewSocketIOServer(&socketio.Config{})
+  sio.Handle("/", http.FileServer(http.Dir("./public/")))
+
   sio.On("connect", func(ns *socketio.NameSpace){
     log.Println("Connected: ", ns.Id())
   })
@@ -18,11 +20,10 @@ func main() {
     log.Println("Disconnected: ", ns.Id())
   })
 
-  maps = map[string]*json_map.Map{
-    "map0.json": json_map.NewMap("public/maps/map0.json", sio),
+  for _, map_name := range maps {
+    new_map := json_map.NewMap("public/maps/"+map_name+".json", sio)
+    go new_map.Run()
   }
-
-  sio.Handle("/", http.FileServer(http.Dir("./public/")))
 
 	println("listening on port 3000")
   log.Fatal(http.ListenAndServe(":3000", sio))

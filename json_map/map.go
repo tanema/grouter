@@ -134,3 +134,11 @@ func (m *Map) At(x, y float32) []MapObject {
   }
   return results
 }
+
+func (m *Map) Run() {
+  for true {
+    for _, npc := range m.Npcs {
+      npc.Step()
+    }
+  }
+}
