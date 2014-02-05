@@ -92,32 +92,47 @@ func (sp *Sprite) Step(){
 func (sp *Sprite) setupBehaviour() {
   sp.behaviour = otto.New()
   //set custom methods in javascript
-  //look
-  //position
-  sp.behaviour.Set("setTimeout", func(call otto.FunctionCall) otto.Value {
-    scope := call.Argument(0)
-    callback := call.Argument(1)
-    timeout, _ := call.Argument(2).ToInteger()
-    go func(){
-      time.Sleep(time.Duration(timeout) * time.Millisecond)
-      callback.Call(scope)
-    }()
-    return otto.UndefinedValue()
+  sp.behaviour.Set("look", func(call otto.FunctionCall) otto.Value {
+    direction, _ := call.Argument(0).ToString()
+    distance, _ := call.Argument(1).ToInteger()
+    objects := []MapObject{}
+    for i := int64(1); i <= (distance+int64(1)); i++ {
+      switch direction {
+        case "left":
+          objects = append(objects, sp.Map.At(sp.X-float32(i), sp.Y)...)
+        case "right":
+          objects = append(objects, sp.Map.At(sp.X+float32(i), sp.Y)...)
+        case "up":
+          objects = append(objects, sp.Map.At(sp.X, sp.Y-float32(i))...)
+        case "down":
+          objects = append(objects, sp.Map.At(sp.X, sp.Y+float32(i))...)
+      }
+    }
+    val, _ := sp.behaviour.ToValue(objects)
+    return val
+  })
+  sp.behaviour.Set("position", func(call otto.FunctionCall) otto.Value {
+    val, _ := sp.behaviour.ToValue(map[string]float32{"x": sp.X, "y": sp.Y})
+    return val
   })
   sp.behaviour.Set("move", func(call otto.FunctionCall) otto.Value {
     direction, _ := call.Argument(0).ToString()
-    distance, _ := call.Argument(0).ToInteger()
+    distance, _ := call.Argument(1).ToInteger()
     sp.Move(direction, distance)
+    return otto.UndefinedValue()
+  })
+  sp.behaviour.Set("setTimeout", func(call otto.FunctionCall) otto.Value {
+    go func(){
+      timeout, _ := call.Argument(2).ToInteger()
+      time.Sleep(time.Duration(timeout) * time.Millisecond)
+      call.Argument(1).Call(call.Argument(0))
+    }()
     return otto.UndefinedValue()
   })
 
   //load behaviour tree dependancy into environment
   behaviour_tree_dep, _ := ioutil.ReadFile("lib/btree.js")
-  _, e := sp.behaviour.Run(string(behaviour_tree_dep[:]))
-  if e != nil {
-    fmt.Println("Javascript error in btree.js : ", e)
-    panic(0)
-  }
+  sp.behaviour.Run(string(behaviour_tree_dep[:]))
 }
 
 func (sp *Sprite) SetupSocket(sio *socketio.SocketIOServer){
