@@ -13,8 +13,8 @@ TODO List
 --------
 - interaction server work
   - handle both react and onenter
-  - load all from server side no json setup
 - server side npc
+  -npc name doesnt load for some reason
 - load new map event and connector
   - unload socket connections
 - Better latency handling and checking

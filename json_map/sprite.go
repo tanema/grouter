@@ -51,9 +51,6 @@ func (sp *Sprite) channel() string{
   return sp.Map.Name+sp.Ident()
 }
 
-func (sp *Sprite) Solid() bool {
-  return true
-}
 func (sp *Sprite) IsPlayer() bool {
   return sp.Type == "player"
 }
@@ -95,17 +92,17 @@ func (sp *Sprite) setupBehaviour() {
   sp.behaviour.Set("look", func(call otto.FunctionCall) otto.Value {
     direction, _ := call.Argument(0).ToString()
     distance, _ := call.Argument(1).ToInteger()
-    objects := []MapObject{}
-    for i := int64(1); i <= (distance+int64(1)); i++ {
+    objects := []MapQuery{}
+    for i := int64(1); i <= distance; i++ {
       switch direction {
         case "left":
-          objects = append(objects, sp.Map.At(sp.X-float32(i), sp.Y)...)
+          objects = append(objects, sp.Map.At(sp.X-float32(i), sp.Y, sp.Layer.Properties["group"]))
         case "right":
-          objects = append(objects, sp.Map.At(sp.X+float32(i), sp.Y)...)
+          objects = append(objects, sp.Map.At(sp.X+float32(i), sp.Y, sp.Layer.Properties["group"]))
         case "up":
-          objects = append(objects, sp.Map.At(sp.X, sp.Y-float32(i))...)
+          objects = append(objects, sp.Map.At(sp.X, sp.Y-float32(i), sp.Layer.Properties["group"]))
         case "down":
-          objects = append(objects, sp.Map.At(sp.X, sp.Y+float32(i))...)
+          objects = append(objects, sp.Map.At(sp.X, sp.Y+float32(i), sp.Layer.Properties["group"]))
       }
     }
     val, _ := sp.behaviour.ToValue(objects)

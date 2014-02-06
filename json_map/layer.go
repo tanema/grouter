@@ -1,16 +1,17 @@
 package json_map
 
 type Layer struct {
-  Data    []int     `json:"data"`
-  Height  float32   `json:"height"`
-  Width   float32   `json:"width"`
-  Name    string    `json:"name"`
-  Opacity float32   `json:"opacity"`
-  Type    string    `json:"type"`
-  Visible bool      `json:"visible"`
-  X       float32   `json:"x"`
-  Y       float32   `json:"y"`
-  Sprites []*Sprite `json:"objects"`
+  Data        []int               `json:"data"`
+  Height      float32             `json:"height"`
+  Width       float32             `json:"width"`
+  Name        string              `json:"name"`
+  Opacity     float32             `json:"opacity"`
+  Type        string              `json:"type"`
+  Visible     bool                `json:"visible"`
+  X           float32             `json:"x"`
+  Y           float32             `json:"y"`
+  Sprites     []*Sprite           `json:"objects"`
+  Properties  map[string]string   `json:"properties"`
 }
 
 func (l *Layer) IsTileLayer() bool {

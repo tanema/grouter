@@ -7,6 +7,7 @@ import (
   "encoding/json"
   "strings"
   "github.com/tanema/go-socket.io"
+  "time"
 )
 
 type Map struct {
@@ -117,17 +118,24 @@ func (m *Map) leave(ns *socketio.NameSpace){
   delete(m.Players, ns.Id())
 }
 
-func (m *Map) At(x, y float32) []MapObject {
-  results := []MapObject{}
+func (m *Map) At(x, y float32, group string) MapQuery {
+  results := MapQuery{[]*Tile{}, []*Sprite{}}
   for _, layer := range m.Layers {
+
+    if !layer.Visible || layer.Properties["group"] != group {
+      continue
+    }
+
     if layer.IsTileLayer() {
       tile_index := layer.Data[int(x + y * layer.Width)] - 1
       tile := m.TileSets[0].Tile(int64(tile_index))
-      results = append(results, tile)
+      if tile != nil {
+        results.Tiles = append(results.Tiles, tile)
+      }
     } else if layer.IsObjectGroup() {
       for _, sprite := range layer.Sprites {
         if sprite.X == x && sprite.Y == y {
-          results = append(results, sprite)
+          results.Objects = append(results.Objects, sprite)
         }
       }
     }
@@ -140,5 +148,6 @@ func (m *Map) Run() {
     for _, npc := range m.Npcs {
       npc.Step()
     }
+    time.Sleep(10 * time.Millisecond)
   }
 }
