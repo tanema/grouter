@@ -146,6 +146,7 @@ func (sp *Sprite) Move(direction string, distance int64){
   }
   to_x := int64(sp.X)
   to_y := int64(sp.Y)
+  println(direction)
   switch direction {
     case "left":
       to_x -= distance
@@ -161,9 +162,12 @@ func (sp *Sprite) Move(direction string, distance int64){
 
 func (sp *Sprite) MoveTo(to_x, to_y int64){
   //TODO validate move
-  sp.X = float32(to_x)
-  sp.Y = float32(to_y)
-  sp.sio.In(sp.channel()).Broadcast("move", to_x, to_y);
+  pos := sp.Map.At(float32(to_x), float32(to_y), sp.Layer.Properties["group"])
+  if len(pos.Tiles) < 1 && len(pos.Objects) < 1 {
+    sp.X = normalize_coord(float32(to_x), sp.Layer.Width)
+    sp.Y = normalize_coord(float32(to_y), sp.Layer.Height)
+    sp.sio.In(sp.channel()).Broadcast("move", to_x, to_y);
+  }
 }
 
 func (sp *Sprite) ChangeLayer(layer string){

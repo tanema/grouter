@@ -126,6 +126,9 @@ func (m *Map) At(x, y float32, group string) MapQuery {
       continue
     }
 
+    x = normalize_coord(x, layer.Width)
+    y = normalize_coord(y, layer.Height)
+
     if layer.IsTileLayer() {
       tile_index := layer.Data[int(x + y * layer.Width)] - 1
       tile := m.TileSets[0].Tile(int64(tile_index))
