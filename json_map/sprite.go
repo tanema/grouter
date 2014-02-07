@@ -146,7 +146,6 @@ func (sp *Sprite) Move(direction string, distance int64){
   }
   to_x := int64(sp.X)
   to_y := int64(sp.Y)
-  println(direction)
   switch direction {
     case "left":
       to_x -= distance
