@@ -1,13 +1,17 @@
 package main
 
 import (
-	"net/http"
+  "fmt"
   "log"
-  "github.com/tanema/go-socket.io"
+	"net/http"
   "grouter/json_map"
+  "github.com/tanema/go-socket.io"
 )
 
-var maps = []string{"map0"}
+var (
+  maps = []string{"map0"}
+  port = 3000
+)
 
 func main() {
   sio := socketio.NewSocketIOServer(&socketio.Config{})
@@ -25,6 +29,6 @@ func main() {
     go new_map.Run()
   }
 
-	println("listening on port 3000")
-  log.Fatal(http.ListenAndServe(":3000", sio))
+	log.Println("listening on port ", port)
+  log.Fatal(http.ListenAndServe(fmt.Sprint(":", port), sio))
 }

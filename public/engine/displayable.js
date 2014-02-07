@@ -103,7 +103,6 @@ Displayable.prototype.move = function(direction, distance){
   }
 
   this.is_moving = true;
-  this.do_tile_actions(direction);
   return true
 };
 
@@ -127,6 +126,7 @@ Displayable.prototype.animate = function(deltatime){
         //reset animation
         this.movementIndex = 0;
         this.is_moving = false;
+        this.do_tile_actions();
         //if the distance is set that means keep walking
         if(this.distance > 1){
           this.move(this.currentMovement, --this.distance);
@@ -199,8 +199,8 @@ Displayable.prototype._facing_solid_tile = function(direction){
   return false;
 };
 
-Displayable.prototype.do_tile_actions = function(direction){
-  var to_tile = this._get_to_tile(direction);
+Displayable.prototype.do_tile_actions = function(){
+  var to_tile = this.map.at(this.x, this.y, this.layer.group);
   for(var i=0; i < to_tile.tiles.length; i++){
     var tile = to_tile.tiles[i];
     if(tile.properties.stair_up){
@@ -219,7 +219,6 @@ Displayable.prototype.stair_down = function(){
 Displayable.prototype.stair_up = function(){
   this.set_layer(this.next_layer(true));
 }
-
 
 Displayable.prototype.next_layer = function(up){
   var current_layer = this.layer,
