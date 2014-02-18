@@ -1,7 +1,11 @@
 function Dialog(){
-  this.dialog_height = 25,
-  this.padding_left = 10,
+  this.dialog_height = 25;
+  this.font_size = 12;
+  this.line_height = 8;
+  this.padding_left = 10;
+  this.padding_right = 10;
   this.padding_bottom = 5;
+
   this.is_talking = false;
   this.script = [];
   this.dialog_open_length = 1000;
@@ -16,10 +20,30 @@ Dialog.prototype.draw = function(ctx){
   ctx.fillStyle = '#dedede';
   ctx.fillRect(0, (ctx.canvas.height - this.dialog_height), ctx.canvas.width, this.dialog_height);
   // then draw text
-  ctx.font = '20px pokemon';
+  ctx.font = this.font_size + 'px pokemon';
   ctx.fillStyle = 'black';
-  ctx.fillText(this.script[0], this.padding_left, (ctx.canvas.height - this.padding_bottom));
+  this.drawText(ctx, this.script[0], this.padding_left, (ctx.canvas.height - this.padding_bottom));
 };
+
+Dialog.prototype.drawText = function(ctx, text, x, y) {
+  var words = text.split(' '),
+      line = '';
+
+  for(var n = 0; n < words.length; n++) {
+    var testLine = line + words[n] + ' ',
+        metrics = ctx.measureText(testLine),
+        testWidth = metrics.width;
+    if (testWidth > (ctx.canvas.width - this.padding_left - this.padding_right) && n > 0) {
+      ctx.fillText(line, x, y);
+      line = words[n] + ' ';
+      y += this.line_height;
+    }
+    else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, y);
+}
 
 Dialog.prototype.say = function(script){
   if(this.just_closed){return;}
