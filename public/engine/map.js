@@ -13,7 +13,7 @@ Map.prototype.load = function (next){
   var _this = this, i;
 
   console.log("["+ _this.map_src + "] getting from server");
-  $.getJSON(this.map_src, function(map_data){
+  getJSON(this.map_src, function(map_data){
     _this.properties = map_data.properties || {};
     _this.orientation = map_data.orientation;
     _this.tilewidth = map_data.tilewidth;

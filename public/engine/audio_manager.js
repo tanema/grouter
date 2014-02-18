@@ -73,28 +73,36 @@ AudioManager.prototype.change_volume = function(vol, type){
 AudioManager.prototype._bind_change_events = function(){
   var _this = this;
   //music events
-  $(document).on("music_off", function(){
+  document.addEventListener("music_off", function(e){
     _this.change_volume(0, "music");
-  }).on("music_on", function(){
+  })
+  document.addEventListener("music_on", function(){
     _this.change_volume(localStorage["prev_music_vol"] && localStorage["prev_music_vol"] != "0" ? localStorage["prev_music_vol"] : 0.5, "music");
-  }).on("music_vol_down", function(){
+  })
+  document.addEventListener("music_vol_down", function(){
     _this.change_volume(_this.music_volume - _this.step_size, "music");
-  }).on("music_vol_up", function(){
+  })
+  document.addEventListener("music_vol_up", function(){
     _this.change_volume(_this.music_volume + _this.step_size, "music");
-  }).on("music_vol_change", function(e, vol){
+  })
+  document.addEventListener("music_vol_change", function(e, vol){
     _this.change_volume(vol/100, "music");
   });
 
   //sfx events
-  $(document).on("sfx_off", function(){
+  document.addEventListener("sfx_off", function(){
     _this.change_volume(0, "sfx");
-  }).on("sfx_on", function(){
+  })
+  document.addEventListener("sfx_on", function(){
     _this.change_volume(localStorage["prev_sfx_vol"] && localStorage["prev_sfx_vol"] != "0" ? localStorage["prev_sfx_vol"] : 0.5, "sfx");
-  }).on("sfx_vol_down", function(){
+  })
+  document.addEventListener("sfx_vol_down", function(){
     _this.change_volume(_this.sfx_volume - _this.step_size, "sfx");
-  }).on("sfx_vol_up", function(){
+  })
+  document.addEventListener("sfx_vol_up", function(){
     _this.change_volume(_this.sfx_volume + _this.step_size, "sfx");
-  }).on("sfx_vol_change", function(e, vol){
+  })
+  document.addEventListener("sfx_vol_change", function(e, vol){
     _this.change_volume(vol/100, "sfx");
   });
 };

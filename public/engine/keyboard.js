@@ -16,8 +16,9 @@ function Keyboard(){
 }
 
 Keyboard.prototype.delegate_key = function () {
-  if(key_def[this.keydown.keyCode])
-    $(document).trigger("keypress_" + key_def[this.keydown.keyCode]);
+  if(key_def[this.keydown.keyCode]){
+    document.dispatchEvent(new CustomEvent("keypress_" + key_def[this.keydown.keyCode]))
+  }
 };
 
 /// KEYBOARD CONSTANTS ///

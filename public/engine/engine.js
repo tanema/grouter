@@ -88,3 +88,27 @@ Grouter.prototype.getSocketId = function () {
 function normalize_coord(h, j){
   return Math.floor(((2*j)+(h%j))%j)
 }
+
+function merge_objects(obj1, obj2) {
+  for (var p in obj2) {
+    if (obj1[p] && obj2[p].constructor == Object) {
+      obj1[p] = merge_objects(obj1[p], obj2[p]);
+    } else {
+      obj1[p] = obj2[p];
+    }
+  }
+  return obj1;
+}
+
+function getJSON(url, cb) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+      cb(JSON.parse(xmlhttp.responseText))
+    } else if (xmlhttp.readyState==4){
+      cb()
+    }
+  }
+  xmlhttp.open("GET", url, true);
+  xmlhttp.send();
+}

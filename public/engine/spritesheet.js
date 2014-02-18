@@ -18,7 +18,7 @@ SpriteSheet.prototype.add_image = function(img_options, next){
 
   this.image_properties.push(image_properties);
   //there will be no conflicts because it offsets the tileset numbers
-  $.extend(this.tile_properties, img_options.tileproperties);
+  this.tile_properties = merge_objects(this.tile_properties, img_options.tileproperties);
 
   img.src = image_properties.src || img_options.image;
   console.log(" → loading image " + img.src + " ...");
