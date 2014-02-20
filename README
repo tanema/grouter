@@ -20,6 +20,7 @@ TODO List
 - Better latency handling and checking
 - server side validation of interactions
 - server side behaviour/interaction definition
+- no render when on a different tab so the world freezes on client
 
 License
 -------

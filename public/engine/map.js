@@ -55,7 +55,7 @@ Map.prototype.register_keyboard_events = function(){
 
 Map.prototype.user_arrow = function(e){
   if(this.dialog.is_talking){
-    //TODO
+    this.dialog.user_arrow(e)
   } else {
     this.player.user_move(e)
   }
@@ -63,7 +63,7 @@ Map.prototype.user_arrow = function(e){
 
 Map.prototype.user_interact = function(e){
   if(this.dialog.is_talking){
-    this.dialog.next();
+    this.dialog.user_action(e)
   } else {
     this.player.user_interact(e)
   }

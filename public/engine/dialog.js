@@ -1,12 +1,8 @@
 function Dialog(){
-  this.dialog_height = 25;
-  this.font_size = 12;
-  this.line_height = 8;
-  this.padding_left = 10;
-  this.padding_right = 10;
-  this.padding_bottom = 5;
-
+  this.font_size = 20;
+  this.line_height = this.font_size + (this.font_size/4);
   this.is_talking = false;
+  this.scroll_top = 0;
   this.script = [];
   this.dialog_open_length = 1000;
   this.can_close = false;
@@ -16,13 +12,21 @@ Dialog.prototype.draw = function(ctx){
   //nothing to see here
   if(!this.is_talking){return;}
 
+  this.top = (ctx.canvas.height/2 + 10);
+  this.left = 10;
+  this.width = ctx.canvas.width - 20;
+  this.height = (ctx.canvas.height/2 - 20);
+  this.bottom = this.top + this.height;
+  this.right = this.left + this.width;
+  this.padding = 20;
+
   // first give text a background
   ctx.fillStyle = '#dedede';
-  ctx.fillRect(0, (ctx.canvas.height - this.dialog_height), ctx.canvas.width, this.dialog_height);
+  ctx.fillRect(this.left, this.top, this.width, this.height);
   // then draw text
   ctx.font = this.font_size + 'px pokemon';
   ctx.fillStyle = 'black';
-  this.drawText(ctx, this.script[0], this.padding_left, (ctx.canvas.height - this.padding_bottom));
+  this.drawText(ctx, this.script[0], this.left + this.padding, (this.top + this.padding + 10) - this.scroll_top);
 };
 
 Dialog.prototype.drawText = function(ctx, text, x, y) {
@@ -31,22 +35,52 @@ Dialog.prototype.drawText = function(ctx, text, x, y) {
 
   for(var n = 0; n < words.length; n++) {
     var testLine = line + words[n] + ' ',
-        metrics = ctx.measureText(testLine),
-        testWidth = metrics.width;
-    if (testWidth > (ctx.canvas.width - this.padding_left - this.padding_right) && n > 0) {
-      ctx.fillText(line, x, y);
+        testWidth = ctx.measureText(testLine).width;
+    if (testWidth > (this.width - this.padding) && n > 0) {
+      if((y - this.line_height) > this.top){
+        ctx.fillText(line, x, y);
+      }
       line = words[n] + ' ';
       y += this.line_height;
+      if(y > this.bottom){
+        break;
+      }
     }
     else {
       line = testLine;
     }
   }
-  ctx.fillText(line, x, y);
+
+  if(((y - this.line_height) > this.top) && (y + this.line_height < this.bottom)){
+    ctx.fillText(line, x, y);
+  }
+}
+
+Dialog.prototype.user_arrow = function(e){
+  var direction = e.type.replace("keypress_", "");
+  this[direction]()
+}
+
+Dialog.prototype.up = function(e){
+  if(this.scroll_top > 0){
+    this.scroll_top-=10;
+  }
+}
+
+Dialog.prototype.down = function(e){
+  this.scroll_top+=10;
+}
+
+Dialog.prototype.left = function(e){}
+Dialog.prototype.right = function(e){}
+
+Dialog.prototype.user_action = function(e){
+  this.next()
 }
 
 Dialog.prototype.say = function(script){
   if(this.just_closed){return;}
+  this.scroll_top = 0;
 
   if(typeof script === "object"){ //pass in an array of things to say
     this.script = script;
