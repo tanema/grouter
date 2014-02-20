@@ -5,14 +5,13 @@ function Map(map_src, engine){
   this.player = null;
   this.objects = {};
   this.audio_manager = new AudioManager();
-  this.dialog = new Dialog();
   this.name = map_src.substring(map_src.lastIndexOf("/")+1, map_src.lastIndexOf("."));
 }
 
 Map.prototype.load = function (next){
   var _this = this, i;
 
-  console.log("["+ _this.map_src + "] getting from server");
+  console.log("["+ _this.map_src + "] Loading");
   Grouter.getJSON(this.map_src, function(map_data){
     _this.properties = map_data.properties || {};
     _this.orientation = map_data.orientation;
@@ -26,23 +25,22 @@ Map.prototype.load = function (next){
       _this.audio_manager.loop(sound);
     }
 
-    console.log("["+ _this.map_src + "] loading " + map_data.tilesets.length + " tileset(s)");
-    //load tilesets
+    console.log(" → loading " + map_data.tilesets.length + " tileset(s)");
     _this.spritesheet = new SpriteSheet(map_data.tilewidth, map_data.tileheight);
     _this._load_tileset(map_data.tilesets, function(){
-      console.log("["+ _this.map_src + "] spritesheet loaded: " + _this.spritesheet.loaded());
-      console.log("["+ _this.map_src + "] setting up " + map_data.layers.length + " layer(s)");
-      //load layers
-      _this._load_layer(map_data.layers, function(){
-        console.log("["+ _this.map_src + "] finished loading");
-        //do socket stuff
-        _this.socket = _this.engine.socket.of(_this.name);
+      console.log(" → spritesheet loaded: " + _this.spritesheet.loaded());
+      console.log(" → setting up " + map_data.layers.length + " layer(s)");
+      _this._load_layer(map_data.layers, function() {   
         _this.register_socket_events();
         _this.register_keyboard_events();
-        // map loaded so continue
-        if(next){
-          next(_this);
-        }
+        console.log(" → loading dialogue " + _this.map_src.replace(".json", "") + "/dialogue.json ...");
+        Grouter.getJSON(_this.map_src.replace(".json", "")+"/dialogue.json", function(dialogue_data){
+          _this.dialog = new Dialog(dialogue_data);
+          console.log(" → finished loading map data");
+          if(next){// everything loaded so continue 
+            next(_this);
+          }
+        });
       });
     });
   });
@@ -71,6 +69,8 @@ Map.prototype.user_interact = function(e){
 
 Map.prototype.register_socket_events = function(){
   var _this = this;
+  console.log(" → connecting to sockets");
+  this.socket = this.engine.socket.of(this.name);
   this.socket.on('player connected', function(x, y){_this.player_connected(x, y);});
   this.socket.on('spawn', function(options){_this.npc_spawn(options);});
 };
@@ -163,14 +163,14 @@ Map.prototype.player_connected = function(connection_data){
 };
 
 Map.prototype.npc_spawn = function(options){
-  console.log("Spawning " + (options.id || options.name) + " at " + options.x + "," + options.y);
+  console.log(" → spawning " + (options.id || options.name) + " at " + options.x + "," + options.y);
   var _this = this;
   var layer = this.layers[options.layer_name];
   //convert tile coords to abs coords for init
   options.x = options.x * this.tilewidth;
   options.y = options.y * this.tileheight;
   new Npc(options, this, layer, function(npc){
-    _this.objects[npc.id] = npc;
-    layer.objects[npc.id] = npc;
+    _this.objects[npc.name] = npc;
+    layer.objects[npc.name] = npc;
   });
 };

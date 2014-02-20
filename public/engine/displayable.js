@@ -93,7 +93,7 @@ Displayable.prototype.move_to = function(to_x, to_y){
 
 Displayable.prototype.move = function(direction, distance){
   this.distance = distance || 1;
-  if(this.is_moving || this.is_interacting){ return false; }
+  if(this.is_moving || this.is_busy){ return false; }
 
   this.currentMovement = direction;
   this.movementIndex = 0;

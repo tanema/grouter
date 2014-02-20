@@ -1,4 +1,4 @@
-Grouter.js For HTML5 Game Creation
+Grouter.js a pokemon-esque mmo
 =============
   This is a work in progress, not really meant to compete with anything out there but I wanted to build a 
 tile engine around Tiled. It makes it easy to quickly generate worlds and games in a 2D environment.
@@ -7,20 +7,19 @@ Status
 ------
 
   This is really just a hobby project for me to work on and keep learning and possibly use to make a real game or
-two in the future. I am looking for contributors to help speed up the process though.
+two in the future. 
 
 TODO List
 --------
 - interaction server work
   - handle both react and onenter
-- server side npc
-  -npc name doesnt load for some reason
-- load new map event and connector
+- load new map
   - unload socket connections
+  - unbind events
 - Better latency handling and checking
-- server side validation of interactions
-- server side behaviour/interaction definition
-- no render when on a different tab so the world freezes on client
+  - server side validation of interactions
+  - server side behaviour/interaction definition
+  - no render when on a different tab so the world freezes on client
 
 License
 -------

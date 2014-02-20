@@ -21,16 +21,6 @@ function Actionable(actionable_options, map, layer){
       this.action = actionable_options.properties.action;
     }else if(actionable_options.properties.enter_action){
       this.enter_action = actionable_options.properties.enter_action;
-    }else if(actionable_options.properties.action_src){
-      var _this = this,
-          src = "/maps/"+this.map.name+"/actors/interaction/"+this.name+".js"
-      console.log(" → loading actionable's reaction " + src);
-      //$.ajax({
-      //  url: src,
-      //  dataType: 'text', // have to set as text otherwise get ref errors from me/dialog/ect
-      //  success: function(data){_this.action = data;},
-      //  async: false
-      //});
     }
 
     if(actionable_options.properties.action_sound){
