@@ -64,13 +64,13 @@ Dialog.prototype.next = function(){
   if(this.script.length > 1){
     this.script.shift();
   }else{
-    $(document).trigger("dialog_done");
+    Grouter.fire_event("dialog_done");
     this.is_talking = false;
     var _this = this;
     this.just_closed = true;
     setTimeout(function(){
       _this.just_closed = false;
-      $(document).trigger("dialog_finished");
+      Grouter.fire_event("dialog_finished");
     }, this.dialog_open_length);
   }
 

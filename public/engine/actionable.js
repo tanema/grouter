@@ -25,12 +25,12 @@ function Actionable(actionable_options, map, layer){
       var _this = this,
           src = "/maps/"+this.map.name+"/actors/interaction/"+this.name+".js"
       console.log(" → loading actionable's reaction " + src);
-      $.ajax({
-        url: src,
-        dataType: 'text', // have to set as text otherwise get ref errors from me/dialog/ect
-        success: function(data){_this.action = data;},
-        async: false
-      });
+      //$.ajax({
+      //  url: src,
+      //  dataType: 'text', // have to set as text otherwise get ref errors from me/dialog/ect
+      //  success: function(data){_this.action = data;},
+      //  async: false
+      //});
     }
 
     if(actionable_options.properties.action_sound){
@@ -77,11 +77,11 @@ Actionable.prototype._eval_script = function(script, next){
   eval("(function eval_csf(me, player, dialog, load_map, next){" + script + "})(me, player, dialog, load_map, _next);");
 
   if(uses_dialog){
-    $(document).one("dialog_done", function(){
+    Grouter.bind_event("dialog_done", function(){
       return next();
     });
 
-    $(document).one("dialog_finished", function(){
+    Grouter.bind_event("dialog_finished", function(){
       me.is_busy = false;
     });
   }else if(!uses_dialog && !uses_next){

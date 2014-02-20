@@ -13,7 +13,7 @@ Map.prototype.load = function (next){
   var _this = this, i;
 
   console.log("["+ _this.map_src + "] getting from server");
-  getJSON(this.map_src, function(map_data){
+  Grouter.getJSON(this.map_src, function(map_data){
     _this.properties = map_data.properties || {};
     _this.orientation = map_data.orientation;
     _this.tilewidth = map_data.tilewidth;
@@ -38,6 +38,7 @@ Map.prototype.load = function (next){
         //do socket stuff
         _this.socket = _this.engine.socket.of(_this.name);
         _this.register_socket_events();
+        _this.register_keyboard_events();
         // map loaded so continue
         if(next){
           next(_this);
@@ -46,6 +47,27 @@ Map.prototype.load = function (next){
     });
   });
 };
+
+Map.prototype.register_keyboard_events = function(){
+  Grouter.bind_event("keypress_up keypress_down keypress_left keypress_right", this.user_arrow, this);
+  Grouter.bind_event("keypress_z", this.user_interact, this);
+}
+
+Map.prototype.user_arrow = function(e){
+  if(this.dialog.is_talking){
+    //TODO
+  } else {
+    this.player.user_move(e)
+  }
+}
+
+Map.prototype.user_interact = function(e){
+  if(this.dialog.is_talking){
+    this.dialog.next();
+  } else {
+    this.player.user_interact(e)
+  }
+}
 
 Map.prototype.register_socket_events = function(){
   var _this = this;
@@ -108,7 +130,7 @@ Map.prototype.at = function(x, y, group){
 
 Map.prototype.draw = function (ctx, deltatime){
   //default background, using css
-  $(ctx.canvas).css("background", this.properties.background);
+  ctx.canvas.style.background = this.properties.background
 
   //update the spritesheet(animated tiles) for this frame
   this.spritesheet.update(deltatime);

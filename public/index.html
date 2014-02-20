@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Grouter</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
     <link   href='/stylesheets/style.css' type="text/css" rel="stylesheet"  />
   </head>
   <body>
@@ -52,8 +51,8 @@
     <script src='/engine/dialog.js'         type="text/javascript"></script>
 
     <script type="text/javascript">
-      var engine = new Grouter("#canvas", '/maps/map0.json');
-      function sound_event(name){document.dispatchEvent(new CustomEvent(name))}
+      var engine = new Grouter("canvas", '/maps/map0.json');
+      function sound_event(name){Grouter.fire_event(name)}
     </script>
 
 

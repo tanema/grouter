@@ -48,8 +48,8 @@ Layer.prototype.initiate_objects = function(objects){
 };
 
 Layer.prototype.get_tile_index = function(x, y) {
-  var sphere_x = normalize_coord(x, this.width),
-      sphere_y = normalize_coord(y, this.height);
+  var sphere_x = Grouter.normalize_coord(x, this.width),
+      sphere_y = Grouter.normalize_coord(y, this.height);
   return this.data[(sphere_x + sphere_y * this.width)]
 }
 

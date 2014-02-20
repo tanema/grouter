@@ -7,14 +7,15 @@ function Grouter(canvas_el, map_src){
   }
 
   var _this = this;
-  this.canvas = $(canvas_el).get(0);
+  this.canvas = document.getElementById(canvas_el);
   this.ctx = this.canvas.getContext('2d');
   this.ctx.canvas = this.canvas;
 
   this.keyboard = new Keyboard();
   this.startTime = window.mozAnimationStartTime || Date.now();
 
-  if($("#fps").length){
+  this.fps_el = document.getElementById("fps"); 
+  if(this.fps_el){
     this.fps = 0;
     this.fps_timer = setInterval(function(){_this.updateFPS()}, 1000);
   }
@@ -72,7 +73,7 @@ Grouter.prototype.draw = function(timestamp){
 };
 
 Grouter.prototype.updateFPS = function(){
-  $("#fps").html(this.fps || 0);
+  this.fps_el.innerHTML = this.fps || 0;
   this.fps = 0;
 },
 
@@ -85,14 +86,14 @@ Grouter.prototype.getSocketId = function () {
   return this.socket.socket.sessionid;
 }
 
-function normalize_coord(h, j){
+Grouter.normalize_coord = function(h, j){
   return Math.floor(((2*j)+(h%j))%j)
 }
 
-function merge_objects(obj1, obj2) {
+Grouter.merge_objects = function(obj1, obj2) {
   for (var p in obj2) {
     if (obj1[p] && obj2[p].constructor == Object) {
-      obj1[p] = merge_objects(obj1[p], obj2[p]);
+      obj1[p] = Grouter.merge_objects(obj1[p], obj2[p]);
     } else {
       obj1[p] = obj2[p];
     }
@@ -100,7 +101,7 @@ function merge_objects(obj1, obj2) {
   return obj1;
 }
 
-function getJSON(url, cb) {
+Grouter.getJSON = function(url, cb) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState==4 && xmlhttp.status==200) {
@@ -111,4 +112,21 @@ function getJSON(url, cb) {
   }
   xmlhttp.open("GET", url, true);
   xmlhttp.send();
+}
+
+Grouter.bind_event = function(event_names, cb, scope){
+  var events = event_names.split(" ")
+  for(var i = 0; i < events.length; i++){
+    document.addEventListener(events[i], function(e){
+      try{
+        cb.call(scope, e)
+      }catch(e){
+        this.removeEventListener(events[i], arguments.callee);
+      }
+    });
+  }
+}
+
+Grouter.fire_event = function(name, extra) {
+  document.dispatchEvent(new CustomEvent(name, extra))
 }

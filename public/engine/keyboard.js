@@ -17,7 +17,7 @@ function Keyboard(){
 
 Keyboard.prototype.delegate_key = function () {
   if(key_def[this.keydown.keyCode]){
-    document.dispatchEvent(new CustomEvent("keypress_" + key_def[this.keydown.keyCode]))
+    Grouter.fire_event("keypress_" + key_def[this.keydown.keyCode])
   }
 };
 

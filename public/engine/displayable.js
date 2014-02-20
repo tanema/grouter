@@ -120,8 +120,8 @@ Displayable.prototype.animate = function(deltatime){
       }
       if(this.movementIndex >= this.movement[this.currentMovement].length){
         //set our destination as whole values because the step size might be just out a bit
-        this.x = normalize_coord(this.to_x, this.map.width);
-        this.y = normalize_coord(this.to_y, this.map.height);
+        this.x = Grouter.normalize_coord(this.to_x, this.map.width);
+        this.y = Grouter.normalize_coord(this.to_y, this.map.height);
 
         //reset animation
         this.movementIndex = 0;
