@@ -10,7 +10,7 @@ import (
 
 var (
   maps = []string{"map0"}
-  port = 3000
+  port = 3001
 )
 
 func main() {

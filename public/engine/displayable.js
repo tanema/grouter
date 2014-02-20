@@ -63,7 +63,7 @@ Displayable.prototype.draw = function(ctx, deltatime, x, y){
 
   var draw_frame = this._get_frame();
   if(draw_frame){
-    ctx.drawImage(draw_frame, draw_x - (ctx.viewport.x * this.map_tile_width), draw_y - (ctx.viewport.y * this.map_tile_height));
+    ctx.drawImage(draw_frame, draw_x - (ctx.camera.x * this.map_tile_width), draw_y - (ctx.camera.y * this.map_tile_height));
   }
 };
 

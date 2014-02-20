@@ -135,9 +135,10 @@ Map.prototype.draw = function (ctx, deltatime){
   //update the spritesheet(animated tiles) for this frame
   this.spritesheet.update(deltatime);
 
-  //set viewport x,y from player
-  ctx.viewport.x = this.player.x - (ctx.screen.width  - this.spritesheet.tile_width) / (this.spritesheet.tile_width * 2);
-  ctx.viewport.y = this.player.y - (ctx.screen.height - this.spritesheet.tile_height) / (this.spritesheet.tile_height * 2);
+  //set camera x,y from player
+  if(!this.dialog.is_talking){
+    ctx.camera.set(this.player.x, this.player.y);
+  }
 
   var layer_name;
   for(layer_name in this.layers){

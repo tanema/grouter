@@ -61,10 +61,10 @@ Layer.prototype.draw = function(ctx, deltatime){
     var x, y,
         tile_height = this.map.spritesheet.tile_height,
         tile_width  = this.map.spritesheet.tile_width,
-        from_x = ctx.viewport.left(),
-        from_y = ctx.viewport.top(),
-        to_x = ctx.viewport.right(),
-        to_y = ctx.viewport.bottom();
+        from_x = ctx.camera.left(),
+        from_y = ctx.camera.top(),
+        to_x = ctx.camera.right(),
+        to_y = ctx.camera.bottom();
 
     //we only draw the screen rather than culling just draw screen range
     for (y = from_y; y < to_y; y++) {
@@ -73,7 +73,7 @@ Layer.prototype.draw = function(ctx, deltatime){
         if(tile){
           var draw_x = (Math.floor(x) * tile_width),
               draw_y = (Math.floor(y) * tile_height);
-          tile.draw(ctx, draw_x - (ctx.viewport.x * tile_width), draw_y - (ctx.viewport.y * tile_height));
+          tile.draw(ctx, draw_x - (ctx.camera.x * tile_width), draw_y - (ctx.camera.y * tile_height));
         }
       }
     }
@@ -83,9 +83,9 @@ Layer.prototype.draw = function(ctx, deltatime){
       object = this.objects[object_name];
       if(object.type == 'player'){
         object.draw(ctx, deltatime);
-      }else if(object.type == 'npc' && (object_pos = ctx.viewport.isInside(object.x, object.y, this))){
+      }else if(object.type == 'npc' && (object_pos = ctx.camera.isInside(object.x, object.y, this))){
         object.draw(ctx, deltatime, object_pos[0], object_pos[1]);
-      }else if(object.type == 'npc'){ //this means it is not in viewport
+      }else if(object.type == 'npc'){ //this means it is not in camera
         object.animate(deltatime);    // update position 
       }
     }
