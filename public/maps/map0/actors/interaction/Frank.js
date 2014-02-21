@@ -1,1 +1,0 @@
-dialog.say(["Frank: Don't talk to me", "Harry: Whoa, chill dude.", "Frank: ..."]);

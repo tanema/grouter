@@ -33,9 +33,9 @@ Map.prototype.load = function (next){
       _this._load_layer(map_data.layers, function() {   
         _this.register_socket_events();
         _this.register_keyboard_events();
-        console.log(" → loading dialogue " + _this.map_src.replace(".json", "") + "/dialogue.json ...");
-        Grouter.getJSON(_this.map_src.replace(".json", "")+"/dialogue.json", function(dialogue_data){
-          _this.dialog = new Dialog(_this, dialogue_data);
+        console.log(" → loading script " + _this.map_src.replace(".json", "") + "/script.json ...");
+        Grouter.getJSON(_this.map_src.replace(".json", "")+"/script.json", function(script_data){
+          _this.director = new Director(_this, script_data);
           console.log(" → finished loading map data");
           if(next){// everything loaded so continue 
             next(_this);
@@ -52,16 +52,16 @@ Map.prototype.register_keyboard_events = function(){
 }
 
 Map.prototype.user_arrow = function(e){
-  if(this.dialog.is_talking){
-    this.dialog.user_arrow(e)
+  if(this.director.current_scene){
+    this.director.user_arrow(e)
   } else {
     this.player.user_move(e)
   }
 }
 
 Map.prototype.user_interact = function(e){
-  if(this.dialog.is_talking){
-    this.dialog.user_action(e)
+  if(this.director.current_scene){
+    this.director.user_action(e)
   } else {
     this.player.user_interact(e)
   }
@@ -136,7 +136,7 @@ Map.prototype.draw = function (ctx, deltatime){
   this.spritesheet.update(deltatime);
 
   //set camera x,y from player
-  if(!this.dialog.is_talking){
+  if(!this.director.current_scene){
     ctx.camera.set(this.player.x, this.player.y);
   }
 
@@ -145,7 +145,7 @@ Map.prototype.draw = function (ctx, deltatime){
     this.layers[layer_name].draw(ctx, deltatime);
   }
 
-  this.dialog.draw(ctx);
+  this.director.draw(ctx);
 };
 
 Map.prototype.player_connected = function(connection_data){

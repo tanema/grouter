@@ -1,7 +1,7 @@
 function Actionable(actionable_options, map, layer){
   actionable_options = actionable_options || {};
   this.map = map || {};
-  this.dialog = this.map.dialog,
+  this.director = this.map.director,
   this.name = actionable_options.name;
   this.layer = layer;
   this.type = actionable_options.type;
@@ -34,7 +34,7 @@ Actionable.prototype.react = function(actor){
 
   var _this = this;
   this.is_busy = actor.is_busy = true;
-  this.dialog.act(this, actor, function(){
+  this.director.act(this, actor, function(){
     _this.is_busy = actor.is_busy = false;
   })
 };

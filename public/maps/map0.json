@@ -37,10 +37,7 @@
                 {
                  "height":0,
                  "name":"home picture",
-                 "properties":
-                    {
-                     "action":"dialog.say([\" A beautiful Painting of a hill side\", \"I feel very refreshed\"])"
-                    },
+                 "properties": {},
                  "type":"actionable",
                  "width":0,
                  "x":576,
@@ -49,10 +46,7 @@
                 {
                  "height":0,
                  "name":"home frame",
-                 "properties":
-                    {
-                     "action":"dialog.say(\" Home Sweet Home\")"
-                    },
+                 "properties": { },
                  "type":"actionable",
                  "width":0,
                  "x":640,
@@ -161,10 +155,7 @@
                 {
                  "height":0,
                  "name":"house sign",
-                 "properties":
-                    {
-                     "action":"dialog.say(\"All are welcome in our house\");"
-                    },
+                 "properties": {},
                  "type":"actionable",
                  "width":0,
                  "x":640,
