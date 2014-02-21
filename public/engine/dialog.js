@@ -1,4 +1,4 @@
-function Dialog(){
+function Dialog(map, data){
   this.font_size = 20;
   this.line_height = this.font_size + (this.font_size/4);
   this.is_talking = false;
@@ -6,6 +6,15 @@ function Dialog(){
   this.script = [];
   this.dialog_open_length = 1000;
   this.can_close = false;
+
+  this.characters = {}
+  for(var name in data){
+    var scenes = data[name];
+    this.characters[name] = [];
+    for(var i = 0; i < scenes.length; i++){
+      this.characters[name].push(new Scene(scenes[i]));
+    }
+  }
 }
 
 Dialog.prototype.draw = function(ctx){
@@ -56,6 +65,21 @@ Dialog.prototype.drawText = function(ctx, text, x, y) {
   }
 }
 
+Dialog.prototype.act = function(primary_actor, secondary_actory, cb){
+  if(this.just_closed){return;}
+
+  var _this = this,
+      scene = this.characters[primary_actor.name][0];
+  this.is_talking = true;
+  this.current_scene = scene.start(primary_actor, secondary_actory, function(){
+    _this.is_talking = false;
+    _this.current_scene = null;
+    _this.lock_open();
+    cb()
+  })
+  this.lock_close();
+}
+
 Dialog.prototype.user_arrow = function(e){
   var direction = e.type.replace("keypress_", "");
   this[direction]()
@@ -75,7 +99,9 @@ Dialog.prototype.left = function(e){}
 Dialog.prototype.right = function(e){}
 
 Dialog.prototype.user_action = function(e){
+  if(!this.can_close){return;}
   this.next()
+  this.lock_close();
 }
 
 Dialog.prototype.say = function(script){
@@ -88,30 +114,30 @@ Dialog.prototype.say = function(script){
     this.script = [script];
   }
   this.is_talking = true;
-  this._after_new_dialog();
+  this.lock_close();
 };
 
 Dialog.prototype.next = function(){
-  //wait until you can close, this prevents the fast button repeat
   if(!this.can_close){return;}
 
   if(this.script.length > 1){
     this.script.shift();
   }else{
-    Grouter.fire_event("dialog_done");
-    this.is_talking = false;
-    var _this = this;
-    this.just_closed = true;
-    setTimeout(function(){
-      _this.just_closed = false;
-      Grouter.fire_event("dialog_finished");
-    }, this.dialog_open_length);
+    this.lock_open();
   }
 
-  this._after_new_dialog();
+  this.lock_close();
 };
 
-Dialog.prototype._after_new_dialog = function(){
+Dialog.prototype.lock_open = function(){
+  var _this = this;
+  this.just_closed = true;
+  setTimeout(function(){
+    _this.just_closed = false;
+  }, this.dialog_open_length);
+};
+
+Dialog.prototype.lock_close = function(){
   this.can_close = false;
   var _this = this;
   setTimeout(function(){

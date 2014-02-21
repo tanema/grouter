@@ -35,7 +35,7 @@ Map.prototype.load = function (next){
         _this.register_keyboard_events();
         console.log(" → loading dialogue " + _this.map_src.replace(".json", "") + "/dialogue.json ...");
         Grouter.getJSON(_this.map_src.replace(".json", "")+"/dialogue.json", function(dialogue_data){
-          _this.dialog = new Dialog(dialogue_data);
+          _this.dialog = new Dialog(_this, dialogue_data);
           console.log(" → finished loading map data");
           if(next){// everything loaded so continue 
             next(_this);

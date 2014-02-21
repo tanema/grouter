@@ -20,17 +20,12 @@ Player.prototype.user_move = function(e){
 
 Player.prototype.user_interact = function(){
   if(!this.is_busy){
-    this.take_action();
+    var to_tile = this._get_to_tile();
+    for(var i=0; i < to_tile.objects.length; i++){
+      to_tile.objects[i].react(this);
+    }
   }
 }
-
-Player.prototype.take_action = function(){
-  var to_tile = this._get_to_tile();
-
-  for(var i=0; i < to_tile.objects.length; i++){
-    to_tile.objects[i].react(this);
-  }
-};
 
 Player.prototype.teleport = function(x, y, skip_notify){
   //call Superto_x, to_y
