@@ -1,7 +1,7 @@
 function Actionable(actionable_options, map, layer){
   actionable_options = actionable_options || {};
   this.map = map || {};
-  this.director = this.map.director,
+  this.is_busy = false
   this.name = actionable_options.name;
   this.layer = layer;
   this.type = actionable_options.type;
@@ -26,15 +26,10 @@ function Actionable(actionable_options, map, layer){
 }
 
 Actionable.prototype.react = function(actor){
-  if((!this.is_busy){return;}
+  if(this.is_busy){return;}
 
   if(this.action_sound){
     this.map.audio_manager.play(this.action_sound);
   }
-
-  var _this = this;
-  this.is_busy = actor.is_busy = true;
-  this.director.act(this, actor, function(){
-    _this.is_busy = actor.is_busy = false;
-  })
+  this.map.director.act(this, actor)
 };

@@ -1,5 +1,5 @@
-function AnswerSceneNode(data){
-  SceneNode.call(this, data);
+function AnswerSceneNode(actor, data){
+  SceneNode.call(this, actor, data);
   this.nodes = []
   for(var i = 0; i < data.child_nodes.length; i++){
     var node = data.child_nodes[i];

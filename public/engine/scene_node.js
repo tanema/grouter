@@ -1,26 +1,39 @@
-function SceneNode(data){
+function SceneNode(actor, data){
+  this.actor = actor || {}
   this.font_size = 20;
   this.line_height = this.font_size + (this.font_size/4);
-  this.is_talking = false;
+  this.on_air = false;
   this.scroll_top = 0;
   this.can_close = false;
   
+  data = data || {}
   this.type = data.type;
   this.text = data.text;
-  this.speaker = data.speaker;
+  switch(data.speaker){
+    case 'player':
+      this.speaker = "You: ";
+      break;
+    case 'character':
+      this.speaker = this.actor.name + ": ";
+      break;
+    case 'narrator':
+    default:
+      this.speaker = "";
+  }
   this.action = data.action;
   this.target = data.target;
   this.x = data.x;
   this.y = data.y
 }
 
-SceneNode.prototype.run = function(primary_actor, secondary_actory, cb){
-  cb()
+SceneNode.prototype.run = function(player, cb){
+  this.done = cb;
+  this.on_air = true;
+  this.lock_close();
 }
 
 SceneNode.prototype.draw = function(ctx){
-  //nothing to see here
-  if(!this.is_talking){return;}
+  if(!this.on_air){return;}
 
   this.top = (ctx.canvas.height/2 + 10);
   this.left = 10;
@@ -36,7 +49,7 @@ SceneNode.prototype.draw = function(ctx){
   // then draw text
   ctx.font = this.font_size + 'px pokemon';
   ctx.fillStyle = 'black';
-  this.drawText(ctx, this.script[0], this.left + this.padding, (this.top + this.padding + 10) - this.scroll_top);
+  this.drawText(ctx, this.speaker + this.text, this.left + this.padding, (this.top + this.padding + 10) - this.scroll_top);
 };
 
 SceneNode.prototype.drawText = function(ctx, text, x, y) {
@@ -81,8 +94,8 @@ SceneNode.prototype.user_arrow = function(direction){
 
 SceneNode.prototype.user_action = function(){
   if(!this.can_close){return;}
-  this.is_talking()
-  this.is_talking = null;
+  this.done()
+  this.on_air = false;
 }
 
 SceneNode.prototype.lock_close = function(){

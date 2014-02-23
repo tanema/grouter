@@ -1,25 +1,25 @@
-function Scene(nodes){
+function Scene(actor, nodes){
   this.nodes = []
-  for(var i = 0; i < data.child_nodes.length; i++){
-    var node = data.child_nodes[i];
+  for(var i = 0; i < nodes.length; i++){
+    var node = nodes[i];
     switch(node.type){
-      case 'dialogue': node = new DialogueSceneNode(node); break;
-      case 'question': node = new QuestionSceneNode(node); break; 
-      case 'event': node = new EventSceneNode(node); break; 
-      case 'camera': node = new CameraSceneNode(node); break; 
+      case 'dialogue': node = new DialogueSceneNode(actor, node); break;
+      case 'question': node = new QuestionSceneNode(actor, node); break; 
+      case 'event': node = new EventSceneNode(actor, node); break; 
+      case 'camera': node = new CameraSceneNode(actor, node); break; 
     }
     this.nodes.push(node);
   }
 }
 
-Scene.prototype.start(primary_actor, secondary_actory, cb){
+Scene.prototype.start = function(player, cb){
   var _this = this,
       index = -1;
   var next = function(){
     index++
     if(_this.nodes[index]){
-      _this.current_node = _this.nodes[i]
-      _this.current_node.run(primary_actor, secondary_actory, next)
+      _this.current_node = _this.nodes[index]
+      _this.current_node.run(player, next)
     } else {
       _this.current_node = null;
       cb()

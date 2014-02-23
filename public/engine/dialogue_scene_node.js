@@ -1,5 +1,5 @@
-function DialogueSceneNode(data){
-  SceneNode.call(this, data);
+function DialogueSceneNode(actor, data){
+  SceneNode.call(this, actor, data);
 }
 
 DialogueSceneNode.prototype = new SceneNode();

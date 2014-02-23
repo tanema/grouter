@@ -1,5 +1,5 @@
-function CameraSceneNode(data){
-  SceneNode.call(this, data);
+function CameraSceneNode(actor, data){
+  SceneNode.call(this, actor, data);
 }
 
 CameraSceneNode.prototype = new SceneNode();

@@ -1,24 +1,23 @@
 function Director(map, data){
-  this.just_closed =  false;
+  this.just_closed = false;
   this.characters = {}
   for(var name in data){
     var scenes = data[name];
     this.characters[name] = [];
     for(var i = 0; i < scenes.length; i++){
-      this.characters[name].push(new Scene(scenes[i]));
+      this.characters[name].push(new Scene(map.objects[name], scenes[i]));
     }
   }
 }
 
-Director.prototype.act = function(primary_actor, secondary_actory, cb){
+Director.prototype.act = function(actor, player, cb){
   if(this.just_closed){return;}
-
-  var _this = this,
-      scene = this.characters[primary_actor.name][0];
-  this.is_talking = true;
-  this.current_scene = scene.start(primary_actor, secondary_actory, function(){
-    _this.is_talking = false;
+  var _this = this;
+  player.is_busy = actor.is_busy = true;
+  this.current_scene = this.characters[actor.name][0];
+  this.current_scene.start(player, function(){
     _this.current_scene = null;
+    player.is_busy = actor.is_busy = false;
     _this.lock_open();
     cb()
   })

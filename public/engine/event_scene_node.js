@@ -1,5 +1,5 @@
-function EventSceneNode(data){
-  SceneNode.call(this, data);
+function EventSceneNode(actor, data){
+  SceneNode.call(this, actor, data);
 }
 
 EventSceneNode.prototype = new SceneNode();
