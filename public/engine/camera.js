@@ -20,6 +20,10 @@ Camera.prototype.get_center_on = function(x,y){
   }
 }
 
+Camera.prototype.pan_to = function(x, y, cb){
+  Animation.ease(this, this.get_center_on(x, y), {callback: cb})
+}
+
 Camera.prototype.left = function(){
   return this.x - this.overflowTile;
 };

@@ -1,5 +1,6 @@
-function SceneNode(actor, data){
-  this.actor = actor || {}
+function SceneNode(map, actor_name, data){
+  this.map = map || {};
+  this.actor_name = actor_name || {};
   this.font_size = 20;
   this.line_height = this.font_size + (this.font_size/4);
   this.on_air = false;
@@ -9,24 +10,17 @@ function SceneNode(actor, data){
   data = data || {}
   this.type = data.type;
   this.text = data.text;
-  switch(data.speaker){
-    case 'player':
-      this.speaker = "You: ";
-      break;
-    case 'character':
-      this.speaker = this.actor.name + ": ";
-      break;
-    case 'narrator':
-    default:
-      this.speaker = "";
-  }
-  this.action = data.action;
-  this.target = data.target;
-  this.x = data.x;
-  this.y = data.y
 }
 
-SceneNode.prototype.run = function(player, cb){
+SceneNode.prototype.actor = function(){
+  return this.map.objects[this.actor_name]
+}
+
+SceneNode.prototype.prefix = function(){
+  return ""
+}
+
+SceneNode.prototype.run = function(cb){
   this.done = cb;
   this.on_air = true;
   this.lock_close();
@@ -35,10 +29,10 @@ SceneNode.prototype.run = function(player, cb){
 SceneNode.prototype.draw = function(ctx){
   if(!this.on_air){return;}
 
-  this.top = (ctx.canvas.height/2 + 10);
+  this.top = ((ctx.canvas.height/3)*2 - 10);
   this.left = 10;
   this.width = ctx.canvas.width - 20;
-  this.height = (ctx.canvas.height/2 - 20);
+  this.height = (ctx.canvas.height/3);
   this.bottom = this.top + this.height;
   this.right = this.left + this.width;
   this.padding = 20;
@@ -49,7 +43,7 @@ SceneNode.prototype.draw = function(ctx){
   // then draw text
   ctx.font = this.font_size + 'px pokemon';
   ctx.fillStyle = 'black';
-  this.drawText(ctx, this.speaker + this.text, this.left + this.padding, (this.top + this.padding + 10) - this.scroll_top);
+  this.drawText(ctx, this.prefix() + this.text, this.left + this.padding, (this.top + this.padding + 10) - this.scroll_top);
 };
 
 SceneNode.prototype.drawText = function(ctx, text, x, y) {
@@ -74,6 +68,7 @@ SceneNode.prototype.drawText = function(ctx, text, x, y) {
     }
   }
 
+  this.text_bottom = y + this.line_height;
   if(((y - this.line_height) > this.top) && (y + this.line_height < this.bottom)){
     ctx.fillText(line, x, y);
   }
@@ -87,7 +82,9 @@ SceneNode.prototype.user_arrow = function(direction){
       }
       break;
     case 'down':
-      this.scroll_top+=10;
+      if(this.text_bottom > this.bottom){
+        this.scroll_top+=10;
+      }
       break;
   }
 }

@@ -3,6 +3,7 @@ function Map(map_src, engine){
   this.engine = engine;
   this.layers = {};
   this.player = null;
+  this.camera = null;
   this.objects = {};
   this.audio_manager = new AudioManager();
   this.name = map_src.substring(map_src.lastIndexOf("/")+1, map_src.lastIndexOf("."));
@@ -137,7 +138,7 @@ Map.prototype.draw = function (ctx, deltatime){
 
   //set camera x,y from player
   if(!this.director.current_scene){
-    ctx.camera.set(this.player.x, this.player.y);
+    this.camera.set(this.player.x, this.player.y);
   }
 
   var layer_name;

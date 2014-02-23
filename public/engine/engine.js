@@ -34,7 +34,7 @@ Grouter.prototype.load_map = function(map_src){
     var tile_width = map.spritesheet.tile_width,
         tile_height = map.spritesheet.tile_height,
         screen = _this.ctx.screen = new Screen(_this.canvas, tile_width, tile_height);
-    _this.ctx.camera = new Camera(screen, tile_width, tile_height, map.properties.tiles_overflow);
+    map.camera = _this.ctx.camera = new Camera(screen, tile_width, tile_height, map.properties.tiles_overflow);
     _this.loaded = true;
 
     requestAnimationFrame(function(timestamp){_this.draw(timestamp);});
