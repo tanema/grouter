@@ -14,3 +14,20 @@ function AnswerSceneNode(map, actor_name, data){
 }
 
 AnswerSceneNode.prototype = new SceneNode();
+
+AnswerSceneNode.prototype.run = function(cb){
+  console.log("running")
+  var _this = this,
+      index = -1;
+  var next = function(){
+    index++
+    if(_this.nodes[index]){
+      _this.current_node = _this.nodes[index]
+      _this.current_node.run(next)
+    } else {
+      _this.current_node = null;
+      cb()
+    }
+  }
+  next();
+}
