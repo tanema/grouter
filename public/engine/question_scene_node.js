@@ -5,10 +5,6 @@ function QuestionSceneNode(map, actor_name, data){
   for(var i = 0; i < data.child_nodes.length; i++){
     this.nodes.push(new AnswerSceneNode(map, actor_name, data.child_nodes[i]));
   }
-
-  this.select_index = 0;
-  this.selected_answer = null;
-  this.is_answering = false;
 }
 
 QuestionSceneNode.prototype = new SceneNode();
@@ -17,8 +13,18 @@ QuestionSceneNode.prototype.prefix = function(){
   return this.actor().name + " : ";
 }
 
+QuestionSceneNode.prototype.run = function(cb){
+  this.select_index = 0;
+  this.selected_answer = null;
+  this.is_answering = false;
+  SceneNode.prototype.run.call(this, cb)
+}
+
 
 QuestionSceneNode.prototype.draw = function(ctx){
+  if(this.running_answer){
+    return this.running_answer.draw(ctx)
+  }
   if(this.is_answering && this.on_air){
     var text = [];
     for(var i = 0; i < this.nodes.length; i++){
@@ -32,6 +38,9 @@ QuestionSceneNode.prototype.draw = function(ctx){
 }
 
 QuestionSceneNode.prototype.user_arrow = function(direction){
+  if(this.running_answer){
+    return this.running_answer.user_arrow(direction)
+  }
   SceneNode.prototype.user_arrow.call(this, direction)
   if(this.is_answering){
     switch(direction){
@@ -51,9 +60,17 @@ QuestionSceneNode.prototype.user_arrow = function(direction){
 }
 
 QuestionSceneNode.prototype.user_action = function(){
+  if(this.running_answer){
+    return this.running_answer.user_action()
+  }
   if(this.is_answering && this.can_close){
-    this.on_air = false;
-    this.selected_answer.run(this.done)
+    var _this = this;
+    this.running_answer = this.selected_answer
+    this.running_answer.start(function(){
+      _this.running_answer = null;
+      _this.on_air = false;
+      _this.done()
+    })
   } else if(this.can_close) {
     this.is_answering = true;
     this.lock_close();

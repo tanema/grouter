@@ -1,5 +1,6 @@
 function Scene(map, actor_name, nodes){
   this.nodes = []
+  nodes = nodes || [];
   for(var i = 0; i < nodes.length; i++){
     var node = nodes[i];
     switch(node.type){
