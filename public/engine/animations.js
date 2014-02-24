@@ -37,7 +37,7 @@ Animation._animate = function(initial, changes, options, animation_function){
       time_passed = 0;
 
   options = options || {}
-  var duration = options.duration || 2000,
+  var duration = options.duration || 800,
       callback = options.callback || function(){};
 
   function do_animations(){

@@ -200,16 +200,19 @@ Displayable.prototype._facing_solid_tile = function(direction){
 };
 
 Displayable.prototype.do_tile_actions = function(){
-  var to_tile = this.map.at(this.x, this.y, this.layer.group);
-  for(var i=0; i < to_tile.tiles.length; i++){
-    var tile = to_tile.tiles[i];
-    if(tile.properties.stair_up){
-      this.stair_up()
+  var to_tile = this.map.at(this.x, this.y, this.layer.group),
+      _this = this;
+
+  function tile_action(object){
+    if(object.properties.stair_up){
+      _this.stair_up()
     }
-    if(tile.properties.stair_down){
-      this.stair_down()
+    if(object.properties.stair_down){
+      _this.stair_down()
     }
   }
+  for(var i=0; i < to_tile.tiles.length; i++){ tile_action(to_tile.tiles[i]); }
+  for(var i=0; i < to_tile.objects.length; i++){ tile_action(to_tile.objects[i]); }
 }
 
 Displayable.prototype.stair_down = function(){
