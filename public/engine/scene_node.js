@@ -39,11 +39,23 @@ SceneNode.prototype.generate_dimentions = function(ctx){
 
 SceneNode.prototype.draw_background = function(ctx){
   // first give text a background
+  ctx.beginPath();
+  ctx.rect(this.left, this.top, this.width, this.height);
   ctx.fillStyle = '#dedede';
-  ctx.fillRect(this.left, this.top, this.width, this.height);
-  // then draw text
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#6f6f6f';
+  ctx.stroke();
+  
   ctx.font = this.font_size + 'px pokemon';
   ctx.fillStyle = 'black';
+  // then draw text
+  if(this.scroll_top > 0){
+    ctx.fillText("▲", this.left + this.width - this.padding, this.top + this.padding);
+  }
+  if(this.text_bottom > this.bottom){
+    ctx.fillText("▼", this.left + this.width - this.padding, this.bottom - 10);
+  }
 }
 
 SceneNode.prototype.draw = function(ctx){

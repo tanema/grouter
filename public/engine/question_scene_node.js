@@ -5,6 +5,7 @@ function QuestionSceneNode(map, actor_name, data){
   for(var i = 0; i < data.child_nodes.length; i++){
     this.nodes.push(new AnswerSceneNode(map, actor_name, data.child_nodes[i]));
   }
+  this.can_change = true;
 }
 
 QuestionSceneNode.prototype = new SceneNode();
@@ -42,16 +43,18 @@ QuestionSceneNode.prototype.user_arrow = function(direction){
     return this.running_answer.user_arrow(direction)
   }
   SceneNode.prototype.user_arrow.call(this, direction)
-  if(this.is_answering){
+  if(this.is_answering && this.can_change){
     switch(direction){
       case 'up':
         if(this.select_index > 0){
           this.select_index--
+          this.lock_change_option()
         }
         break;
       case 'down':
         if(this.select_index < (this.nodes.length - 1)){
           this.select_index++
+          this.lock_change_option()
         }
         break;
     }
@@ -75,4 +78,12 @@ QuestionSceneNode.prototype.user_action = function(){
     this.is_answering = true;
     this.lock_close();
   }
+}
+
+QuestionSceneNode.prototype.lock_change_option = function(){
+  this.can_change = false;
+  var _this = this;
+  setTimeout(function(){
+    _this.can_change = true;
+  }, 500);
 }
