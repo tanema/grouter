@@ -41,24 +41,27 @@ Camera.prototype.bottom = function(){
 };
 
 Camera.prototype.isInside = function(x, y, layer) {
-   if(x > this.left() && x < this.right() && y > this.top() && y < this.bottom()){
-     return [x,y]
-   } else if((x+layer.width) > this.left() && (x+layer.width) < this.right()){
-     if(y > this.top() && y < this.bottom()){
-      return [x+layer.width, y]
-     } else if((y+layer.height) > this.top() && (y+layer.height) < this.bottom()){
-      return [x+layer.width, y+layer.height]
-     } else if((y-layer.height) > this.top() && (y-layer.height) < this.bottom()){
-      return [x+layer.width, y-layer.height]
-     }
-   } else if((x-layer.width) > this.left() && (x-layer.width) < this.right()){
-     if(y > this.top() && y < this.bottom()){
-      return [x-layer.width, y]
-     } else if((y+layer.height) > this.top() && (y+layer.height) < this.bottom()){
-      return [x-layer.width, y+layer.height]
-     } else if((y-layer.height) > this.top() && (y-layer.height) < this.bottom()){
-      return [x-layer.width, y-layer.height]
-     }
-   }
-   return false
+  if(x > this.left() && x < this.right() && y > this.top() && y < this.bottom()){
+    return [x,y]
+  } else {
+    var new_x, new_y;
+    if(x > this.left() && x < this.right()){
+      new_x = x;
+    } else if((x+layer.width) > this.left() && (x+layer.width) < this.right()){
+      new_x = x+layer.width;
+    } else if((x-layer.width) > this.left() && (x-layer.width) < this.right()){
+      new_x = x-layer.width;
+    }
+    if(y > this.top() && y < this.bottom()){
+      new_y = y;
+    } else if((y+layer.height) > this.top() && (y+layer.height) < this.bottom()){
+      new_y = y+layer.height;
+    } else if((y-layer.height) > this.top() && (y-layer.height) < this.bottom()){
+      new_y = y-layer.height;
+    }
+    if(new_x && new_y){
+      return [new_x, new_y]
+    }
+  }
+  return false
 };

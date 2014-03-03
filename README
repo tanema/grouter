@@ -20,7 +20,6 @@ TODO List
   - server side validation of interactions
   - server side behaviour/interaction definition
   - no render when on a different tab so the world freezes on client
-- rendering of sprites near flip boarder still doesnt work on the +y flip
 
 License
 -------
