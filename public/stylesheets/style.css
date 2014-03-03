@@ -10,22 +10,44 @@
 
 body {
   font: 20px pokemon;
+  overflow:hidden;
+}
+
+#canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left:0;
 }
 
 #contents{
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   text-align: center;
+  color: white;
 }
 
 #fps_container{
-  padding-left: 540px;
+  float: right;
+  background: rgba(0, 0, 0, 0.31);
+  padding: 10px;
 }
 
-.instructions, .title{
-  font: 30px kulminoituva;
+.title{
+  font: 30px;
+  background: rgba(0, 0, 0, 0.31);
+  padding: 10px;
+}
+
+.title div {
+  display: inline-block;
 }
 
 #vol_controls div{
-  font: 20px kulminoituva;
+  font: 20px;
   display: inline-block;
   border: thin solid black;
   cursor: pointer;
