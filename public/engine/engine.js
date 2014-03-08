@@ -53,6 +53,9 @@ Grouter.prototype.draw = function(timestamp){
   //clear last frame
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+  //update screen
+  this.ctx.screen.update()
+
   // draw down the hierarchy starting at the map
   this.map.draw(this.ctx, deltatime);
 
