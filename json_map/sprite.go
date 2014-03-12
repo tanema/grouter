@@ -2,7 +2,7 @@ package json_map
 
 import (
   "fmt"
-  "github.com/tanema/go-socket.io"
+  "grouter/socketio"
   "github.com/robertkrimen/otto"
   "io/ioutil"
   "time"

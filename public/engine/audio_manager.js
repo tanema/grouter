@@ -63,7 +63,7 @@ AudioManager.prototype.loop = function(sound_name){
 };
 
 AudioManager.prototype.change_volume = function(vol, type){
-  localStorage["prev_"+type+"_vol"] = localStorage[type+"_vol"];
+  localStorage["prev_"+type+"_vol"] = localStorage[type+"_vol"] || 0.5;
   this[type+"_volume"] = localStorage[type+"_vol"] = vol;
   for(var sound_name in this[type]){
     this[type][sound_name].volume = this[type+"_volume"];

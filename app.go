@@ -5,7 +5,7 @@ import (
   "log"
 	"net/http"
   "grouter/json_map"
-  "github.com/tanema/go-socket.io"
+  "grouter/socketio"
 )
 
 var (

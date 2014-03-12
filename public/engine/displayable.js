@@ -206,9 +206,15 @@ Displayable.prototype.do_tile_actions = function(){
   function tile_action(object){
     if(object.properties.stair_up){
       _this.stair_up()
+      if(this.action_sound){
+        this.action_sound.play()
+      }
     }
     if(object.properties.stair_down){
       _this.stair_down()
+      if(this.action_sound){
+        this.action_sound.play()
+      }
     }
   }
   for(var i=0; i < to_tile.tiles.length; i++){ tile_action(to_tile.tiles[i]); }

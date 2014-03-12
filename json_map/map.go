@@ -6,7 +6,7 @@ import (
   "io/ioutil"
   "encoding/json"
   "strings"
-  "github.com/tanema/go-socket.io"
+  "grouter/socketio"
   "time"
 )
 

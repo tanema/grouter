@@ -11,6 +11,10 @@ function Grouter(canvas_el, map_src){
   this.ctx = this.canvas.getContext('2d');
   this.ctx.canvas = this.canvas;
 
+  this.canvas.style.position = "absolute";
+  this.canvas.style.top = 0;
+  this.canvas.style.left =0;
+
   this.keyboard = new Keyboard();
   this.startTime = window.mozAnimationStartTime || Date.now();
 
