@@ -1,4 +1,4 @@
-var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
 
 function Grouter(canvas_el, map_src){
   if(!this.canvasIsSupported() && !!requestAnimationFrame){
@@ -16,6 +16,7 @@ function Grouter(canvas_el, map_src){
   this.canvas.style.left =0;
 
   this.keyboard = new Keyboard();
+  this.gamepadsupport = new GamepadSupport();
   this.startTime = window.mozAnimationStartTime || Date.now();
 
   this.fps_el = document.getElementById("fps"); 
@@ -87,6 +88,10 @@ Grouter.prototype.canvasIsSupported = function (){
   var elem = document.createElement('canvas');
   return !!(elem && elem.getContext && elem.getContext('2d'));
 };
+
+Grouter.prototype.gamepadIsSupported = function(){
+  return !!navigator.webkitGetGamepads || !!navigator.webkitGamepads;
+}
 
 Grouter.prototype.getSocketId = function () {
   return this.socket.socket.sessionid;

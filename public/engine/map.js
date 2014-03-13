@@ -49,7 +49,8 @@ Map.prototype.load = function (next){
 
 Map.prototype.register_keyboard_events = function(){
   Grouter.bind_event("keypress_up keypress_down keypress_left keypress_right", this.user_arrow, this);
-  Grouter.bind_event("keypress_z", this.user_interact, this);
+  Grouter.bind_event("gamepad_dpad_up gamepad_dpad_down gamepad_dpad_left gamepad_dpad_right", this.user_arrow, this);
+  Grouter.bind_event("keypress_z gamepad_a", this.user_interact, this);
 }
 
 Map.prototype.user_arrow = function(e){
