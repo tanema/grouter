@@ -32,7 +32,7 @@ Director.prototype.draw = function(ctx){
 
 Director.prototype.user_arrow = function(e){
   if(this.current_scene){
-    this.current_scene.user_arrow(e.type.replace("keypress_", ""))
+    this.current_scene.user_arrow(e.type.replace("keypress_", "").replace("gamepad_dpad_", ""))
   }
 }
 

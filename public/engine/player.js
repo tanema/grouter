@@ -9,7 +9,7 @@ Player.prototype = new Displayable();
 Player.prototype.is_player = true
 
 Player.prototype.user_move = function(e){
-  var direction = e.type.replace("keypress_", "");
+  var direction = e.type.replace("keypress_", "").replace("gamepad_dpad_", "");
   if(!this.is_moving){
     var to_tile = this._get_to_tile(direction);
     if(this.move(direction) && this.socket){
