@@ -31,9 +31,12 @@ Animation.linear = function(initial, changes, options){
 }
 
 Animation._animate = function(initial, changes, options, animation_function){
+  window.test = initial
   var change_keys = Object.keys(changes),
       interval = 13,
-      starting_values = JSON.parse(JSON.stringify(initial))
+      starting_values = JSON.parse(JSON.stringify(initial, function(key, value){
+        return (!key || (value && ["Object","String","Array","Number"].indexOf(value.constructor.name) != -1)) ? value : null;
+      })),
       time_passed = 0;
 
   options = options || {}
