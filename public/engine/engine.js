@@ -27,7 +27,6 @@ function Grouter(canvas_el, map_src){
     this.fps_timer = setInterval(function(){_this.updateFPS()}, 1000);
   }
 
-  this.socket = io.connect();
   window.addEventListener('load', function(){
     _this.load_map(map_src);
   });
@@ -73,6 +72,10 @@ Grouter.prototype.set_resolution = function(i){
 
 Grouter.prototype.load_map = function(map_src){
   var _this = this;
+  if(this.map){
+    this.unload_map();
+  }
+  this.socket = io.connect(null,{'force new connection':true});
   this.loaded = false;
   this.map = new Map(map_src, this);
   this.map.load(function(map){
@@ -81,13 +84,20 @@ Grouter.prototype.load_map = function(map_src){
         screen = _this.ctx.screen = new Screen(_this.canvas, tile_width, tile_height);
     map.camera = _this.ctx.camera = new Camera(screen, tile_width, tile_height, map.properties.tiles_overflow);
     _this.loaded = true;
-
     _this.gameloop = Grouter.gameloop(_this.draw, _this);
   });
 };
 
-//the time difference does not need to be regarded in the model of this engine since the
-//animations are done within thier own intervals
+Grouter.prototype.unload_map = function(){
+  this.gameloop.stop();
+  this.map.unload();
+  this.loaded = false;
+  this.socket.disconnect();
+  delete this.socket;
+  delete this.map
+  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+}
+
 Grouter.prototype.draw = function(deltatime){
   if(!this.loaded){return;}
   //clear last frame
@@ -114,10 +124,6 @@ Grouter.prototype.canvasIsSupported = function (){
   var elem = document.createElement('canvas');
   return !!(elem && elem.getContext && elem.getContext('2d'));
 };
-
-Grouter.prototype.gamepadIsSupported = function(){
-  return !!navigator.webkitGetGamepads || !!navigator.webkitGamepads;
-}
 
 Grouter.prototype.getSocketId = function () {
   return this.socket.socket.sessionid;

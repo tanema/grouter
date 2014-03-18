@@ -47,6 +47,13 @@ Map.prototype.load = function (next){
   });
 };
 
+Map.prototype.unload = function (){
+  this.spritesheet.unload();
+  for(layer_name in this.layers){
+    this.layers[layer_name].unload();
+  }
+}
+
 Map.prototype.register_keyboard_events = function(){
   Grouter.bind_event("keypress_up keypress_down keypress_left keypress_right", this.user_arrow, this);
   Grouter.bind_event("gamepad_dpad_up gamepad_dpad_down gamepad_dpad_left gamepad_dpad_right", this.user_arrow, this);
@@ -169,7 +176,7 @@ Map.prototype.npc_spawn = function(options){
   options.x = options.x * this.tilewidth;
   options.y = options.y * this.tileheight;
   new Npc(options, this, layer, function(npc){
-    _this.objects[npc.name] = npc;
-    layer.objects[npc.name] = npc;
+    _this.objects[npc.id || npc.name] = npc;
+    layer.objects[npc.id || npc.name] = npc;
   });
 };

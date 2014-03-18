@@ -8,7 +8,7 @@ function Displayable(display_object_options, map, layer, next){
   }else{
     if(next){next(this);}
   }
-  Grouter.gameloop(this.animate, this);
+  this.animationloop = Grouter.gameloop(this.animate, this);
 }
 
 Displayable.prototype = new Actionable();
@@ -75,6 +75,13 @@ Displayable.prototype.teleport = function(x, y){
 Displayable.prototype.kill = function(){
   delete this.layer.objects[this.id || this.name];
   delete this.map.objects[this.id || this.name];
+};
+
+//@OVERRIDE this just make sure the displayable is facing the speaker/actor
+Displayable.prototype.unload = function(){
+  this.animationloop.stop();
+  //call Super
+  this.constructor.prototype.unload.call(this);
 };
 
 Displayable.prototype.move_to = function(to_x, to_y){

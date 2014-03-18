@@ -10,10 +10,14 @@ function AnimatedTile(base_image, tile_properties, spritesheet){
   this.animation_speed = this.speed / this.frames.length;
   this.frame_time = 0;
   Tile.call(this, base_image, tile_properties, spritesheet);
-  Grouter.gameloop(this.update, this);
+  this.animationloop = Grouter.gameloop(this.update, this);
 }
 
 AnimatedTile.prototype = new Tile();
+
+AnimatedTile.prototype.unload = function(){
+  this.animationloop.stop();
+}
 
 AnimatedTile.prototype.update = function(deltatime){
   if(this.frame_time < 0){

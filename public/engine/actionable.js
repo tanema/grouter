@@ -25,6 +25,8 @@ function Actionable(actionable_options, map, layer){
   this.properties = actionable_options.properties || {};
 }
 
+Actionable.prototype.unload = function(){ }
+
 Actionable.prototype.react = function(actor){
   if(this.is_busy){return;}
 

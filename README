@@ -13,9 +13,6 @@ TODO List
 --------
 - interaction server work
   - handle both react and onenter
-- load new map
-  - unload socket connections
-  - unbind events
 - Better latency handling and checking
   - server side validation of interactions
   - server side behaviour/interaction definition

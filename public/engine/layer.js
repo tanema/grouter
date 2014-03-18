@@ -47,6 +47,15 @@ Layer.prototype.initiate_objects = function(objects){
   }
 };
 
+Layer.prototype.unload = function(){
+  if(this.is_objectgroup()){
+    var object_name, object;
+    for(object_name in this.objects){
+      this.objects[object_name].unload();
+    }
+  }
+}
+
 Layer.prototype.get_tile_index = function(x, y) {
   var sphere_x = Grouter.normalize_coord(x, this.width),
       sphere_y = Grouter.normalize_coord(y, this.height);
