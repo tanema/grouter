@@ -134,9 +134,6 @@ Map.prototype.draw = function (ctx, deltatime){
   //default background, using css
   ctx.canvas.style.background = this.properties.background
 
-  //update the spritesheet(animated tiles) for this frame
-  this.spritesheet.update(deltatime);
-
   //set camera x,y from player
   if(!this.director.current_scene){
     this.camera.set(this.player.x, this.player.y);

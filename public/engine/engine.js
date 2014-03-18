@@ -1,7 +1,10 @@
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+window.requestAnimationFrame = window.requestAnimationFrame       ||
+                               window.webkitRequestAnimationFrame ||
+                               window.mozRequestAnimationFrame    ||
+                               function(callback){window.setTimeout(callback, 1000 / 60);}; 
 
 function Grouter(canvas_el, map_src){
-  if(!this.canvasIsSupported() && !!requestAnimationFrame){
+  if(!this.canvasIsSupported()){
     alert("Your browser does not support this game.");
     return;
   }
@@ -17,7 +20,6 @@ function Grouter(canvas_el, map_src){
 
   this.keyboard = new Keyboard();
   this.gamepadsupport = new GamepadSupport();
-  this.startTime = window.mozAnimationStartTime || Date.now();
 
   this.fps_el = document.getElementById("fps"); 
   if(this.fps_el){
@@ -31,6 +33,44 @@ function Grouter(canvas_el, map_src){
   });
 }
 
+Grouter.gameloop = function(method, scope){
+  var startTime = window.mozAnimationStartTime || Date.now(),
+      stop = false;
+      looper = {
+        stop: function(){
+          stop = true;
+        },
+        start: function(){
+          stop = false;
+          (function _loop(timestamp){
+            //calculate difference since last repaint
+            var drawStart = (timestamp || Date.now()),
+                deltatime = drawStart - startTime;
+            method.call(scope, deltatime)
+            startTime = drawStart;
+            if(!stop){
+              requestAnimationFrame(_loop);
+            }
+          })()
+        }
+      }
+  looper.start();
+  return looper;
+}
+
+Grouter.resolutions = [
+  [640, 480],
+  [800, 600],
+  [1024, 768],
+  [1280, 720],
+  [1360, 768],
+  [1366, 768],
+]
+Grouter.prototype.set_resolution = function(i){
+  this.canvas.width = Grouter.resolutions[i][0];
+  this.canvas.height = Grouter.resolutions[i][1];
+}
+
 Grouter.prototype.load_map = function(map_src){
   var _this = this;
   this.loaded = false;
@@ -42,19 +82,14 @@ Grouter.prototype.load_map = function(map_src){
     map.camera = _this.ctx.camera = new Camera(screen, tile_width, tile_height, map.properties.tiles_overflow);
     _this.loaded = true;
 
-    requestAnimationFrame(function(timestamp){_this.draw(timestamp);});
+    _this.gameloop = Grouter.gameloop(_this.draw, _this);
   });
 };
 
 //the time difference does not need to be regarded in the model of this engine since the
 //animations are done within thier own intervals
-Grouter.prototype.draw = function(timestamp){
+Grouter.prototype.draw = function(deltatime){
   if(!this.loaded){return;}
-
-  //calculate difference since last repaint
-  var drawStart = (timestamp || Date.now()),
-      deltatime = drawStart - this.startTime;
-
   //clear last frame
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -64,19 +99,10 @@ Grouter.prototype.draw = function(timestamp){
   // draw down the hierarchy starting at the map
   this.map.draw(this.ctx, deltatime);
 
-  //reset startTime to this repaint
-  this.startTime = drawStart;
-
   //increments frame for fps display
   if(this.fps_timer){
     this.fps++;
   }
-
-  //set the next animation frame
-  var _this = this;
-  requestAnimationFrame(function(timestamp){
-    _this.draw(timestamp);
-  });
 };
 
 Grouter.prototype.updateFPS = function(){

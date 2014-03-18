@@ -1,8 +1,8 @@
 function SceneNode(map, actor_name, data){
   this.map = map || {};
   this.actor_name = actor_name || {};
-  this.font_size = 20;
-  this.line_height = this.font_size + (this.font_size/4);
+  this.font_size = 25;
+  this.line_height = this.font_size + (this.font_size/8);
   this.on_air = false;
   this.scroll_top = 0;
   this.can_close = false;

@@ -63,12 +63,6 @@ SpriteSheet.prototype._calculateFrames = function(img, img_options) {
   }
 };
 
-SpriteSheet.prototype.update = function(deltatime){
-  for(var i = 0; i < this._animated_tiles.length; i++){
-    this._animated_tiles[i].update(deltatime);
-  }
-};
-
 SpriteSheet.prototype.loaded = function(){
   return this.image_properties.length == this.image_sources.length;
 };

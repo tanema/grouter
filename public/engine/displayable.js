@@ -8,6 +8,7 @@ function Displayable(display_object_options, map, layer, next){
   }else{
     if(next){next(this);}
   }
+  Grouter.gameloop(this.animate, this);
 }
 
 Displayable.prototype = new Actionable();
@@ -52,16 +53,14 @@ Displayable.prototype.initalize_properties = function(next){
   }
 };
 
-Displayable.prototype.draw = function(ctx, deltatime, x, y){
+Displayable.prototype.draw = function(ctx, x, y){
   x = x || this.x;
   y = y || this.y;
 
   var draw_x = ((x * this.map_tile_width)  - this.offset_x),
-      draw_y = ((y * this.map_tile_height) - this.offset_y);
+      draw_y = ((y * this.map_tile_height) - this.offset_y),
+      draw_frame = this._get_frame();
 
-  this.animate(deltatime);
-
-  var draw_frame = this._get_frame();
   if(draw_frame){
     ctx.drawImage(draw_frame, draw_x - (ctx.camera.x * this.map_tile_width), draw_y - (ctx.camera.y * this.map_tile_height));
   }

@@ -82,19 +82,9 @@ Layer.prototype.draw = function(ctx, deltatime){
     for(object_name in this.objects){
       object = this.objects[object_name];
       if(object.type == 'player'){
-        object.draw(ctx, deltatime);
+        object.draw(ctx);
       }else if(object.type == 'npc' && (object_pos = ctx.camera.isInside(object.x, object.y, this))){
-        object.draw(ctx, deltatime, object_pos[0], object_pos[1]);
-      }else if(object.type == 'npc'){ //this means it is not in camera
-        object.animate(deltatime);    // update position 
-      }
-    }
-  }else if(this.is_objectgroup()){ //object group that is not in the displayable group
-    var object_name, object;
-    for(object_name in this.objects){
-      object = this.objects[object_name];
-      if(object.type == 'npc'){
-        object.animate(deltatime);// update position 
+        object.draw(ctx, object_pos[0], object_pos[1]);
       }
     }
   }
