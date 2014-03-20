@@ -18,6 +18,7 @@ type Sprite struct {
   Height      float32           `json:"height"`
   LayerName   string            `json:"layer_name"`
   Properties  map[string]string `json:"properties"`
+  IsBusy      bool              `json:"-"`
   Map         *Map              `json:"-"`
   Layer       *Layer            `json:"-"`
   sio         *socketio.SocketIOServer `json:"-"`
@@ -138,9 +139,24 @@ func (sp *Sprite) SetupSocket(sio *socketio.SocketIOServer){
   sp.sio.Of(sp.channel()).On("change layer", func(ns *socketio.NameSpace, layer string){sp.ChangeLayer(layer)})
   sp.sio.Of(sp.channel()).On("teleport", func(ns *socketio.NameSpace, to_x, to_y int64){sp.Teleport(to_x, to_y)})
   sp.sio.Of(sp.channel()).On("set name", func(ns *socketio.NameSpace, name string){sp.ChangeName(name)})
+  sp.sio.Of(sp.channel()).On("interacting started", func(ns *socketio.NameSpace, name string){sp.StartInteracting()})
+  sp.sio.Of(sp.channel()).On("interacting finished", func(ns *socketio.NameSpace, name string){sp.FinishInteracting()})
+}
+
+func (sp *Sprite) StartInteracting(){
+  sp.IsBusy = true;
+  sp.sio.In(sp.channel()).Broadcast("interacting started");
+}
+
+func (sp *Sprite) FinishInteracting(){
+  sp.IsBusy = false;
+  sp.sio.In(sp.channel()).Broadcast("interacting finished");
 }
 
 func (sp *Sprite) Move(direction string, distance int64){
+  if sp.IsBusy {
+    return
+  }
   if distance < 1 {
     distance = 1
   }
@@ -160,6 +176,9 @@ func (sp *Sprite) Move(direction string, distance int64){
 }
 
 func (sp *Sprite) MoveTo(to_x, to_y int64){
+  if sp.IsBusy {
+    return
+  }
   //TODO validate move
   pos := sp.Map.At(float32(to_x), float32(to_y), sp.Layer.Properties["group"])
   if len(pos.Tiles) < 1 && len(pos.Objects) < 1 {
@@ -170,11 +189,17 @@ func (sp *Sprite) MoveTo(to_x, to_y int64){
 }
 
 func (sp *Sprite) ChangeLayer(layer string){
+  if sp.IsBusy {
+    return
+  }
   sp.LayerName = layer
   sp.sio.In(sp.channel()).Broadcast("change layer", layer);
 }
 
 func (sp *Sprite) Teleport(to_x, to_y int64){
+  if sp.IsBusy {
+    return
+  }
   //TODO validate move
   sp.X = float32(to_x)
   sp.Y = float32(to_y)

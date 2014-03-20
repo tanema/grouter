@@ -14,7 +14,12 @@ function Actionable(actionable_options, map, layer){
     this.y = this.y / map.spritesheet.tile_height;
     //set socket to be for only this object
     //at this point the map socket is not setup yet
-    this.socket = this.map.engine.socket.of(this.map.name+(this.id || this.name));
+    this.channel = this.map.name+(this.id || this.name); 
+    this.socket = this.map.engine.socket.of(this.channel);
+
+    var _this = this;
+    this.socket.on('interacting started', function(){ _this.busy = true});
+    this.socket.on('interacting finished', function(){ _this.busy = false});
   }
 
   if(actionable_options.properties){
@@ -30,10 +35,17 @@ Actionable.prototype.unload = function(){ }
 Actionable.prototype.react = function(actor){
   if(this.is_busy){return;}
 
+  this.socket.emit("interacting started");
   if(this.action_sound){
     this.map.audio_manager.play(this.action_sound);
   }
-  this.map.director.act(this, actor)
+
+  var _this = this;
+  this.is_busy = actor.is_busy = true;
+  this.map.director.act(this, function(){
+    _this.is_busy = actor.is_busy = false;
+    _this.socket.emit("interacting finished");
+  })
 };
 
 Actionable.prototype.play_action_sound = function(){
@@ -61,6 +73,5 @@ Actionable.prototype.on_enter = function(layer){
 
 Actionable.prototype.on_leave = function(layer){
   switch(this.properties.on_enter){
-
   }
 }

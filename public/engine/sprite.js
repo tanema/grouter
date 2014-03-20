@@ -148,6 +148,8 @@ Sprite.prototype.animate = function(deltatime){
 
 //@OVERRIDE this just make sure the displayable is facing the speaker/actor
 Sprite.prototype.react = function(actor){
+  if(this.is_busy){return;}
+
   switch(actor.currentMovement){
     case "left":  this.currentMovement = "right"; break;
     case "right": this.currentMovement = "left"; break;

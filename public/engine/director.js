@@ -12,13 +12,11 @@ function Director(map, data){
 }
 
 Director.prototype.act = function(actor, cb){
-  if(this.just_closed || !this.characters[actor.name]){return;}
+  if(this.just_closed || !this.characters[actor.name]){return cb();}
   var _this = this;
-  this.map.player.is_busy = actor.is_busy = true;
   this.current_scene = this.characters[actor.name][0];
   this.current_scene.start(function(){
     _this.current_scene = null;
-    _this.map.player.is_busy = actor.is_busy = false;
     _this.lock_open();
     cb()
   })
