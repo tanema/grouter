@@ -35,3 +35,32 @@ Actionable.prototype.react = function(actor){
   }
   this.map.director.act(this, actor)
 };
+
+Actionable.prototype.play_action_sound = function(){
+  if(this.action_sound){
+    this.action_sound.play()
+  }
+}
+
+Actionable.prototype.on_enter = function(layer){
+  switch(this.properties.on_enter){
+    case "stair_up":
+      layer.stair_up();
+      this.play_action_sound();
+      break;
+    case "stair_down":
+      layer.stair_down()
+      this.play_action_sound();
+      break;
+    case "load_map":
+      this.map.engine(this.properties.map_name)
+      break;
+  }
+}
+
+
+Actionable.prototype.on_leave = function(layer){
+  switch(this.properties.on_enter){
+
+  }
+}

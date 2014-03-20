@@ -30,10 +30,10 @@ layer
       right         array of tile indexes
       idle          array of tile indexes
 
-      //Displayable
+      //Sprite
       speed         number of how fast they are
 
-      //Actionable (Displayables inherit from Actionable)
+      //Actionable (Sprites inherit from Actionable)
       action        what happens when interacted with
       action_src    a path to a script to download for longer scripts
       action_sound  sound made when interacted with

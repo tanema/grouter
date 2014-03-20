@@ -8,7 +8,8 @@ function Layer(layer_options, map, next){
   this.visible = layer_options.visible;
 
   this.data = layer_options.data;
-  this.objects = {};
+  this.sprites = {};
+  this.actors = {};
 
   this.x = layer_options.x;
   this.y = layer_options.y;
@@ -42,7 +43,7 @@ Layer.prototype.initiate_objects = function(objects){
       this.map.player = object;//set it to inital object so we have a starting x y to render
     }else if(object.type.toLowerCase() == "actionable"){
       var actionable = new Actionable(object, this.map, this);
-      this.map.objects[actionable.name] = this.objects[actionable.name] = actionable;
+      this.map.actors[actionable.name] = this.actors[actionable.name] = actionable;
     }
   }
 };
@@ -50,8 +51,8 @@ Layer.prototype.initiate_objects = function(objects){
 Layer.prototype.unload = function(){
   if(this.is_objectgroup()){
     var object_name, object;
-    for(object_name in this.objects){
-      this.objects[object_name].unload();
+    for(object_name in this.sprites){
+      this.sprites[object_name].unload();
     }
   }
 }
@@ -88,8 +89,8 @@ Layer.prototype.draw = function(ctx, deltatime){
     }
   }else if(this.is_objectgroup() && this.visible && this.map.player.layer.group == this.group){
     var object_name, object, object_pos;
-    for(object_name in this.objects){
-      object = this.objects[object_name];
+    for(object_name in this.sprites){
+      object = this.sprites[object_name];
       if(object.type == 'player'){
         object.draw(ctx);
       }else if(object.type == 'npc' && (object_pos = ctx.camera.isInside(object.x, object.y, this))){

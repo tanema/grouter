@@ -4,7 +4,8 @@ function Map(map_src, engine){
   this.layers = {};
   this.player = null;
   this.camera = null;
-  this.objects = {};
+  this.sprites = {};
+  this.actors = {};
   this.audio_manager = new AudioManager();
   this.name = map_src.substring(map_src.lastIndexOf("/")+1, map_src.lastIndexOf("."));
 }
@@ -108,7 +109,7 @@ Map.prototype._load_layer = function(layers, next){
 };
 
 Map.prototype.at = function(x, y, group){
-  var results = {tiles: [], objects: []};
+  var results = {tiles: [], sprites: [], actors: []};
 
   var layer_name;
   for(layer_name in this.layers){
@@ -125,10 +126,16 @@ Map.prototype.at = function(x, y, group){
       }
     }else if(layer.is_objectgroup()){
       var object_name, object;
-      for(object_name in layer.objects){
-        object = layer.objects[object_name];
+      for(object_name in layer.sprites){
+        object = layer.sprites[object_name];
         if(object && object.x === x && object.y === y){
-          results.objects.push(object);
+          results.sprites.push(object);
+        }
+      }
+      for(object_name in layer.actors){
+        object = layer.actors[object_name];
+        if(object && object.x === x && object.y === y){
+          results.actors.push(object);
         }
       }
     }
@@ -159,7 +166,7 @@ Map.prototype.player_connected = function(connection_data){
   var layer = this.layers[connection_data.player.layer_name];
   connection_data.player.x = connection_data.player.x * this.tilewidth;
   connection_data.player.y = connection_data.player.y * this.tileheight;
-  this.player = this.objects[connection_data.player.id] = layer.objects[connection_data.player.id] = new Player(connection_data.player, this, layer);
+  this.player = this.sprites[connection_data.player.id] = layer.sprites[connection_data.player.id] = new Player(connection_data.player, this, layer);
   for(var player_id in connection_data.players){
     this.npc_spawn(connection_data.players[player_id]);
   }
@@ -176,7 +183,7 @@ Map.prototype.npc_spawn = function(options){
   options.x = options.x * this.tilewidth;
   options.y = options.y * this.tileheight;
   new Npc(options, this, layer, function(npc){
-    _this.objects[npc.id || npc.name] = npc;
-    layer.objects[npc.id || npc.name] = npc;
+    _this.sprites[npc.id || npc.name] = npc;
+    layer.sprites[npc.id || npc.name] = npc;
   });
 };

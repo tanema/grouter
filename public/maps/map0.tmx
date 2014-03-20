@@ -185,6 +185,11 @@
     <property name="action" value=""/>
    </properties>
   </object>
+  <object name="house exit" type="actionable" x="576" y="288">
+   <properties>
+    <property name="on_enter" value="stair_up"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="inside_foreground" width="50" height="50">
   <properties>
@@ -243,6 +248,11 @@
   <object name="house sign" type="actionable" x="640" y="288">
    <properties>
     <property name="action" value=""/>
+   </properties>
+  </object>
+  <object name="house enter" type="actionable" x="576" y="256">
+   <properties>
+    <property name="on_enter" value="stair_down"/>
    </properties>
   </object>
  </objectgroup>

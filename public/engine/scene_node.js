@@ -14,7 +14,7 @@ function SceneNode(map, actor_name, data){
 }
 
 SceneNode.prototype.actor = function(){
-  return this.map.objects[this.actor_name]
+  return this.map.sprites[this.actor_name] || this.map.actors[this.actor_name]
 }
 
 SceneNode.prototype.prefix = function(){

@@ -1,4 +1,4 @@
-function Displayable(display_object_options, map, layer, next){
+function Sprite(display_object_options, map, layer, next){
   display_object_options = display_object_options || {};
 
   Actionable.call(this, display_object_options, map, layer);
@@ -11,9 +11,9 @@ function Displayable(display_object_options, map, layer, next){
   this.animationloop = Grouter.gameloop(this.animate, this);
 }
 
-Displayable.prototype = new Actionable();
+Sprite.prototype = new Actionable();
 
-Displayable.prototype.initalize_properties = function(next){
+Sprite.prototype.initalize_properties = function(next){
   this.map_tile_width = this.map.spritesheet.tile_width;
   this.map_tile_height = this.map.spritesheet.tile_height;
   this.tilewidth = parseInt(this.properties.width,10)|| this.map_tile_width;
@@ -53,7 +53,7 @@ Displayable.prototype.initalize_properties = function(next){
   }
 };
 
-Displayable.prototype.draw = function(ctx, x, y){
+Sprite.prototype.draw = function(ctx, x, y){
   x = x || this.x;
   y = y || this.y;
 
@@ -66,25 +66,25 @@ Displayable.prototype.draw = function(ctx, x, y){
   }
 };
 
-Displayable.prototype.teleport = function(x, y){
+Sprite.prototype.teleport = function(x, y){
   this.is_moving = false
   this.x = x;
   this.y = y;
 };
 
-Displayable.prototype.kill = function(){
-  delete this.layer.objects[this.id || this.name];
-  delete this.map.objects[this.id || this.name];
+Sprite.prototype.kill = function(){
+  delete this.layer.sprites[this.id || this.name];
+  delete this.map.sprites[this.id || this.name];
 };
 
 //@OVERRIDE this just make sure the displayable is facing the speaker/actor
-Displayable.prototype.unload = function(){
+Sprite.prototype.unload = function(){
   this.animationloop.stop();
   //call Super
   this.constructor.prototype.unload.call(this);
 };
 
-Displayable.prototype.move_to = function(to_x, to_y){
+Sprite.prototype.move_to = function(to_x, to_y){
   var direction = "",
       distance = 0;
   if (this.x != to_x) {
@@ -97,7 +97,7 @@ Displayable.prototype.move_to = function(to_x, to_y){
   this.move(direction, distance);
 };
 
-Displayable.prototype.move = function(direction, distance){
+Sprite.prototype.move = function(direction, distance){
   this.distance = distance || 1;
   if(this.is_moving || this.is_busy){ return false; }
 
@@ -108,11 +108,12 @@ Displayable.prototype.move = function(direction, distance){
     return false
   }
 
+  this.on_leave();
   this.is_moving = true;
   return true
 };
 
-Displayable.prototype.animate = function(deltatime){
+Sprite.prototype.animate = function(deltatime){
   if(this.is_moving){
     if((this.frame_time += deltatime) >= this.animation_speed){
       var number_of_steps = (this.frame_time / this.animation_speed) | 0;
@@ -132,7 +133,7 @@ Displayable.prototype.animate = function(deltatime){
         //reset animation
         this.movementIndex = 0;
         this.is_moving = false;
-        this.do_tile_actions();
+        this.on_enter();
         //if the distance is set that means keep walking
         if(this.distance > 1){
           this.move(this.currentMovement, --this.distance);
@@ -146,7 +147,7 @@ Displayable.prototype.animate = function(deltatime){
 };
 
 //@OVERRIDE this just make sure the displayable is facing the speaker/actor
-Displayable.prototype.react = function(actor){
+Sprite.prototype.react = function(actor){
   switch(actor.currentMovement){
     case "left":  this.currentMovement = "right"; break;
     case "right": this.currentMovement = "left"; break;
@@ -158,7 +159,7 @@ Displayable.prototype.react = function(actor){
   this.constructor.prototype.react.call(this, actor);
 };
 
-Displayable.prototype._get_frame = function(){
+Sprite.prototype._get_frame = function(){
   var sprite = this.spritesheet.get(this.movement[this.currentMovement][this.movementIndex]);
   return sprite ? sprite.img : null;
 };
@@ -166,7 +167,7 @@ Displayable.prototype._get_frame = function(){
 //we set to_x and to_y here so that the animation has a defined end so we dont get rounding
 //problems if the animation step is off by decimals, we round x and y to make sure are on the grid
 //at the end of the animation
-Displayable.prototype._get_to_tile = function(direction){
+Sprite.prototype._get_to_tile = function(direction){
   var to_tile;
 
   if(this.is_moving){
@@ -192,9 +193,9 @@ Displayable.prototype._get_to_tile = function(direction){
   return to_tile;
 };
 
-Displayable.prototype._facing_solid_tile = function(direction){
+Sprite.prototype._facing_solid_tile = function(direction){
   var to_tile = this._get_to_tile(direction);
-  if(to_tile.objects.length > 0 || to_tile.tiles.length == 0){
+  if(to_tile.sprites.length > 0 || to_tile.tiles.length == 0){
     return true;
   }
   for(var i = 0; i < to_tile.tiles.length; i++){
@@ -205,37 +206,29 @@ Displayable.prototype._facing_solid_tile = function(direction){
   return false;
 };
 
-Displayable.prototype.do_tile_actions = function(){
-  var to_tile = this.map.at(this.x, this.y, this.layer.group),
-      _this = this;
-
-  function tile_action(object){
-    if(object.properties.stair_up){
-      _this.stair_up()
-      if(this.action_sound){
-        this.action_sound.play()
-      }
-    }
-    if(object.properties.stair_down){
-      _this.stair_down()
-      if(this.action_sound){
-        this.action_sound.play()
-      }
-    }
+Sprite.prototype.on_enter = function(){
+  var to_tile = this.map.at(this.x, this.y, this.layer.group);
+  for(var i=0; i < to_tile.actors.length; i++){ 
+    to_tile.actors[i].on_enter(this)
   }
-  for(var i=0; i < to_tile.tiles.length; i++){ tile_action(to_tile.tiles[i]); }
-  for(var i=0; i < to_tile.objects.length; i++){ tile_action(to_tile.objects[i]); }
 }
 
-Displayable.prototype.stair_down = function(){
+Sprite.prototype.on_leave = function(){
+  var to_tile = this.map.at(this.x, this.y, this.layer.group);
+  for(var i=0; i < to_tile.actors.length; i++){ 
+    to_tile.actors[i].on_leave(this)
+  }
+}
+
+Sprite.prototype.stair_down = function(){
   this.set_layer(this.next_layer(false));
 }
 
-Displayable.prototype.stair_up = function(){
+Sprite.prototype.stair_up = function(){
   this.set_layer(this.next_layer(true));
 }
 
-Displayable.prototype.next_layer = function(up){
+Sprite.prototype.next_layer = function(up){
   var current_layer = this.layer,
       current_found = false,
       next_layer,
@@ -256,11 +249,11 @@ Displayable.prototype.next_layer = function(up){
   return next_layer;
 }
 
-Displayable.prototype.set_layer = function(layer, skip_socket){
+Sprite.prototype.set_layer = function(layer, skip_socket){
   if(!layer || layer == this.layer){ return; }
   var current_layer = this.layer;
-  layer.objects[this.id] = this;
-  delete current_layer.objects[this.id]
+  layer.sprites[this.id] = this;
+  delete current_layer.sprites[this.id]
   this.layer = layer;
   if(!skip_socket && this.socket && this.is_player) {
     this.socket.emit("player change layer", layer.name);

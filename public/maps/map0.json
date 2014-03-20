@@ -37,8 +37,12 @@
                 {
                  "height":0,
                  "name":"home picture",
-                 "properties": {},
+                 "properties":
+                    {
+                     "action":""
+                    },
                  "type":"actionable",
+                 "visible":true,
                  "width":0,
                  "x":576,
                  "y":64
@@ -46,11 +50,28 @@
                 {
                  "height":0,
                  "name":"home frame",
-                 "properties": { },
+                 "properties":
+                    {
+                     "action":""
+                    },
                  "type":"actionable",
+                 "visible":true,
                  "width":0,
                  "x":640,
                  "y":64
+                }, 
+                {
+                 "height":0,
+                 "name":"house exit",
+                 "properties":
+                    {
+                     "on_enter":"stair_up"
+                    },
+                 "type":"actionable",
+                 "visible":true,
+                 "width":0,
+                 "x":576,
+                 "y":288
                 }],
          "opacity":1,
          "properties":
@@ -127,6 +148,7 @@
                      "width":"32"
                     },
                  "type":"player",
+                 "visible":true,
                  "width":0,
                  "x":576,
                  "y":320
@@ -148,6 +170,7 @@
                      "width":"32"
                     },
                  "type":"npc",
+                 "visible":true,
                  "width":0,
                  "x":736,
                  "y":352
@@ -155,11 +178,28 @@
                 {
                  "height":0,
                  "name":"house sign",
-                 "properties": {},
+                 "properties":
+                    {
+                     "action":""
+                    },
                  "type":"actionable",
+                 "visible":true,
                  "width":0,
                  "x":640,
                  "y":288
+                }, 
+                {
+                 "height":0,
+                 "name":"house enter",
+                 "properties":
+                    {
+                     "on_enter":"stair_down"
+                    },
+                 "type":"actionable",
+                 "visible":true,
+                 "width":0,
+                 "x":576,
+                 "y":256
                 }],
          "opacity":1,
          "properties":
@@ -208,6 +248,11 @@
             },
          "spacing":0,
          "tileheight":32,
+         "tileoffset":
+            {
+             "x":1,
+             "y":0
+            },
          "tileproperties":
             {
              "0":
