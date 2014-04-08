@@ -226,7 +226,7 @@
     <property name="idle" value="10"/>
     <property name="left" value="7,8,9"/>
     <property name="right" value="1,2,3"/>
-    <property name="source" value="/images/harry.png"/>
+    <property name="source" value="/images/tim.png"/>
     <property name="up" value="4,5,6"/>
     <property name="width" value="32"/>
    </properties>
