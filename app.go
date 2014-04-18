@@ -9,7 +9,7 @@ import (
 )
 
 var (
-  maps = []string{"map0"}
+  maps = []string{"map0", "map1"}
   port = 3001
 )
 
