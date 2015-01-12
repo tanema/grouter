@@ -2,7 +2,7 @@ package json_map
 
 import (
   "fmt"
-  "grouter/socketio"
+  "../socketio"
   "github.com/robertkrimen/otto"
   "io/ioutil"
   "time"

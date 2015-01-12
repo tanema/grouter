@@ -4,8 +4,8 @@ import (
   "fmt"
   "log"
 	"net/http"
-  "grouter/json_map"
-  "grouter/socketio"
+  "./json_map"
+  "./socketio"
 )
 
 var maps = []string{"map0", "map1"}

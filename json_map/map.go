@@ -6,7 +6,7 @@ import (
   "io/ioutil"
   "encoding/json"
   "strings"
-  "grouter/socketio"
+  "../socketio"
   "time"
 )
 
